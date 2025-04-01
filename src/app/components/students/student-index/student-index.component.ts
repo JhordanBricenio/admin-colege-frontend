@@ -13,10 +13,10 @@ export class StudentIndexComponent {
 
   public users:User[]=[];
 
-  constructor(private userService:UserService) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe(
+   /* this.userService.getUsers().subscribe(
       response=>{
         this.users=response;
         console.log(this.users);
@@ -24,7 +24,7 @@ export class StudentIndexComponent {
       error=>{
         console.log(error);
       }
-    );
+    );*/
     
   }
 

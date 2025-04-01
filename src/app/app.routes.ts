@@ -12,9 +12,9 @@ export const routes: Routes = [
             {path:'student',component:StudentIndexComponent},
             {path:'student/new', component:StudentNewComponent},
             {path:'student/detail', component:StudentDetailComponent},
-            {path:'student',component:StudentIndexComponent},
-            {path:'student/new', component:StudentNewComponent},
-            {path:'student/detail', component:StudentDetailComponent},
+           // {path:'student',component:StudentIndexComponent},
+           // {path:'student/new', component:StudentNewComponent},
+            //{path:'student/detail', component:StudentDetailComponent},
 
 
             {path: '', component: HomeComponent},
