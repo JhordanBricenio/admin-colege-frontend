@@ -15,34 +15,34 @@ export class UserService {
     this.url=GLOBAL.url;
   }
   getUsers():Observable<User[]>{
-    return this._http.get<User[]>(this.url+'user');
+    return this._http.get<User[]>(this.url+'users');
   }
 
   //createAlumnosAll()
   createAlumnosAll(user:User):Observable<any>{
-    return this._http.post(this.url+'user',user);
+    return this._http.post(this.url+'users',user);
   }
 
   //getAlumnoById()
   getAlumnoById(id:any):Observable<User>{
-    return this._http.get<User>(this.url+'user/'+id);
+    return this._http.get<User>(this.url+'users/'+id);
   }
 
   //updateAlumno()
   updateAlumno(user:User):Observable<any>{
-    return this._http.put(this.url+'user/'+user.id,user);
+    return this._http.put(this.url+'users/'+user.id,user);
   }
 
   //deleteAlumno()
   deleteAlumno(id:any):Observable<any>{
-    return this._http.delete(this.url+'user/'+id);
+    return this._http.delete(this.url+'users/'+id);
   }
 
   subirFoto(foto: File, id:any): Observable<HttpEvent<{}>> {
     let formData = new FormData();
     formData.append('file', foto);
     formData.append('id', id.toString());
-    const req = new HttpRequest('POST', this.url + 'user/upload', formData,{reportProgress: true});
+    const req = new HttpRequest('POST', this.url + 'users/upload', formData,{reportProgress: true});
     return this._http.request(req).pipe(
        catchError(e => {
           return throwError(()=>e);

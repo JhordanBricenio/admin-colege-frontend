@@ -1,31 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user';
+import { RouterLink } from '@angular/router';
+import {NgFor} from '@angular/common';
 
 @Component({
   selector: 'app-student-index',
   standalone: true,
-  imports: [],
+  imports: [RouterLink, NgFor],
   templateUrl: './student-index.component.html',
   styleUrl: './student-index.component.css'
 })
 export class StudentIndexComponent {
 
-  public users:User[]=[];
+  public users: User[] = [];
 
   constructor() { }
 
+  private userService = inject(UserService);
+
   ngOnInit(): void {
-   /* this.userService.getUsers().subscribe(
-      response=>{
-        this.users=response;
+    this.userService.getUsers().subscribe(
+      response => {
+        this.users = response;
         console.log(this.users);
       },
-      error=>{
+      error => {
         console.log(error);
       }
-    );*/
-    
+    );
+
   }
 
 
