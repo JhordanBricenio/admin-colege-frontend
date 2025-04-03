@@ -1,7 +1,7 @@
 import { Component, inject, Inject } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {NgFor} from '@angular/common';
 
 @Component({
@@ -14,6 +14,7 @@ import {NgFor} from '@angular/common';
 export class StudentIndexComponent {
 
   public users: User[] = [];
+  private router = inject(Router); 
 
   constructor() { }
 
@@ -30,6 +31,11 @@ export class StudentIndexComponent {
       }
     );
 
+  }
+
+  verStudent(dni: string) {
+    sessionStorage.setItem('dni', dni);
+    this.router.navigate(['/admin/student/detail']); 
   }
 
 

@@ -28,6 +28,11 @@ export class UserService {
     return this._http.get<User>(this.url+'users/'+id);
   }
 
+  getUserByDni(dni: string): Observable<User> {
+    return this._http.post<User>(this.url + 'users/dni', { dni });
+    }
+  
+
   //updateAlumno()
   updateAlumno(user:User):Observable<any>{
     return this._http.put(this.url+'users/'+user.id,user);

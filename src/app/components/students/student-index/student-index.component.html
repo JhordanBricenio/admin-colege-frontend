@@ -97,7 +97,7 @@
                                                     </svg>
                                                 </div>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item" [routerLink]="['/admin/student/detail/',item.dni]" >Ver alumno</a>
+                                                    <a class="dropdown-item" style="cursor: pointer;" (click)="verStudent(item.dni)" >Ver alumno</a>
                                                     <a class="dropdown-item" >Suspender</a>
                                                     <a class="dropdown-item" >Bloquear</a>
                                                 </div>

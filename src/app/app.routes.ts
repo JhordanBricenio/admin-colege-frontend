@@ -11,7 +11,7 @@ export const routes: Routes = [
         children: [
             {path:'student',component:StudentIndexComponent},
             {path:'student/new', component:StudentNewComponent},
-            {path:'student/detail/:dni', component:StudentDetailComponent},
+            {path:'student/detail', component:StudentDetailComponent},
            // {path:'student',component:StudentIndexComponent},
            // {path:'student/new', component:StudentNewComponent},
             //{path:'student/detail', component:StudentDetailComponent},

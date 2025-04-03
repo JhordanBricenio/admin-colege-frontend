@@ -1,7 +1,7 @@
 <div class="content-body">
     <div class="container-fluid">
         <!-- Row -->
-        <div class="row">
+        <div *ngIf="student" class="row">
             <div class="col-xl-9">
                 <div class="card h-auto">
                     <div class="card-header p-0">
@@ -26,7 +26,7 @@
                                     <img src="assets/images/avatar/5.jpg" alt="" class="avatar avatar-xxl">
                                 </div>
                                 <div>
-                                    <h2 class="mb-0">Karen Hope</h2>
+                                    <h2 class="mb-0">{{student.name}}</h2>
                                     <p class="text-primary font-w600">Estudiante</p>
                                 </div>
                             </div>
@@ -87,7 +87,7 @@
                                         </a>	
                                     
                                     </li>
-                                    <li><span>Email:</span><h5 class="mb-0">Historiamail.com</h5></li>
+                                    <li><span>Email:</span><h5 class="mb-0">{{student.email}}</h5></li>
                                 </ul>
                             </div>
                         </div>
