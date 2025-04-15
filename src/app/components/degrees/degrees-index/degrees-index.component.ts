@@ -39,7 +39,6 @@ export class DegreesIndexComponent {
       this.selectedDegreeId = idDegree;
       this.degreeService.getDegreesWithCourses(idDegree).subscribe((data) => {
         this.courses = data.courses;
-        console.log(this.courses);
         this.showCursos = true;
       });
     }

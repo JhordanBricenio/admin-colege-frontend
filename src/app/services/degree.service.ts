@@ -22,6 +22,14 @@ export class DegreeService {
       return this._http.get<Degree>(`${this.url}degrees/${idDegree}`);
     }
 
+    //{{base_url}}/api/degrees/assign-course/2
+    assignCoursesToDegree(idDegree: number, cursos: any[]): Observable<any> {
+      return this._http.post(`${this.url}degrees/assign-course/${idDegree}`, cursos);
+    }
+    
+
+  
+
     //{{base_url}}/api/degrees/withCourses/{{idDegree}}
     getDegreesWithCourses(idDegree: number): Observable<any> {
       return this._http.get<any>(`${this.url}degrees/withCourses/${idDegree}`);

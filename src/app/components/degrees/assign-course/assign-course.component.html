@@ -16,7 +16,7 @@
                                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
                                     data-bs-parent="#accordion-one">
                                     <div class="accordion-body-text">
-                                      {{degree.description}}
+                                        {{degree.description}}
                                     </div>
                                 </div>
                             </div>
@@ -24,7 +24,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-8 col-xxl-6 col-lg-6">
+            <div *ngIf="allCourses" class="col-xl-8 col-xxl-6 col-lg-6">
                 <div class="card border-0 pb-0">
                     <div class="card-header border-0 pb-0">
                         <h4 class="card-title">Lista de cursos</h4>
@@ -32,11 +32,13 @@
                     <div class="card-body p-0">
                         <div id="DZ_W_Todo4" class="widget-media dlab-scroll height370 my-4 px-4">
                             <ul class="timeline">
-                                <li *ngFor="let item of courses">
+                                <li *ngFor="let item of allCourses">
                                     <div class="timeline-panel">
                                         <div class="form-check custom-checkbox checkbox-success check-lg me-3">
                                             <input type="checkbox" class="form-check-input" id="customCheckBox1"
-                                                required="">
+                                                required="" [value]="item.idCourse"
+                                                [checked]="selectedCourses.includes(item.idCourse)"
+                                                (change)="onCheckboxChange($event, item.idCourse)">
                                             <label class="form-check-label" for="customCheckBox1"></label>
                                         </div>
                                         <div class="media-body">
@@ -68,8 +70,8 @@
                 </div>
             </div>
             <div class="col-xl-12 col-xxl-12 col-lg-12 text-center mt-4 d-flex justify-content-center">
-                <button type="button" class="btn light btn-success me-3">Registrar</button>
-                <button type="button" class="btn light btn-danger">Cancelar</button>
+                <button type="button" class="btn light btn-success me-3" (click)="registrarCursos()">Registrar</button>
+                <button type="button" class="btn light btn-danger" [routerLink]="['/admin/degree']">Cancelar</button>
             </div>
         </div>
     </div>
