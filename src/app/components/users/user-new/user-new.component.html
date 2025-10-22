@@ -1,0 +1,175 @@
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">{{ isEditMode ? 'Editar usuario' : 'Detalles del usuario' }}</h5>
+          </div>
+          <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-xl-3 col-lg-4">
+                  <label class="form-label text-primary">Imagen<span class="required">*</span></label>
+                  <div class="avatar-upload">
+                    <div class="avatar-preview">
+                      <div id="imagePreview" style="background-image: url(assets/images/avatar/avatar.png);">
+                      </div>
+                    </div>
+                    <div class="change-btn mt-2 mb-lg-0 mb-3">
+                      <input type='file' class="form-control d-none" id="imageUpload" accept=".png, .jpg, .jpeg">
+                      <label for="imageUpload" class="dlab-upload mb-0 btn btn-primary btn-sm">Cargar imagen</label>
+                      <a href="javascript:void" class="btn btn-danger light remove-img ms-2 btn-sm">Eliminar</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-9 col-lg-8">
+                  <div class="row">
+                    <div class="col-xl-6 col-sm-6">
+                      <!--Selector de rol-->
+
+                      <div class="mb-3">
+                        <label for="dni" class="form-label text-primary">DNI<span class="required">*</span></label>
+                        <div class="input-group">
+                          <input type="text" class="form-control" formControlName="dni" id="dni" placeholder="85412174">
+                          <button type="button" class="btn btn-secondary" (click)="buscar()"
+                            [disabled]="!userForm.get('dni')?.value">
+                            <i class="fas fa-search"></i> Buscar
+                          </button>
+                        </div>
+                        <small *ngIf="userForm.get('dni')?.touched && userForm.get('dni')?.invalid" class="text-danger">
+                          El DNI es obligatorio y debe tener 8 dígitos
+                        </small>
+                        <small *ngIf="error" class="text-danger">
+                          {{error}}
+                        </small>
+                      </div>
+                      <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label text-primary">Nombres<span
+                            class="required">*</span></label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1" formControlName="name"
+                          placeholder="James">
+                        <small *ngIf="userForm.get('name')?.touched && userForm.get('name')?.invalid"
+                          class="text-danger">
+                          El nombre es obligatorio
+                        </small>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label text-primary">Nacimiento<span class="required">*</span></label>
+                        <div class="d-flex">
+                          <input type="date" formControlName="birthDate" class="form-control" placeholder="2017-06-04"
+                            id="datepicker">
+                        </div>
+                        <small *ngIf="userForm.get('birthDate')?.touched && userForm.get('birthDate')?.invalid"
+                          class="text-danger">
+                          La fecha de nacimiento es obligatoria
+                        </small>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label text-primary">Género<span class="required">*</span></label>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" formControlName="gender" id="inlineRadio1"
+                            value="MASCULINO">
+                          <label class="form-check-label" for="inlineRadio1">Masculino</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" formControlName="gender" id="inlineRadio2"
+                            value="FEMENINO">
+                          <label class="form-check-label" for="inlineRadio2">Femenino</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" formControlName="gender" id="inlineRadio3"
+                            value="OTRO">
+                          <label class="form-check-label" for="inlineRadio3">Otro</label>
+                        </div>
+                        <small *ngIf="userForm.get('gender')?.touched && userForm.get('gender')?.invalid"
+                          class="text-danger">
+                          El sexo es obligatorio
+                        </small>
+                      </div>
+                      <div class="mb-3">
+                        <label for="exampleFormControlInput3" class="form-label text-primary">Correo electrónico<span
+                            class="required">*</span></label>
+                        <input type="email" class="form-control" formControlName="email" id="exampleFormControlInput3"
+                          placeholder="hello@example.com">
+                        <small *ngIf="userForm.get('email')?.touched && userForm.get('email')?.invalid"
+                          class="text-danger">
+                          El correo electrónico es obligatorio y debe ser válido
+                        </small>
+                      </div>
+                      <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label text-primary">Dirección<span
+                            class="required">*</span></label>
+                        <input class="form-control" formControlName="address" id="exampleFormControlTextarea1" rows="6"
+                          placeholder="Av. Los Alamos 123">
+                        <small *ngIf="userForm.get('address')?.touched && userForm.get('address')?.invalid"
+                          class="text-danger">
+                          La dirección es obligatoria
+                        </small>
+                      </div>
+                      <div class="mb-3">
+                        <label for="role" class="form-label text-primary">Rol<span class="required">*</span></label>
+                        <select class="form-select" formControlName="role" id="role">
+                          <option value="" disabled>Seleccione un rol</option>
+                          <option *ngFor="let role of roles" [value]="role.idRole">{{ role.name }}</option>
+                        </select>
+                        <small *ngIf="userForm.get('role')?.touched && userForm.get('role')?.invalid"
+                          class="text-danger">
+                          El rol es obligatorio
+                        </small>
+                      </div>
+                    </div>
+                    <div class="col-xl-6 col-sm-6">
+                      <div class="mb-3">
+                        <label for="exampleFormControlInput4" class="form-label text-primary">Apellido paterno<span
+                            class="required">*</span></label>
+                        <input type="text" class="form-control" id="exampleFormControlInput4"
+                          formControlName="fatherLastName" placeholder="Wally">
+                        <small
+                          *ngIf="userForm.get('fatherLastName')?.touched && userForm.get('fatherLastName')?.invalid"
+                          class="text-danger">
+                          El apellido paterno es obligatorio
+                        </small>
+                      </div>
+                      <div class="mb-3">
+                        <label for="exampleFormControlInput5" class="form-label text-primary">Apellido materno<span
+                            class="required">*</span></label>
+                        <input type="text" class="form-control" id="exampleFormControlInput5"
+                          formControlName="motherLastName" placeholder="Mana William">
+                        <small
+                          *ngIf="userForm.get('motherLastName')?.touched && userForm.get('motherLastName')?.invalid"
+                          class="text-danger">
+                          El apellido materno es obligatorio
+                        </small>
+                      </div>
+                      <div class="mb-3">
+                        <label for="exampleFormControlInput6" class="form-label text-primary">Celular<span
+                            class="required">*</span></label>
+                        <input type="text" formControlName="phone" class="form-control" id="exampleFormControlInput6"
+                          placeholder="+123456789">
+                        <small *ngIf="userForm.get('phone')?.touched && userForm.get('phone')?.invalid"
+                          class="text-danger">
+                          El celular es obligatorio
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">
+                    <i class="fas fa-save"></i> {{ isEditMode ? 'Actualizar usuario' : 'Guardar usuario' }}
+                  </button>
+                  <button type="button" class="btn btn-secondary ms-2" [routerLink]="['/admin/user']">
+                    <i class="fas fa-times"></i> Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

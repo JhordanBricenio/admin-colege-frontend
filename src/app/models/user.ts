@@ -1,14 +1,17 @@
+
 export class User {
-    id: number;
+    idUser: string;
     name: string;
     lastname: string;
     dni: string;
     email: string;
-    password: string;
+    password?: string;
     phone: string;
     address: string;
     photo: string;
-    father: string;
-    education:string;
-    fecha_nacimiento: string;
+    birthDate: string;
+    gender: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+    rolId: string;
 }

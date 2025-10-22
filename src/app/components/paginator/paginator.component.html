@@ -1,0 +1,25 @@
+<nav class="mb-3 mt-3" *ngIf="pagination && pagination.totalPages > 0">
+    <ul class="pagination pagination-gutter pagination-danger">
+        <!-- Prev -->
+        <li class="page-item page-indicator" [class.disabled]="pagination.number === 0">
+            <a class="page-link" [routerLink]="['/admin/user/paged', pagination.number - 1]">
+                <i class="la la-angle-left"></i>
+            </a>
+        </li>
+
+        <!-- Pages -->
+        <li class="page-item" *ngFor="let page of pages" [class.active]="page === pagination.number">
+            <a class="page-link" [routerLink]="['/admin/user/paged', page]">{{ page + 1 }}</a>
+        </li>
+
+        <!-- Next -->
+        <li class="page-item page-indicator" [class.disabled]="pagination.number >= pagination.totalPages - 1">
+            <a class="page-link" [routerLink]="['/admin/user/paged', pagination.number + 1]">
+                <i class="la la-angle-right"></i>
+            </a>
+        </li>
+    </ul>
+    <div class="text-muted small mt-1">
+        Mostrando {{ rangeStart }}–{{ rangeEnd }} de {{ totalElements }} • {{ pageSize }} por página
+    </div>
+</nav>

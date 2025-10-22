@@ -18,15 +18,17 @@ export class UserService {
     return this._http.get<User[]>(this.url + 'users');
   }
 
-  //createAlumnosAll()
-  createAlumnosAll(user: User): Observable<any> {
-    return this._http.post(this.url + 'users', user);
+  getUsersByPageable(page: number): Observable<any> {
+    return this._http.get<any>(`${this.url}users/paged/${page}`);
+  }
+  saveUser(user: User): Observable<User> {
+    return this._http.post<User>(this.url + 'users', user);
   }
 
-  //getAlumnoById()
-  getAlumnoById(id: any): Observable<User> {
+  getUserById(id: any): Observable<User> {
     return this._http.get<User>(this.url + 'users/' + id);
   }
+
 
   getUserByDni(dni: string): Observable<User> {
     return this._http.post<User>(this.url + 'users/dni', { dni });
@@ -34,19 +36,18 @@ export class UserService {
 
 
   //updateAlumno()
-  updateAlumno(user: User): Observable<any> {
-    return this._http.put(this.url + 'users/' + user.id, user);
+  updateUser(user: User): Observable<any> {
+    return this._http.patch<User>(this.url + 'users/' + user.idUser, user);
   }
 
-  //deleteAlumno()
-  deleteAlumno(id: any): Observable<any> {
+  //deleteUser()
+  deleteUser(id: any): Observable<any> {
     return this._http.delete(this.url + 'users/' + id);
   }
 
   //obtenerDatosAPiDni
 
   searchByDniApi(dni: string): Observable<any> {
-    console.log("DNI", dni);
     return this._http.get<User>(this.url + `users/dni/${dni}`);
   }
 
