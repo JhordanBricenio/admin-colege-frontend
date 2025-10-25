@@ -1,9 +1,10 @@
 <div class="nav-header">
-  <a href="" class="brand-logo">
-    <img src="assets/images/logo.png" alt="" class="px-2 py-2" style="height: 90px;"/>
+  <a *ngIf="settings.length > 0" href="" class="brand-logo d-flex align-items-center">
+    <img *ngIf="settings[0].logo" [src]="settings[0].logo" alt="Logo" class="img-fluid rounded me-2"
+      style="max-height: 50px;">
+    <div *ngIf="!settings[0].logo" class="text-muted me-2">Sin logo</div>
+    <span *ngIf="settings[0]?.name" class="fw-semibold">{{ settings[0].name }}</span>
   </a>
-
-
   <div class="nav-control">
     <div class="hamburger">
       <span class="line"></span><span class="line"></span><span class="line"></span>
@@ -21,13 +22,6 @@
     </div>
   </div>
 </div>
-<!--**********************************
-  Nav header end
-***********************************-->
-
-<!--**********************************
-  Chat box start
-***********************************-->
 <div class="chatbox">
   <div class="chatbox-close"></div>
   <div class="custom-tab-1">
@@ -1025,7 +1019,7 @@
                   <img src="assets/images/user.jpg" alt="">
                 </div>
               </a>
-              <div class="dropdown-menu dropdown-menu-end pb-0" style="">
+              <div class="dropdown-menu dropdown-menu-end pb-0">
                 <div class="card mb-0">
                   <div class="card-header p-3">
                     <ul class="d-flex align-items-center">

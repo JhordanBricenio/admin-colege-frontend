@@ -99,7 +99,8 @@
                                                             (click)="verUser(item.dni)">Ver usuario</a>
                                                         <a class="dropdown-item"
                                                             [routerLink]="['/admin/user/edit', item.idUser]">Editar</a>
-                                                        <a class="dropdown-item">Eliminar</a>
+                                                        <a class="dropdown-item" style="cursor: pointer;"
+                                                            (click)="deleteUser(item.idUser)">Eliminar</a>
                                                     </div>
                                                 </div>
                                             </td>

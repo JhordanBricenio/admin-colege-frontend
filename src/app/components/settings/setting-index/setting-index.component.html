@@ -1,0 +1,67 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <ng-container *ngIf="settings && settings.length > 0; else emptyState">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Configuración</h5>
+                            <button class="btn btn-primary"
+                                [routerLink]="['/admin/settings/edit', settings[0].idSetting]">
+                                <i class="fa fa-edit me-1"></i> Editar
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-3 text-center">
+                                    <img *ngIf="settings[0].logo" [src]="settings[0].logo" alt="Logo"
+                                        style="max-height: 120px;">
+                                    <div *ngIf="!settings[0].logo" class="text-muted">Sin logo</div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-sm-6 mb-2">
+                                            <div class="text-muted small">Nombre</div>
+                                            <div class="fw-semibold">{{ settings[0].name }}</div>
+                                        </div>
+                                        <div class="col-sm-6 mb-2">
+                                            <div class="text-muted small">Email</div>
+                                            <div class="fw-semibold">{{ settings[0].email }}</div>
+                                        </div>
+                                        <div class="col-sm-6 mb-2">
+                                            <div class="text-muted small">Teléfono</div>
+                                            <div class="fw-semibold">{{ settings[0].phone }}</div>
+                                        </div>
+                                        <div class="col-sm-6 mb-2">
+                                            <div class="text-muted small">Dirección</div>
+                                            <div class="fw-semibold">{{ settings[0].address }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-muted small mt-2">
+                                        Última actualización: {{ settings[0].updatedAt | date: 'short' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #emptyState>
+            <div class="card" id="card-title-1">
+                <div class="card-header border-0 pb-0 ">
+                    <h5 class="card-title">Configurar institución</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info mb-3">
+                        Aún no has configurado los datos de la institución.
+                    </div>
+                    <a class="btn btn-primary" [routerLink]="['/admin/settings/new']">
+                        <i class="fa fa-plus me-1"></i> Configurar
+                    </a>
+                </div>
+            </div>
+        </ng-template>
+
+    </div>
+</div>

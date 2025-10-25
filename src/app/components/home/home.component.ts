@@ -1,13 +1,49 @@
-import { Component } from '@angular/core';
-import { SidebarComponent } from '../sidebar/sidebar.component';
+import { Component, inject, Inject } from '@angular/core';
+import { UserService } from '../../services/user.service';
+import { User } from '../../models/user';
+import { Role } from '../../models/role';
+import { RoleService } from '../../services/role.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [SidebarComponent],
+  imports: [],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+
+
+  private userService = inject(UserService);
+  private roleService = inject(RoleService);
+
+  users: User[] = [];
+  roles: Role[] = [];
+
+  ngOnInit(): void {
+    this.loadUsers();
+    this.loadRoles();
+  }
+
+  private loadUsers() {
+    this.userService.getUsers().subscribe({
+      next: (response) => {
+        this.users = response;
+      },
+      error: (error) => {
+        console.error('Error fetching users:', error);
+      }
+    });
+  }
+  private loadRoles() {
+    this.roleService.getRoles().subscribe({
+      next: (response) => {
+        this.roles = response;
+      },
+      error: (error) => {
+        console.error('Error fetching roles:', error);
+      }
+    });
+  }
 
 }

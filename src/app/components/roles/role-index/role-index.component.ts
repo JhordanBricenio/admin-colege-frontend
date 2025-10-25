@@ -14,12 +14,12 @@ import Swal from 'sweetalert2';
 })
 export class RoleIndexComponent {
 
+  private userService = inject(RoleService);
   public roles: Role[] = [];
-  private router = inject(Router);
 
   constructor() { }
 
-  private userService = inject(RoleService);
+
 
   ngOnInit(): void {
     this.init_data();
