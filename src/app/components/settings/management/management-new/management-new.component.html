@@ -1,0 +1,49 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">{{ isEditMode ? 'Editar gestión' : 'Detalles de la gestión' }}</h5>
+                </div>
+                <form [formGroup]="managementForm" (ngSubmit)="onSubmit()">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xl-6 col-sm-6">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput9" class="form-label text-primary">Nombre de la
+                                        gestión<span class="required">*</span></label>
+                                    <input formControlName="name" type="text" class="form-control"
+                                        id="exampleFormControlInput9" placeholder="Nombre de la gestión">
+                                    <small
+                                        *ngIf="managementForm.controls.name.touched && managementForm.controls.name.invalid"
+                                        class="text-red-500">
+                                        El nombre es obligatorio y debe tener al menos 3 caracteres
+                                    </small>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="status"
+                                            formControlName="status">
+                                        <label class="form-check-label" for="status">Estado Activo</label>
+                                        <small
+                                            *ngIf="managementForm.controls.status.touched && managementForm.controls.status.invalid"
+                                            class="text-red-500">
+                                            El estado es obligatorio
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+                            <button class="btn btn-primary" type="submit" [disabled]="managementForm.invalid">
+                                {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+                            </button>
+                            <button type="button" class="btn btn-secondary ms-2"
+                                [routerLink]="['/admin/managements']">Cancelar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

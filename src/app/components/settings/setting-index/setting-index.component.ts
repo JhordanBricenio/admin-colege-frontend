@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink, RouterModule } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 import { Setting } from '../../../models/setting';
 import { SettingService } from '../../../services/setting.service';
 
@@ -28,7 +28,6 @@ export class SettingIndexComponent {
         next: (data) => {
 
           this.settings = data;
-          console.log(this.settings);
         },
         error: (error) => {
           console.log(error);

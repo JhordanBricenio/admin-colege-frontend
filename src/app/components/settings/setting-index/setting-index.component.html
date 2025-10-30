@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <ng-container *ngIf="settings && settings.length > 0; else emptyState">
             <div class="row">
-                <div class="col-xl-12">
+                <div class="col-xl-6 col-xxl-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="card-title mb-0">Configuración</h5>
@@ -15,7 +15,7 @@
                             <div class="row align-items-center">
                                 <div class="col-md-3 text-center">
                                     <img *ngIf="settings[0].logo" [src]="settings[0].logo" alt="Logo"
-                                        style="max-height: 120px;">
+                                        style="max-height: 60px;">
                                     <div *ngIf="!settings[0].logo" class="text-muted">Sin logo</div>
                                 </div>
                                 <div class="col-md-9">
@@ -42,6 +42,22 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-xxl-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Gestión educativa</h5>
+                        </div>
+                        <div class="card-body d-flex flex-column align-items-start">
+                            <p class="mb-3">
+                                Configura los parámetros relacionados con la gestión educativa de la institución,
+                                como niveles académicos, grados, secciones y otros ajustes relevantes.
+                            </p>
+                            <button class="btn btn-primary" [routerLink]="['/admin/managements']">
+                                <i class="fa fa-cog"></i> Configurar gestión educativa
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -12,6 +12,8 @@ import { UserDetailComponent } from './components/users/user-detail/user-detail.
 import { UserNewComponent } from './components/users/user-new/user-new.component';
 import { SettingIndexComponent } from './components/settings/setting-index/setting-index.component';
 import { SettingNewComponent } from './components/settings/setting-new/setting-new.component';
+import { ManagementComponent } from './components/settings/management/management/management.component';
+import { ManagementNewComponent } from './components/settings/management/management-new/management-new.component';
 
 export const routes: Routes = [
     {
@@ -31,6 +33,10 @@ export const routes: Routes = [
             { path: 'settings/new', component: SettingNewComponent },
             { path: 'settings/detail', component: SettingNewComponent },
             { path: 'settings/edit/:idSetting', component: SettingNewComponent },
+
+            { path: 'managements', component: ManagementComponent },
+            { path: 'managements/new', component: ManagementNewComponent },
+            { path: 'managements/edit/:id', component: ManagementNewComponent },
 
             { path: 'degree', component: DegreesIndexComponent },
             { path: 'degree/new', component: DegreeNewComponent },
