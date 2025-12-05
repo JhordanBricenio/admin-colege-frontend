@@ -14,6 +14,8 @@ import { SettingIndexComponent } from './components/settings/setting-index/setti
 import { SettingNewComponent } from './components/settings/setting-new/setting-new.component';
 import { ManagementComponent } from './components/settings/management/management/management.component';
 import { ManagementNewComponent } from './components/settings/management/management-new/management-new.component';
+import { EducationLevelIndexComponent } from './components/education_level/education-level-index/education-level-index.component';
+import { EducationNewComponent } from './components/education_level/education-new/education-new.component';
 
 export const routes: Routes = [
     {
@@ -37,6 +39,10 @@ export const routes: Routes = [
             { path: 'managements', component: ManagementComponent },
             { path: 'managements/new', component: ManagementNewComponent },
             { path: 'managements/edit/:id', component: ManagementNewComponent },
+
+            { path: 'education-level', component: EducationLevelIndexComponent },
+            { path: 'education-level/new', component: EducationNewComponent },
+            { path: 'education-level/edit/:id', component: EducationNewComponent },
 
             { path: 'degree', component: DegreesIndexComponent },
             { path: 'degree/new', component: DegreeNewComponent },

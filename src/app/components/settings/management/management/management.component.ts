@@ -61,7 +61,7 @@ export class ManagementComponent {
               console.log(error);
               Swal.fire({
                 title: "Error",
-                text: "Hubo un problema al eliminar el rol.",
+                text: "Hubo un problema al eliminar la gestión.",
                 icon: "error"
               });
             }
