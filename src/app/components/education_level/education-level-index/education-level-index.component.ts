@@ -75,7 +75,7 @@ export class EducationLevelIndexComponent {
         this.educationLevelService.deleteEducationLevel(id).subscribe(
           {
             next: () => {
-              this.educationLevels = this.educationLevels.filter(level => level.id !== id);
+              this.educationLevels = this.educationLevels.filter(level => level.idEducationLevel !== id);
               Swal.fire({
                 title: "¡Eliminado!",
                 text: "El nivel educativo ha sido eliminado con éxito.",

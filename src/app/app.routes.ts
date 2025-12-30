@@ -46,6 +46,7 @@ export const routes: Routes = [
 
             { path: 'degree', component: DegreesIndexComponent },
             { path: 'degree/new', component: DegreeNewComponent },
+            { path: 'degree/edit/:id', component: DegreeNewComponent },
             { path: 'degree/assign-course/:id', component: AssignCourseComponent },
 
 

@@ -1,8 +1,7 @@
-import { Course } from "./course";
-
 export class Degree {
-    idDegree: number;
-    name: string;
-    description: string;
-    courses: Course[];
+    idDegree?: string;
+    course: string;
+    section: string;
+    status: boolean;
+    idEducationLevel: string;
 }

@@ -92,7 +92,6 @@ export class RoleNewComponent {
         confirmButtonText: 'Aceptar'
       });
     }
-
   }
 
   updateRole() {

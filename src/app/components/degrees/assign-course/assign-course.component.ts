@@ -37,7 +37,7 @@ export class AssignCourseComponent {
 
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
-      this.degreeService.getDegree(+id).subscribe(degree => {
+      this.degreeService.getDegree(id).subscribe(degree => {
         this.degree = degree;
       })
     });
@@ -75,7 +75,7 @@ export class AssignCourseComponent {
     const payload = this.selectedCourses.map(id => ({ courseId: id }));
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
-      this.degreeService.assignCoursesToDegree(+id, payload).subscribe({
+      this.degreeService.assignCoursesToDegree(id, payload).subscribe({
         next: () => {
           alert('Cursos asignados correctamente');
           this.selectedCourses = [];

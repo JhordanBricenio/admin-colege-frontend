@@ -1,6 +1,6 @@
 export class EducationLevel {
 
-    id?: string;
+    idEducationLevel?: string;
     name: string;
     shift: string;
     status?: boolean;

@@ -1,1 +1,99 @@
-<p>degree-new works!</p>
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">{{ isEditMode ? 'Editar grado educativo' : 'Detalles del grado educativo' }}</h5>
+                </div>
+                <form [formGroup]="degreeForm" (ngSubmit)="onSubmit()">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xl-6 col-sm-6">
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput9" class="form-label text-primary">Nombre del
+                                        Nivel<span class="required">*</span></label>
+                                    <select formControlName="idEducationLevel" class="form-select" id="educationLevel">
+                                        <option value="" disabled>Seleccione una nivel</option>
+                                        <option *ngFor="let level of educationLevels" [value]="level.idEducationLevel">
+                                            {{ level.name }}
+                                        </option>
+                                    </select>
+                                    <small
+                                        *ngIf="degreeForm.controls.idEducationLevel.touched && degreeForm.controls.idEducationLevel.invalid"
+                                        class="text-red-500">
+                                        El nivel educativo es obligatorio
+                                    </small>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="course" class="form-label text-primary">Curso<span
+                                            class="required">*</span></label>
+                                    <select formControlName="course" id="course" class="form-select">
+                                        <option value="" disabled>Seleccione un curso</option>
+                                        <option value="INICIAL-1">Inicial-1</option>
+                                        <option value="INICIAL-2">Inicial-2</option>
+                                        <option value="PRIMARIA-1">Primaria-1</option>
+                                        <option value="PRIMARIA-2">Primaria-2</option>
+                                        <option value="PRIMARIA-3">Primaria-3</option>
+                                        <option value="PRIMARIA-4">Primaria-4</option>
+                                        <option value="PRIMARIA-5">Primaria-5</option>
+                                        <option value="PRIMARIA-6">Primaria-6</option>
+                                        <option value="SECUNDARIA-1">Secundaria-1</option>
+                                        <option value="SECUNDARIA-2">Secundaria-2</option>
+                                        <option value="SECUNDARIA-3">Secundaria-3</option>
+                                        <option value="SECUNDARIA-4">Secundaria-4</option>
+                                        <option value="SECUNDARIA-5">Secundaria-5</option>
+                                    </select>
+                                    <small
+                                        *ngIf="degreeForm.controls.course.touched && degreeForm.controls.course.invalid"
+                                        class="text-red-500">
+                                        El turno es obligatorio
+                                    </small>
+                                </div>
+                                <div class="mb-5">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="status"
+                                            formControlName="status">
+                                        <label class="form-check-label" for="status">Estado Activo</label>
+                                        <small
+                                            *ngIf="degreeForm.controls.status.touched && degreeForm.controls.status.invalid"
+                                            class="text-red-500">
+                                            El estado es obligatorio
+                                        </small>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-sm-6">
+                                <div class="mb-3">
+                                    <label for="section" class="form-label text-primary">Sección <span
+                                            class="required">* </span></label>
+                                    <select formControlName="section" class="form-select" id="section">
+                                        <option value="" disabled>Seleccione una sección</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                        <option value="F">F</option>
+                                    </select>
+                                    <small
+                                        *ngIf="degreeForm.controls.section.touched && degreeForm.controls.section.invalid"
+                                        class="text-red-500">
+                                        La gestión es obligatoria
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+                            <button class="btn btn-primary" type="submit" [disabled]="degreeForm.invalid">
+                                {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+                            </button>
+                            <button type="button" class="btn btn-secondary ms-2"
+                                [routerLink]="['/admin/degree']">Cancelar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>>
