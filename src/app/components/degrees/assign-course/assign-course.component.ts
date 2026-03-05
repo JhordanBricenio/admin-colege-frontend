@@ -56,7 +56,7 @@ export class AssignCourseComponent {
     this.degreeService.getDegreesWithCourses(+idDegree).subscribe((data) => {
       this.courses = data.courses;
       this.assignedCourses = data.courses.map((course: any) => course);
-      this.selectedCourses = this.assignedCourses.map(course => course.idCourse);
+      // this.selectedCourses = this.assignedCourses.map(course => course.idCourse);
     });
   }
 

@@ -1,5 +1,5 @@
 export class Course {
-    idCourse: number;
+    idCourse?: string;
     name: string;
-    description: string;
+    status: boolean;
 }

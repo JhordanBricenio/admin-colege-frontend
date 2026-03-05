@@ -3,6 +3,8 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
 import { Role } from '../../models/role';
 import { RoleService } from '../../services/role.service';
+import { Course } from '../../models/course';
+import { CourseService } from '../../services/course.service';
 
 @Component({
   selector: 'app-home',
@@ -16,13 +18,16 @@ export class HomeComponent {
 
   private userService = inject(UserService);
   private roleService = inject(RoleService);
+  private courseService = inject(CourseService);
 
   users: User[] = [];
   roles: Role[] = [];
+  courses: Course[] = [];
 
   ngOnInit(): void {
     this.loadUsers();
     this.loadRoles();
+    this.loadCourses();
   }
 
   private loadUsers() {
@@ -42,6 +47,17 @@ export class HomeComponent {
       },
       error: (error) => {
         console.error('Error fetching roles:', error);
+      }
+    });
+  }
+
+  private loadCourses() {
+    this.courseService.getCourses().subscribe({
+      next: (response) => {
+        this.courses = response;
+      },
+      error: (error) => {
+        console.error('Error fetching courses:', error);
       }
     });
   }

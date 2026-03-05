@@ -16,6 +16,13 @@ import { ManagementComponent } from './components/settings/management/management
 import { ManagementNewComponent } from './components/settings/management/management-new/management-new.component';
 import { EducationLevelIndexComponent } from './components/education_level/education-level-index/education-level-index.component';
 import { EducationNewComponent } from './components/education_level/education-new/education-new.component';
+import { SubjectIndexComponent } from './components/subject/subject-index/subject-index.component';
+import { SubjectNewComponent } from './components/subject/subject-new/subject-new.component';
+import { RegistrationIndexComponent } from './components/registration/registration-index/registration-index.component';
+import { RegistrationCreateComponent } from './components/registration/registration-create/registration-create.component';
+import { TeacherIndexComponent } from './components/users/teachers/teacher-index/teacher-index.component';
+import { TeacherNewComponent } from './components/users/teachers/teacher-new/teacher-new.component';
+import { StudentsIndexComponent } from './components/users/students/students-index/students-index.component';
 
 export const routes: Routes = [
     {
@@ -30,6 +37,18 @@ export const routes: Routes = [
             { path: 'user/detail', component: UserDetailComponent },
             { path: 'user/edit/:idUser', component: UserNewComponent },
             { path: 'user/paged/:page', component: UserIndexComponent },
+
+            { path: 'teacher', component: TeacherIndexComponent },
+            { path: 'teacher/new', component: TeacherNewComponent },
+            { path: 'teacher/detail', component: UserDetailComponent },
+            { path: 'teacher/edit/:idTeacher', component: TeacherNewComponent },
+            { path: 'teacher/paged/:page', component: TeacherIndexComponent },
+
+            { path: 'student', component: StudentsIndexComponent },
+            { path: 'student/new', component: StudentsIndexComponent },
+            { path: 'student/detail', component: UserDetailComponent },
+            { path: 'student/edit/:idStudent', component: StudentsIndexComponent },
+            { path: 'student/paged/:page', component: StudentsIndexComponent },
 
             { path: 'settings', component: SettingIndexComponent },
             { path: 'settings/new', component: SettingNewComponent },
@@ -49,6 +68,14 @@ export const routes: Routes = [
             { path: 'degree/edit/:id', component: DegreeNewComponent },
             { path: 'degree/assign-course/:id', component: AssignCourseComponent },
 
+            { path: 'subject', component: SubjectIndexComponent },
+            { path: 'subject/new', component: SubjectNewComponent },
+            { path: 'subject/edit/:id', component: SubjectNewComponent },
+
+
+            { path: 'registration', component: RegistrationIndexComponent },
+            { path: 'registration/new', component: RegistrationCreateComponent },
+            { path: 'registration/edit/:id', component: RegistrationCreateComponent },
 
             { path: '', component: HomeComponent },
 

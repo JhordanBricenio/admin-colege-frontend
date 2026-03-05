@@ -34,23 +34,16 @@ export class UserService {
     return this._http.post<User>(this.url + 'users/dni', { dni });
   }
 
-
-  //updateAlumno()
   updateUser(user: User): Observable<any> {
     return this._http.patch<User>(this.url + 'users/' + user.idUser, user);
   }
-
-  //deleteUser()
   deleteUser(id: any): Observable<any> {
     return this._http.delete(this.url + 'users/' + id);
   }
 
-  //obtenerDatosAPiDni
-
   searchByDniApi(dni: string): Observable<any> {
     return this._http.get<User>(this.url + `users/dni/${dni}`);
   }
-
 
   subirFoto(foto: File, id: any): Observable<HttpEvent<{}>> {
     let formData = new FormData();

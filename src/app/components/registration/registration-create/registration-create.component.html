@@ -1,0 +1,116 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 fw-semibold text-dark">Registrar Nueva Matrícula</h5>
+                </div>
+
+                <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+                    <div class="card-body">
+                        <div class="row ">
+
+                            <!-- Estudiante -->
+                            <div class="col-xl-6 col-sm-6">
+                                <div class="mb-3"> <label for="student" class="form-label text-primary">Estudiante<span
+                                            class="required">*</span></label>
+                                    <div class="autocomplete-wrapper" style="position: relative;"> <input type="text"
+                                            [formControl]="studentSearchControl" class="form-control" id="student"
+                                            placeholder="Buscar estudiante por nombre..." autocomplete="off">
+                                        <div class="autocomplete-dropdown"
+                                            *ngIf="filteredStudents.length > 0 && studentSearchControl.value"
+                                            style="position: absolute; z-index: 1000; border: 1px solid #ddd; border-radius: 4px; max-height: 200px; overflow-y: auto; width: 100%; margin-top: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                            <div *ngFor="let student of filteredStudents"
+                                                (click)="selectStudent(student)"
+                                                style="padding: 10px; cursor: pointer; border-bottom: 1px solid #f0f0f0;">
+                                                {{
+                                                student.name }} {{ student.lastname }} </div>
+                                        </div>
+                                    </div> <small
+                                        *ngIf="registrationForm.controls.idStudent.touched && registrationForm.controls.idStudent.invalid"
+                                        class="text-danger"> El estudiante es obligatorio </small>
+                                </div>
+                            </div>
+                            <!-- Grado -->
+                            <div class="col-xl-6 col-sm-6">
+                                <label class="form-label text-dark fw-medium">Grado <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-lg" formControlName="idDegree">
+                                    <option value="" disabled>Seleccione un grado</option>
+                                    <option *ngFor="let degree of degrees" [value]="degree.idDegree">
+                                        {{ degree.course }}
+                                    </option>
+                                </select>
+                            </div>
+                            <!-- Padre -->
+                            <div class="col-xl-6 col-sm-6 mt-5"> <!-- Apoderado/Padre -->
+                                <div class="mb-3"> <label for="parent"
+                                        class="form-label text-primary">Apoderado/Padre<span
+                                            class="required">*</span></label>
+                                    <div class="autocomplete-wrapper" style="position: relative;"> <input type="text"
+                                            [formControl]="parentSearchControl" class="form-control" id="parent"
+                                            placeholder="Buscar apoderado por nombre..." autocomplete="off">
+                                        <div class="autocomplete-dropdown"
+                                            *ngIf="filteredParents.length > 0 && parentSearchControl.value"
+                                            style="position: absolute; z-index: 1000;  border: 1px solid #ddd; border-radius: 4px; max-height: 200px; overflow-y: auto; width: 100%; margin-top: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                            <div *ngFor="let parent of filteredParents" (click)="selectParent(parent)"
+                                                style="padding: 10px; cursor: pointer; border-bottom: 1px solid #f0f0f0;">
+                                                {{ parent.name }} {{ parent.lastname }} </div>
+
+                                        </div>
+                                    </div> <small
+                                        *ngIf="registrationForm.controls.idParent.touched && registrationForm.controls.idParent.invalid"
+                                        class="text-danger"> El apoderado es obligatorio </small>
+                                </div>
+
+                                <!-- Nivel -->
+                                <div class="col-xl-6 col-sm-6 mt-5">
+                                    <label class="form-label text-dark fw-medium">Nivel Educativo <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select form-select-lg" formControlName="idEducationLevel">
+                                        <option value="">Seleccione un nivel</option>
+                                        <option *ngFor="let level of educationLevels" [value]="level.idEducationLevel">
+                                            {{ level.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estado -->
+                        <div class="mt-5">
+                            <div class="form-check form-switch fs-5">
+                                <input class="form-check-input" type="checkbox" id="status" formControlName="status"
+                                    (change)="registrationForm.patchValue({status: $event.target.checked ? 'ACTIVE' : 'INACTIVE'})">
+                                <label class="form-check-label fw-medium" for="status">Estado Activo</label>
+                            </div>
+                        </div>
+
+                        <!--Fecha de registro  -->
+
+                        <div class="mt-4 col-xl-6 col-sm-6 mt-5">
+                            <label for="registrationDate" class="form-label text-dark fw-medium">Fecha de
+                                Registro<span class="text-danger">*</span></label>
+                            <input type="date" class="form-control form-control-lg" id="registrationDate"
+                                formControlName="registrationDate" readonly>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="mt-4 d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-outline-secondary px-4"
+                                (click)="cancel()">Cancelar</button>
+                            <button class="btn btn-primary px-4" type="submit"
+                                [disabled]="registrationForm.invalid || isLoading">
+                                <span *ngIf="!isLoading">Guardar Matrícula</span>
+                                <span *ngIf="isLoading" class="d-flex align-items-center">
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                    Guardando...
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
