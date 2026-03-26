@@ -1,324 +1,162 @@
 <div class="content-body">
-    <!-- row -->
     <div class="container-fluid">
-        <!-- Row -->
-        <div class="row">
-            <div class="col-xl-12">
+        <!-- Estudiantes -->
+        <div class="row mb-3">
+            <div class="col-xl-3 col-lg-4 col-md-6">
                 <div class="card">
-                    <div class="card-body pb-xl-4 pb-sm-3 pb-0">
-                        <div class="row">
-                            <div class="col-xl-3 col-6">
-                                <div class="content-box">
-                                    <div class="icon-box icon-box-xl std-data">
-                                        <svg width="25" height="25" viewBox="0 0 30 38" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M12.9288 37.75H3.75C1.67875 37.75 0 36.0713 0 34V23.5863C0 21.7738 1.29625 20.2213 3.07875 19.8975C5.72125 19.4163 10.2775 18.5875 12.855 18.12C14.2737 17.8612 15.7263 17.8612 17.145 18.12C19.7225 18.5875 24.2788 19.4163 26.9213 19.8975C28.7038 20.2213 30 21.7738 30 23.5863C30 26.3125 30 31.0825 30 34C30 36.0713 28.3212 37.75 26.25 37.75H12.9288ZM24.785 22.05L24.79 22.0563C25.0088 22.3838 25.06 22.795 24.9287 23.1662L24.0462 25.6662C23.9312 25.9925 23.685 26.2575 23.3675 26.3963L21.7075 27.12L22.3675 28.4412C22.5525 28.81 22.5425 29.2462 22.3425 29.6075L19.2075 35.25H26.25C26.94 35.25 27.5 34.69 27.5 34C27.5 31.0825 27.5 26.3125 27.5 23.5863C27.5 22.9825 27.0675 22.465 26.4738 22.3562L24.785 22.05ZM21.3663 21.4275L16.6975 20.5788C15.575 20.375 14.425 20.375 13.3025 20.5788L8.63375 21.4275L7.63625 22.9238L8.13 24.3213L10.5 25.3537C10.8138 25.4912 11.0575 25.7512 11.175 26.0737C11.2925 26.3962 11.2712 26.7525 11.1175 27.0588L10.1625 28.9688L13.6525 35.25H16.3475L19.8375 28.9688L18.8825 27.0588C18.7288 26.7525 18.7075 26.3962 18.825 26.0737C18.9425 25.7512 19.1862 25.4912 19.5 25.3537L21.87 24.3213L22.3638 22.9238L21.3663 21.4275ZM5.215 22.05L3.52625 22.3562C2.9325 22.465 2.5 22.9825 2.5 23.5863V34C2.5 34.69 3.06 35.25 3.75 35.25H10.7925L7.6575 29.6075C7.4575 29.2462 7.4475 28.81 7.6325 28.4412L8.2925 27.12L6.6325 26.3963C6.315 26.2575 6.06875 25.9925 5.95375 25.6662L5.07125 23.1662C4.94 22.795 4.99125 22.3838 5.21 22.0563L5.215 22.05ZM23.75 29V31.5C23.75 32.19 24.31 32.75 25 32.75C25.69 32.75 26.25 32.19 26.25 31.5V29C26.25 28.31 25.69 27.75 25 27.75C24.31 27.75 23.75 28.31 23.75 29ZM15 0.25C10.5163 0.25 6.875 3.89125 6.875 8.375C6.875 12.8587 10.5163 16.5 15 16.5C19.4837 16.5 23.125 12.8587 23.125 8.375C23.125 3.89125 19.4837 0.25 15 0.25ZM15 2.75C18.105 2.75 20.625 5.27 20.625 8.375C20.625 11.48 18.105 14 15 14C11.895 14 9.375 11.48 9.375 8.375C9.375 5.27 11.895 2.75 15 2.75Z"
-                                                fill="white" />
-                                        </svg>
-                                    </div>
-                                    <div class="chart-num">
-                                        <p>Usuarios</p>
-                                        <h2 class="font-w700 mb-0">{{ users.length }}</h2>
-                                    </div>
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box icon-box-lg std-data bg-primary me-3">
+                                <svg width="32" height="32" viewBox="0 0 30 38" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M12.9288 37.75H3.75C1.67875 37.75 0 36.0713 0 34V23.5863C0 21.7738 1.29625 20.2213 3.07875 19.8975C5.72125 19.4163 10.2775 18.5875 12.855 18.12C14.2737 17.8612 15.7263 17.8612 17.145 18.12C19.7225 18.5875 24.2788 19.4163 26.9213 19.8975C28.7038 20.2213 30 21.7738 30 23.5863C30 26.3125 30 31.0825 30 34C30 36.0713 28.3212 37.75 26.25 37.75H12.9288ZM24.785 22.05L24.79 22.0563C25.0088 22.3838 25.06 22.795 24.9287 23.1662L24.0462 25.6662C23.9312 25.9925 23.685 26.2575 23.3675 26.3963L21.7075 27.12L22.3675 28.4412C22.5525 28.81 22.5425 29.2462 22.3425 29.6075L19.2075 35.25H26.25C26.94 35.25 27.5 34.69 27.5 34C27.5 31.0825 27.5 26.3125 27.5 23.5863C27.5 22.9825 27.0675 22.465 26.4738 22.3562L24.785 22.05ZM21.3663 21.4275L16.6975 20.5788C15.575 20.375 14.425 20.375 13.3025 20.5788L8.63375 21.4275L7.63625 22.9238L8.13 24.3213L10.5 25.3537C10.8138 25.4912 11.0575 25.7512 11.175 26.0737C11.2925 26.3962 11.2712 26.7525 11.1175 27.0588L10.1625 28.9688L13.6525 35.25H16.3475L19.8375 28.9688L18.8825 27.0588C18.7288 26.7525 18.7075 26.3962 18.825 26.0737C18.9425 25.7512 19.1862 25.4912 19.5 25.3537L21.87 24.3213L22.3638 22.9238L21.3663 21.4275ZM5.215 22.05L3.52625 22.3562C2.9325 22.465 2.5 22.9825 2.5 23.5863V34C2.5 34.69 3.06 35.25 3.75 35.25H10.7925L7.6575 29.6075C7.4575 29.2462 7.4475 28.81 7.6325 28.4412L8.2925 27.12L6.6325 26.3963C6.315 26.2575 6.06875 25.9925 5.95375 25.6662L5.07125 23.1662C4.94 22.795 4.99125 22.3838 5.21 22.0563L5.215 22.05ZM23.75 29V31.5C23.75 32.19 24.31 32.75 25 32.75C25.69 32.75 26.25 32.19 26.25 31.5V29C26.25 28.31 25.69 27.75 25 27.75C24.31 27.75 23.75 28.31 23.75 29ZM15 0.25C10.5163 0.25 6.875 3.89125 6.875 8.375C6.875 12.8587 10.5163 16.5 15 16.5C19.4837 16.5 23.125 12.8587 23.125 8.375C23.125 3.89125 19.4837 0.25 15 0.25ZM15 2.75C18.105 2.75 20.625 5.27 20.625 8.375C20.625 11.48 18.105 14 15 14C11.895 14 9.375 11.48 9.375 8.375C9.375 5.27 11.895 2.75 15 2.75Z"
+                                        fill="white" />
+                                </svg>
                             </div>
-                            <div class="col-xl-3 col-6">
-                                <div class="content-box">
-                                    <div class="teach-data icon-box icon-box-xl">
-                                        <svg width="25" height="25" viewBox="0 0 30 38" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M0 34C0 36.0713 1.67875 37.75 3.75 37.75H26.25C28.3212 37.75 30 36.0713 30 34C30 31.0825 30 26.3125 30 23.5863C30 21.7738 28.7038 20.2213 26.9213 19.8975C24.2788 19.4163 19.7225 18.5875 17.145 18.12C15.7263 17.8612 14.2737 17.8612 12.855 18.12C10.2775 18.5875 5.72125 19.4163 3.07875 19.8975C1.29625 20.2213 0 21.7738 0 23.5863V34ZM17.885 20.795L19.7612 27.9288C20.0075 28.865 19.6775 29.8588 18.92 30.4638C18.28 30.9738 17.2713 31.7788 16.5713 32.3388C15.6525 33.0713 14.3475 33.0713 13.4287 32.3388C12.7287 31.7788 11.72 30.9738 11.08 30.4638C10.3225 29.8588 9.9925 28.865 10.2388 27.9288L12.115 20.795L3.52625 22.3562C2.9325 22.465 2.5 22.9825 2.5 23.5863V34C2.5 34.69 3.06 35.25 3.75 35.25C8.98 35.25 21.02 35.25 26.25 35.25C26.94 35.25 27.5 34.69 27.5 34C27.5 31.0825 27.5 26.3125 27.5 23.5863C27.5 22.9825 27.0675 22.465 26.4738 22.3562L17.885 20.795ZM15.2038 20.4288C15.0675 20.425 14.9325 20.425 14.7962 20.4288L12.6663 28.5312L14.9887 30.3837C14.995 30.39 15.005 30.39 15.0113 30.3837L17.3337 28.5312L15.2038 20.4288ZM15 0.25C10.5163 0.25 6.875 3.89125 6.875 8.375C6.875 12.8587 10.5163 16.5 15 16.5C19.4837 16.5 23.125 12.8587 23.125 8.375C23.125 3.89125 19.4837 0.25 15 0.25ZM15 2.75C18.105 2.75 20.625 5.27 20.625 8.375C20.625 11.48 18.105 14 15 14C11.895 14 9.375 11.48 9.375 8.375C9.375 5.27 11.895 2.75 15 2.75Z"
-                                                fill="white" />
-                                        </svg>
-                                    </div>
-                                    <div class="chart-num">
-                                        <p>Roles</p>
-                                        <h2 class="font-w700 mb-0">{{ roles.length }}</h2>
-                                    </div>
-                                </div>
+                            <div>
+                                <p class="text-muted mb-1">Estudiantes</p>
+                                <h3 class="font-w700 mb-0">{{ totalStudents }}</h3>
                             </div>
-                            <div class="col-xl-3 col-6">
-                                <div class="content-box">
-                                    <div class="event-data icon-box icon-box-xl">
-                                        <svg width="25" height="25" viewBox="0 0 32 32" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M4 4C4 2.89543 4.89543 2 6 2H18C18.5304 2 19.0391 2.21071 19.4142 2.58579L27.4142 10.5858C27.7893 10.9609 28 11.4696 28 12V28C28 29.1046 27.1046 30 26 30H6C4.89543 30 4 29.1046 4 28V4ZM18 4H6V28H26V12.8284L18.1716 5H18V4ZM10 14C9.44772 14 9 14.4477 9 15C9 15.5523 9.44772 16 10 16H22C22.5523 16 23 15.5523 23 15C23 14.4477 22.5523 14 22 14H10ZM9 19C9 18.4477 9.44772 18 10 18H22C22.5523 18 23 18.4477 23 19C23 19.5523 22.5523 20 22 20H10C9.44772 20 9 19.5523 9 19ZM10 22C9.44772 22 9 22.4477 9 23C9 23.5523 9.44772 24 10 24H18C18.5523 24 19 23.5523 19 23C19 22.4477 18.5523 22 18 22H10Z"
-                                                fill="white" />
-                                        </svg>
-                                    </div>
-                                    <div class="chart-num">
-                                        <p>Cursos</p>
-                                        <h2 class="font-w700 mb-0">{{ courses.length }}</h2>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Docentes -->
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box icon-box-lg teach-data bg-secondary me-3">
+                                <svg width="32" height="32" viewBox="0 0 30 38" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M0 34C0 36.0713 1.67875 37.75 3.75 37.75H26.25C28.3212 37.75 30 36.0713 30 34C30 31.0825 30 26.3125 30 23.5863C30 21.7738 28.7038 20.2213 26.9213 19.8975C24.2788 19.4163 19.7225 18.5875 17.145 18.12C15.7263 17.8612 14.2737 17.8612 12.855 18.12C10.2775 18.5875 5.72125 19.4163 3.07875 19.8975C1.29625 20.2213 0 21.7738 0 23.5863V34ZM17.885 20.795L19.7612 27.9288C20.0075 28.865 19.6775 29.8588 18.92 30.4638C18.28 30.9738 17.2713 31.7788 16.5713 32.3388C15.6525 33.0713 14.3475 33.0713 13.4287 32.3388C12.7287 31.7788 11.72 30.9738 11.08 30.4638C10.3225 29.8588 9.9925 28.865 10.2388 27.9288L12.115 20.795L3.52625 22.3562C2.9325 22.465 2.5 22.9825 2.5 23.5863V34C2.5 34.69 3.06 35.25 3.75 35.25C8.98 35.25 21.02 35.25 26.25 35.25C26.94 35.25 27.5 34.69 27.5 34C27.5 31.0825 27.5 26.3125 27.5 23.5863C27.5 22.9825 27.0675 22.465 26.4738 22.3562L17.885 20.795ZM15.2038 20.4288C15.0675 20.425 14.9325 20.425 14.7962 20.4288L12.6663 28.5312L14.9887 30.3837C14.995 30.39 15.005 30.39 15.0113 30.3837L17.3337 28.5312L15.2038 20.4288ZM15 0.25C10.5163 0.25 6.875 3.89125 6.875 8.375C6.875 12.8587 10.5163 16.5 15 16.5C19.4837 16.5 23.125 12.8587 23.125 8.375C23.125 3.89125 19.4837 0.25 15 0.25ZM15 2.75C18.105 2.75 20.625 5.27 20.625 8.375C20.625 11.48 18.105 14 15 14C11.895 14 9.375 11.48 9.375 8.375C9.375 5.27 11.895 2.75 15 2.75Z"
+                                        fill="white" />
+                                </svg>
                             </div>
-                            <div class="col-xl-3 col-6">
-                                <div class="content-box">
-                                    <div class="food-data icon-box icon-box-xl bg-dark">
-                                        <svg width="23" height="23" viewBox="0 0 28 34" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M8.25448 0.509167C5.96882 1.64226 4.0464 3.39315 2.70524 5.56327C1.36408 7.7334 0.657848 10.2359 0.666646 12.787V18.7167C0.667705 19.5871 1.01397 20.4216 1.62948 21.0372C2.245 21.6527 3.07951 21.9989 3.94998 22H7.33331V32C7.33331 32.442 7.50891 32.866 7.82147 33.1785C8.13403 33.4911 8.55795 33.6667 8.99998 33.6667C9.44201 33.6667 9.86593 33.4911 10.1785 33.1785C10.4911 32.866 10.6666 32.442 10.6666 32V2C10.6664 1.71598 10.5936 1.43673 10.4552 1.18872C10.3168 0.940703 10.1173 0.732152 9.87574 0.582831C9.63414 0.43351 9.3584 0.348368 9.07467 0.335477C8.79095 0.322585 8.50863 0.382371 8.25448 0.509167ZM7.33331 18.6833L3.99998 18.7167V12.787C3.99498 11.3525 4.28878 9.93273 4.86268 8.61805C5.43658 7.30336 6.27798 6.12261 7.33331 5.151V18.6833ZM24 2V8.66667C23.9994 9.10852 23.8236 9.53211 23.5112 9.84455C23.1988 10.157 22.7752 10.3328 22.3333 10.3333V2C22.3333 1.55797 22.1577 1.13405 21.8452 0.821489C21.5326 0.508929 21.1087 0.333334 20.6666 0.333334C20.2246 0.333334 19.8007 0.508929 19.4881 0.821489C19.1756 1.13405 19 1.55797 19 2V10.3333C18.5581 10.3328 18.1345 10.157 17.8221 9.84455C17.5097 9.53211 17.3339 9.10852 17.3333 8.66667V2C17.3333 1.55797 17.1577 1.13405 16.8452 0.821489C16.5326 0.508929 16.1087 0.333334 15.6666 0.333334C15.2246 0.333334 14.8007 0.508929 14.4881 0.821489C14.1756 1.13405 14 1.55797 14 2V8.66667C14.0014 9.9923 14.5287 11.2632 15.4661 12.2006C16.4034 13.138 17.6743 13.6652 19 13.6667V32C19 32.442 19.1756 32.866 19.4881 33.1785C19.8007 33.4911 20.2246 33.6667 20.6666 33.6667C21.1087 33.6667 21.5326 33.4911 21.8452 33.1785C22.1577 32.866 22.3333 32.442 22.3333 32V13.6667C23.6589 13.6652 24.9299 13.138 25.8672 12.2006C26.8046 11.2632 27.3319 9.9923 27.3333 8.66667V2C27.3333 1.55797 27.1577 1.13405 26.8452 0.821489C26.5326 0.508929 26.1087 0.333334 25.6666 0.333334C25.2246 0.333334 24.8007 0.508929 24.4881 0.821489C24.1756 1.13405 24 1.55797 24 2Z"
-                                                fill="white" />
-                                        </svg>
-                                    </div>
-                                    <div class="chart-num">
-                                        <p>Comida</p>
-                                        <h2 class="font-w700 mb-0">320u</h2>
-                                    </div>
-                                </div>
+                            <div>
+                                <p class="text-muted mb-1">Docentes</p>
+                                <h3 class="font-w700 mb-0">{{ totalTeachers }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Matrículas -->
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box icon-box-lg event-data bg-info me-3">
+                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M4 4C4 2.89543 4.89543 2 6 2H18C18.5304 2 19.0391 2.21071 19.4142 2.58579L27.4142 10.5858C27.7893 10.9609 28 11.4696 28 12V28C28 29.1046 27.1046 30 26 30H6C4.89543 30 4 29.1046 4 28V4ZM18 4H6V28H26V12.8284L18.1716 5H18V4ZM10 14C9.44772 14 9 14.4477 9 15C9 15.5523 9.44772 16 10 16H22C22.5523 16 23 15.5523 23 15C23 14.4477 22.5523 14 22 14H10ZM9 19C9 18.4477 9.44772 18 10 18H22C22.5523 18 23 18.4477 23 19C23 19.5523 22.5523 20 22 20H10C9.44772 20 9 19.5523 9 19ZM10 22C9.44772 22 9 22.4477 9 23C9 23.5523 9.44772 24 10 24H18C18.5523 24 19 23.5523 19 23C19 22.4477 18.5523 22 18 22H10Z"
+                                        fill="white" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-muted mb-1">Matrículas</p>
+                                <h3 class="font-w700 mb-0">{{ totalRegistrations }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cursos -->
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box icon-box-lg course-data bg-warning me-3">
+                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M4 4C4 2.89543 4.89543 2 6 2H18C18.5304 2 19.0391 2.21071 19.4142 2.58579L27.4142 10.5858C27.7893 10.9609 28 11.4696 28 12V28C28 29.1046 27.1046 30 26 30H6C4.89543 30 4 29.1046 4 28V4ZM18 4H6V28H26V12.8284L18.1716 5H18V4ZM10 14C9.44772 14 9 14.4477 9 15C9 15.5523 9.44772 16 10 16H22C22.5523 16 23 15.5523 23 15C23 14.4477 22.5523 14 22 14H10ZM9 19C9 18.4477 9.44772 18 10 18H22C22.5523 18 23 18.4477 23 19C23 19.5523 22.5523 20 22 20H10C9.44772 20 9 19.5523 9 19ZM10 22C9.44772 22 9 22.4477 9 23C9 23.5523 9.44772 24 10 24H18C18.5523 24 19 23.5523 19 23C19 22.4477 18.5523 22 18 22H10Z"
+                                        fill="white" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-muted mb-1">Cursos</p>
+                                <h3 class="font-w700 mb-0">{{ totalCourses }}</h3>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xl-6 ">
-                <div class="card crypto-chart ">
-                    <div class="card-header pb-0 border-0 flex-wrap">
-                        <div class="mb-2 mb-sm-0">
-                            <div class="chart-title mb-3">
-                                <h2 class="heading">Rendimiento escolar</h2>
-                            </div>
-                        </div>
-                        <div class="p-static">
-                            <div class="d-flex align-items-center mb-3 mb-sm-0">
-                                <div class="round weekly" id="dzOldSeries">
-                                    <div>
-                                        <input type="checkbox" id="checkbox1" name="radio" value="weekly">
-                                        <label for="checkbox1" class="checkmark"></label>
-                                    </div>
-                                    <div>
-                                        <span class="fs-14">This Week</span>
-                                        <h4 class="fs-5 font-w700 mb-0">1.245</h4>
-                                    </div>
-                                </div>
-                                <div class="round" id="dzNewSeries">
-                                    <div>
-                                        <input type="checkbox" id="checkbox" name="radio" value="monthly">
-                                        <label for="checkbox" class="checkmark"></label>
-                                    </div>
-                                    <div>
-                                        <span class="fs-14">Last Week</span>
-                                        <h4 class="fs-5 font-w700 mb-0">1.356</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body pt-2 custome-tooltip pb-0 px-2">
-                        <div id="marketChart"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-6">
-                <div class="card h-auto">
-                    <div class="card-header border-0 pb-0 flex-wrap">
-                        <h4 class="heading mb-3 mb-sm-0">Resumen escolar</h4>
-                        <ul class="nav nav-pills mix-chart-tab" id="pills-tab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" data-series="week" id="pills-week-tab"
-                                    data-bs-toggle="pill" data-bs-target="#pills-week" type="button" role="tab"
-                                    aria-selected="true">Week</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" data-series="month" id="pills-month-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-month" type="button" role="tab"
-                                    aria-selected="false">Month</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" data-series="year" id="pills-year-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-year" type="button" role="tab"
-                                    aria-selected="false">Year</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" data-series="all" id="pills-all-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-all" type="button" role="tab"
-                                    aria-selected="false">All</button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body  p-0">
-                        <div id="overiewChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xl-4 wow fadeInUp" data-wow-delay="1.5s">
-                <div class="card">
-                    <div class="card-header pb-0 border-0 flex-wrap">
-                        <div>
-                            <div class="mb-3">
-                                <h2 class="heading mb-0">School Calendar</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body text-center event-calender  py-0 px-1">
-                        <input type='text' class="form-control d-none" id='datetimepicker1'>
-                    </div>
-                </div>
-            </div>
-            <!--column-->
-            <div class="col-xl-8">
-                <div class="card">
-                    <div class="card-header py-3 border-0 px-3">
-                        <h4 class="heading m-0">Teacher Deatails</h4>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive basic-tbl">
-                            <table class="tech-data" style="min-width: 798px">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Subject</th>
-                                        <th>Qulification</th>
-                                        <th>Fees</th>
-                                        <th class="text-end">Performance</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Yatin Xarma</td>
-                                        <td>Programming</td>
-                                        <td>B.Tech</td>
-                                        <td>$ 217.70</td>
-                                        <td class="text-end"><span class="badge badge-sm light badge-danger">Bad</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Ramen</td>
-                                        <td>Basic Art</td>
-                                        <td>BA</td>
-                                        <td>$ 218.70</td>
-                                        <td class="text-end"><span
-                                                class="badge badge-sm light badge-success">Good</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Harry</td>
-                                        <td>English</td>
-                                        <td>B.Tech</td>
-                                        <td>$ 219.70</td>
-                                        <td class="text-end"><span
-                                                class="badge badge-sm light badge-success">Good</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Hanu</td>
-                                        <td>Programing</td>
-                                        <td>B.Tech</td>
-                                        <td>$ 217.70</td>
-                                        <td class="text-end"><span
-                                                class="badge badge-sm light badge-success">Good</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jorge</td>
-                                        <td>History</td>
-                                        <td>BA</td>
-                                        <td>$ 212.70</td>
-                                        <td class="text-end"><span
-                                                class="badge badge-sm light badge-success">Good</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>James</td>
-                                        <td>History</td>
-                                        <td>B.Com</td>
-                                        <td>$ 21.70</td>
-                                        <td class="text-end"><span class="badge badge-sm light badge-danger">Bad</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Vicky canady</td>
-                                        <td>Basic Art</td>
-                                        <td>B.Tech</td>
-                                        <td>$ 217.70</td>
-                                        <td class="text-end"><span
-                                                class="badge badge-sm light badge-success">Good</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jack Xarma</td>
-                                        <td>Programming</td>
-                                        <td>B.Tech</td>
-                                        <td>$ 19.2.70</td>
-                                        <td class="text-end"><span
-                                                class="badge badge-sm light badge-success">Good</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Ramon</td>
-                                        <td>Basic Art</td>
-                                        <td>BA</td>
-                                        <td>$ 217.70</td>
-                                        <td class="text-end"><span
-                                                class="badge badge-sm light badge-success">Good</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Harry john</td>
-                                        <td>History</td>
-                                        <td>B.Tech</td>
-                                        <td>$ 18.70</td>
-                                        <td class="text-end"><span
-                                                class="badge badge-sm light badge-success">Good</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Hardy</td>
-                                        <td>Basic Algorithm</td>
-                                        <td>B.E</td>
-                                        <td>$ 17.70</td>
-                                        <td class="text-end"><span
-                                                class="badge badge-sm light badge-success">Good</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jeo</td>
-                                        <td>English</td>
-                                        <td>BA</td>
-                                        <td>$ 217.70</td>
-                                        <td class="text-end"><span
-                                                class="badge badge-sm light badge-success">Good</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>James Brown</td>
-                                        <td>History</td>
-                                        <td>B.Com</td>
-                                        <td>$ 15.70</td>
-                                        <td class="text-end"><span class="badge badge-sm light badge-danger">Bad</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>John</td>
-                                        <td>Art</td>
-                                        <td>B.Tech</td>
-                                        <td>$ 217.70</td>
-                                        <td class="text-end"><span
-                                                class="badge badge-sm light badge-success">Good</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Janny</td>
-                                        <td>Basic Algorithm</td>
-                                        <td>B.Tech</td>
-                                        <td>$ 21.70</td>
-                                        <td class="text-end"><span
-                                                class="badge badge-sm light badge-success">Good</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jorge clek</td>
-                                        <td>English</td>
-                                        <td>BA</td>
-                                        <td>$ 22.70</td>
-                                        <td class="text-end"><span
-                                                class="badge badge-sm light badge-success">Good</span></td>
-                                    </tr>
 
-
-                                </tbody>
-                            </table>
+        <!-- Segundo row -->
+        <div class="row">
+            <!-- Grados -->
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box icon-box-lg degree-data bg-danger me-3">
+                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M16 2L2 8V14C2 23.627 8.268 32 16 32C23.732 32 30 23.627 30 14V8L16 2ZM4 9.118L16 4.236L28 9.118V14C28 22.7 22.627 30 16 30C9.373 30 4 22.7 4 14V9.118ZM16 8C12.134 8 9 11.134 9 15C9 18.866 12.134 22 16 22C19.866 22 23 18.866 23 15C23 11.134 19.866 8 16 8ZM11 15C11 12.239 13.239 10 16 10C18.761 10 21 12.239 21 15C21 17.761 18.761 20 16 20C13.239 20 11 17.761 11 15Z"
+                                        fill="white" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-muted mb-1">Grados</p>
+                                <h3 class="font-w700 mb-0">{{ totalDegrees }}</h3>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--/column-->
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box icon-box-lg teach-data bg-primary me-3">
+                                <svg width="32" height="32" viewBox="0 0 30 38" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M0 34C0 36.0713 1.67875 37.75 3.75 37.75H26.25C28.3212 37.75 30 36.0713 30 34C30 31.0825 30 26.3125 30 23.5863C30 21.7738 28.7038 20.2213 26.9213 19.8975C24.2788 19.4163 19.7225 18.5875 17.145 18.12C15.7263 17.8612 14.2737 17.8612 12.855 18.12C10.2775 18.5875 5.72125 19.4163 3.07875 19.8975C1.29625 20.2213 0 21.7738 0 23.5863V34ZM17.885 20.795L19.7612 27.9288C20.0075 28.865 19.6775 29.8588 18.92 30.4638C18.28 30.9738 17.2713 31.7788 16.5713 32.3388C15.6525 33.0713 14.3475 33.0713 13.4287 32.3388C12.7287 31.7788 11.72 30.9738 11.08 30.4638C10.3225 29.8588 9.9925 28.865 10.2388 27.9288L12.1151e-05L17,20L3,22L4,24L6,25L6,27L4,28L4,30L6,31L6,33L4,34L4,36L6,37H24L26,36V34L24,33V31
+L26,30V28L24,27V25L26,24V22L24,21V20L17.885 20.795ZM15.2038 20.4288C15.0675 20.425 14.9325 20.425 14.7962 20.4288L12.6663 28.5312L14.9887 30.3837C14.995 30.39 15.005 30.39 15.0113 30.3837L17.3337 28.5312L15.2038 20.4288ZM15 0.25C10.5163 0.25 6.875 3.89125 6.875 8.375C6.875 12.8587 10.5163 16.5 15 16.5C19.4837 16.5 23.125 12.8587 23.125 8.375C23.125 3.89125 19.4837 0.25 15 0.25ZM15 2.75C18.105 2.75 20.625 5.27 20.625 8.375C20.625 11.48 18.105 14 15 14C11.895 14 9.375 11.48 9.375 8.375C9.375 5.27 11.895 2.75 15 2.75Z"
+                                        fill="white" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-muted mb-1">Tutores</p>
+                                <h3 class="font-w700 mb-0">{{ totalParents }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Usuarios -->
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box icon-box-lg users-data bg-success me-3">
+                                <svg width="32" height="32" viewBox="0 0 30 30" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M15 2C8.373 2 3 7.373 3 14C3 20.627 8.373 26 15 26C21.627 26 27 20.627 27 14C27 7.373 21.627 2 15 2ZM15 4C20.523 4 25 8.477 25 14C25 19.523 20.523 24 15 24C9.477 24 5 19.523 5 14C5 8.477 9.477 4 15 4ZM15 6C12.239 6 10 8.239 10 11C10 13.761 12.239 16 15 16C17.761 16 20 13.761 20 11C20 8.239 17.761 6 15 6ZM12 11C12 9.343 13.343 8 15 8C16.657 8 18 9.343 18 11C18 12.657 16.657 14 15 14C13.343 14 12 12.657 12 11ZM8 19C8 17.343 8 17 9 17H21C22 17 22 17.343 22 19C22 20.104 22 22 15 22C8 22 8 20.104 8 19Z"
+                                        fill="white" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-muted mb-1">Usuarios</p>
+                                <h3 class="font-w700 mb-0">{{ totalUsers }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

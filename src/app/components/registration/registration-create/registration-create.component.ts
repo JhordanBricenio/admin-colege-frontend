@@ -1,40 +1,47 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RegistrationService } from '../../../services/registration.service';
-import { UserService } from '../../../services/user.service';
 import { DegreeService } from '../../../services/degree.service';
 import { EducationLevelService } from '../../../services/education-level.service';
+import { StudentService } from '../../../services/student.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, DatePipe } from '@angular/common';
 import { Student } from '../../../models/student';
+import { Parent } from '../../../models/parent';
+import { Registration } from '../../../models/registration';
 import { Degree } from '../../../models/degree';
 import { EducationLevel } from '../../../models/education-level';
 import { User } from '../../../models/user';
+import { ParentService } from '../../../services/parent.service';
 
 @Component({
   selector: 'app-registration-create',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, NgFor],
+  imports: [ReactiveFormsModule, NgIf, NgFor, DatePipe],
   templateUrl: './registration-create.component.html',
   styleUrl: './registration-create.component.css'
 })
-export class RegistrationCreateComponent {
+export class RegistrationCreateComponent implements OnInit {
 
-  students: User[] = [];
+  students: Student[] = [];
   degrees: Degree[] = [];
   educationLevels: EducationLevel[] = [];
-  parents: User[] = [];
+  parents: Parent[] = [];
 
-  filteredStudents: User[] = [];
-  filteredParents: User[] = [];
+  filteredStudents: Student[] = [];
+  filteredParents: Parent[] = [];
+
+  selectedStudent: Student | null = null;
+  selectedParent: Parent | null = null;
 
   studentSearchControl = new FormControl('');
   parentSearchControl = new FormControl('');
 
   private fb = inject(FormBuilder);
   private registrationService = inject(RegistrationService);
-  private userService = inject(UserService);
+  private studentService = inject(StudentService);
+  private parentService = inject(ParentService);
   private degreeService = inject(DegreeService);
   private educationLevelService = inject(EducationLevelService);
   private router = inject(Router);
@@ -42,11 +49,9 @@ export class RegistrationCreateComponent {
   isLoading = false;
 
   registrationForm = this.fb.nonNullable.group({
-    idStudent: ['', Validators.required],
-    idDegree: ['', Validators.required],
-    idParent: ['', Validators.required],
-    idEducationLevel: ['', Validators.required],
-    status: ['ACTIVE', Validators.required],
+    student: ['', Validators.required],
+    parent: ['', Validators.required],
+    status: [true, Validators.required],
     registrationDate: [this.getCurrentDate(), Validators.required],
   });
 
@@ -67,61 +72,65 @@ export class RegistrationCreateComponent {
   }
 
   setupAutocomplete(): void {
-    // Configurar autocomplete para estudiantes
     this.studentSearchControl.valueChanges.subscribe(searchTerm => {
       this.filterStudents(searchTerm || '');
     });
 
-    // Configurar autocomplete para padres
     this.parentSearchControl.valueChanges.subscribe(searchTerm => {
       this.filterParents(searchTerm || '');
     });
   }
 
   filterStudents(searchTerm: string): void {
-    if (!searchTerm) {
-      this.filteredStudents = this.students.slice(0, 10); // Mostrar solo primeros 10
+    const term = this.normalizeText(searchTerm).trim();
+
+    if (!term) {
+      this.filteredStudents = this.students.slice(0, 10);
       return;
     }
 
-    const term = searchTerm.toLowerCase();
     this.filteredStudents = this.students.filter(student => {
-      const fullName = `${student.name} ${student.lastname}`.toLowerCase();
-      return fullName.includes(term);
-    }).slice(0, 10); // Limitar resultados a 10
+      const fullName = this.getStudentFullName(student);
+      const code = this.normalizeText(student?.code);
+      const dni = this.normalizeText(student?.user?.dni);
+      return fullName.includes(term) || code.includes(term) || dni.includes(term);
+    }).slice(0, 10);
   }
 
   filterParents(searchTerm: string): void {
-    if (!searchTerm) {
-      this.filteredParents = this.parents.slice(0, 10); // Mostrar solo primeros 10
+    const term = this.normalizeText(searchTerm).trim();
+
+    if (!term) {
+      this.filteredParents = this.parents.slice(0, 10);
       return;
     }
 
-    const term = searchTerm.toLowerCase();
     this.filteredParents = this.parents.filter(parent => {
-      const fullName = `${parent.name} ${parent.lastname}`.toLowerCase();
-      return fullName.includes(term);
-    }).slice(0, 10); // Limitar resultados a 10
+      const fullName = this.getParentFullName(parent);
+      const dni = this.normalizeText(parent?.user?.dni);
+      return fullName.includes(term) || dni.includes(term);
+    }).slice(0, 10);
   }
 
-  selectStudent(student: User): void {
-    this.registrationForm.patchValue({ idStudent: student.idUser.toString() });
-    this.studentSearchControl.setValue(`${student.name} ${student.lastname}`);
+  selectStudent(student: Student): void {
+    this.selectedStudent = student;
+    this.registrationForm.patchValue({ student: student.idStudent });
+    this.studentSearchControl.setValue(this.getStudentFullName(student));
     this.filteredStudents = [];
   }
 
-  selectParent(parent: User): void {
-    this.registrationForm.patchValue({ idParent: parent.idUser.toString() });
-    this.parentSearchControl.setValue(`${parent.name} ${parent.lastname}`);
+  selectParent(parent: Parent): void {
+    this.selectedParent = parent;
+    this.registrationForm.patchValue({ parent: parent.idParent });
+    this.parentSearchControl.setValue(this.getParentFullName(parent));
     this.filteredParents = [];
   }
 
   loadStudents() {
-    this.userService.getUsers().subscribe({
+    this.studentService.getUsers().subscribe({
       next: (data) => {
-        console.log('Loaded students:', data);
         this.students = data;
-        this.filteredStudents = data.slice(0, 10); // Inicializar con primeros 10
+        this.filteredStudents = data.slice(0, 10);
       },
       error: (error) => {
         console.error('Error loading students:', error);
@@ -133,7 +142,6 @@ export class RegistrationCreateComponent {
   loadDegrees() {
     this.degreeService.getDegrees().subscribe({
       next: (data) => {
-        console.log('Loaded degrees:', data);
         this.degrees = data;
 
       },
@@ -147,7 +155,6 @@ export class RegistrationCreateComponent {
   loadEducationLevels() {
     this.educationLevelService.getEducationLevels().subscribe({
       next: (data) => {
-        console.log('Loaded education levels:', data);
         this.educationLevels = data;
       },
       error: (error) => {
@@ -158,15 +165,14 @@ export class RegistrationCreateComponent {
   }
 
   loadParents() {
-    this.userService.getUsers().subscribe({
+    this.parentService.getUsers().subscribe({
       next: (data) => {
-        console.log('Loaded parents:', data);
         this.parents = data;
-        this.filteredParents = data.slice(0, 10); // Inicializar con primeros 10
+        this.filteredParents = data.slice(0, 10);
       },
       error: (error) => {
         console.error('Error loading parents:', error);
-        Swal.fire('Error', 'No se pudieron cargar los apoderados', 'error');
+        Swal.fire('Error', 'No se pudieron cargar los padres', 'error');
       }
     });
   }
@@ -181,8 +187,12 @@ export class RegistrationCreateComponent {
 
   createRegistration() {
     this.isLoading = true;
-    const body = this.registrationForm.getRawValue();
-
+    const formValue = this.registrationForm.getRawValue();
+    const body: any = {
+      idStudent: this.selectedStudent.idStudent!,
+      idParent: this.selectedParent.idParent!,
+      status: formValue.status
+    };
     this.registrationService.createRegistration(body).subscribe({
       next: (response) => {
         this.isLoading = false;
@@ -205,6 +215,22 @@ export class RegistrationCreateComponent {
 
   cancel() {
     this.router.navigate(['/admin/registration']);
+  }
+
+  private normalizeText(value: unknown): string {
+    return String(value ?? '').toLowerCase();
+  }
+
+  private getStudentFullName(student: Student | null | undefined): string {
+    const name = this.normalizeText(student?.user?.name).trim();
+    const lastname = this.normalizeText(student?.user?.lastname).trim();
+    return `${name} ${lastname}`.trim();
+  }
+
+  private getParentFullName(parent: Parent | null | undefined): string {
+    const name = this.normalizeText(parent?.user?.name).trim();
+    const lastname = this.normalizeText(parent?.user?.lastname).trim();
+    return `${name} ${lastname}`.trim();
   }
 
 }

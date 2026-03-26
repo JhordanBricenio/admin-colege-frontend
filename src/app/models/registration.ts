@@ -1,10 +1,13 @@
+import { Parent } from "./parent";
+import { Student } from "./student";
+
 export class Registration {
     idRegistration?: string;
-    idStudent: string;
-    idDegree: string;
-    idParent: string;
-    idEducationLevel: string;
-    status: string;
+    status: boolean;
+    parent: Parent;
+    student: Student;
     createdAt?: Date;
     updatedAt?: Date;
+    idStudent?: string;
+    idParent?: string;
 }

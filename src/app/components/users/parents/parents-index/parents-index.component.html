@@ -21,8 +21,8 @@
                                 <div>
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal">
-                                        <a routerLink="/admin/user/new">
-                                            + Nuevo Usuario
+                                        <a routerLink="/admin/parent/new">
+                                            + Nuevo apoderado
                                         </a>
                                     </button>
                                 </div>
@@ -32,7 +32,7 @@
                         <div class="col-xl-12 wow fadeInUp" data-wow-delay="1.5s">
                             <div class="table-responsive full-data">
                                 <table
-                                    class="table-responsive-lg table display dataTablesCard student-tab dataTable no-footer">
+                                    class="table-responsive-lg table display dataTablesCard parent-tab dataTable no-footer">
                                     <thead>
                                         <tr>
                                             <th>
@@ -40,10 +40,11 @@
                                                     required="">
                                             </th>
                                             <th>Nombres</th>
+                                            <th>Apellidos</th>
                                             <th>DNI</th>
-                                            <th>Fecha registro</th>
                                             <th>Email</th>
                                             <th>Dirección</th>
+                                            <th>Estado</th>
                                             <th class="text-end">Acción</th>
                                         </tr>
                                     </thead>
@@ -62,19 +63,24 @@
                                                 <div class="trans-list">
                                                     <img src="assets/images/trans/1.jpg" alt=""
                                                         class="avatar avatar-sm me-3">
-                                                    <h4>{{item.name}}</h4>
+                                                    <h4>{{item.user.name}}</h4>
                                                 </div>
                                             </td>
-                                            <td><span class="text-primary font-w600">{{item.dni}}</span></td>
                                             <td>
-                                                <div class="date">{{item.createdAt | date: 'short'}}</div>
+                                                <div class="date">{{item.user.lastname}}</div>
                                             </td>
+                                            <td><span class="text-primary font-w600">{{item.user.dni}}</span></td>
                                             <td>
-                                                <h6 class="mb-0">{{item.email}}</h6>
+                                                <h6 class="mb-0">{{item.user.email}}</h6>
                                             </td>
                                             <td>
                                                 <div class="badge bg-info">
-                                                    {{item.address}}
+                                                    {{item.user.address}}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="badge bg-success">
+                                                    {{item.status? 'Activo' : 'Inactivo'}}
                                                 </div>
                                             </td>
                                             <td>
@@ -90,11 +96,11 @@
                                                     </div>
                                                     <div class="dropdown-menu dropdown-menu-end">
                                                         <a class="dropdown-item" style="cursor: pointer;"
-                                                            (click)="verUser(item.dni)">Ver usuario</a>
+                                                            (click)="verUser(item.user.dni)">Ver usuario</a>
                                                         <a class="dropdown-item"
-                                                            [routerLink]="['/admin/user/edit', item.idUser]">Editar</a>
+                                                            [routerLink]="['/admin/teacher/edit', item.idTeacher]">Editar</a>
                                                         <a class="dropdown-item" style="cursor: pointer;"
-                                                            (click)="deleteUser(item.idUser)">Eliminar</a>
+                                                            (click)="deleteUser(item.idTeacher)">Eliminar</a>
                                                     </div>
                                                 </div>
                                             </td>

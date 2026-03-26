@@ -1,10 +1,11 @@
-import { Component, inject, Inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { User } from '../../models/user';
-import { Role } from '../../models/role';
-import { RoleService } from '../../services/role.service';
-import { Course } from '../../models/course';
+import { StudentService } from '../../services/student.service';
+import { TeacherService } from '../../services/teacher.service';
 import { CourseService } from '../../services/course.service';
+import { DegreeService } from '../../services/degree.service';
+import { RegistrationService } from '../../services/registration.service';
+import { ParentService } from '../../services/parent.service';
 
 @Component({
   selector: 'app-home',
@@ -13,51 +14,117 @@ import { CourseService } from '../../services/course.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
-
+export class HomeComponent implements OnInit {
 
   private userService = inject(UserService);
-  private roleService = inject(RoleService);
+  private studentService = inject(StudentService);
+  private teacherService = inject(TeacherService);
+  private parentService = inject(ParentService);
   private courseService = inject(CourseService);
+  private degreeService = inject(DegreeService);
+  private registrationService = inject(RegistrationService);
 
-  users: User[] = [];
-  roles: Role[] = [];
-  courses: Course[] = [];
+  totalUsers: number = 0;
+  totalStudents: number = 0;
+  totalTeachers: number = 0;
+  totalCourses: number = 0;
+  totalParents: number = 0;
+  totalDegrees: number = 0;
+  totalRegistrations: number = 0;
 
   ngOnInit(): void {
-    this.loadUsers();
-    this.loadRoles();
-    this.loadCourses();
+    this.loadAllData();
   }
 
-  private loadUsers() {
+  private loadAllData(): void {
+    this.loadUsers();
+    this.loadStudents();
+    this.loadTeachers();
+    this.loadParents();
+    this.loadCourses();
+    this.loadDegrees();
+    this.loadRegistrations();
+  }
+
+  private loadUsers(): void {
     this.userService.getUsers().subscribe({
       next: (response) => {
-        this.users = response;
+        this.totalUsers = response.length;
       },
       error: (error) => {
         console.error('Error fetching users:', error);
-      }
-    });
-  }
-  private loadRoles() {
-    this.roleService.getRoles().subscribe({
-      next: (response) => {
-        this.roles = response;
-      },
-      error: (error) => {
-        console.error('Error fetching roles:', error);
+        this.totalUsers = 0;
       }
     });
   }
 
-  private loadCourses() {
+  private loadStudents(): void {
+    this.studentService.getUsers().subscribe({
+      next: (response) => {
+        this.totalStudents = response.length;
+      },
+      error: (error) => {
+        console.error('Error fetching students:', error);
+        this.totalStudents = 0;
+      }
+    });
+  }
+
+  private loadTeachers(): void {
+    this.teacherService.getUsers().subscribe({
+      next: (response) => {
+        this.totalTeachers = response.length;
+      },
+      error: (error) => {
+        console.error('Error fetching teachers:', error);
+        this.totalTeachers = 0;
+      }
+    });
+  }
+  private loadParents(): void {
+    this.parentService.getUsers().subscribe({
+      next: (response) => {
+        this.totalParents = response.length;
+      },
+      error: (error) => {
+        console.error('Error fetching parents:', error);
+        this.totalParents = 0;
+      }
+    });
+  }
+
+  private loadCourses(): void {
     this.courseService.getCourses().subscribe({
       next: (response) => {
-        this.courses = response;
+        this.totalCourses = response.length;
       },
       error: (error) => {
         console.error('Error fetching courses:', error);
+        this.totalCourses = 0;
+      }
+    });
+  }
+
+  private loadDegrees(): void {
+    this.degreeService.getDegrees().subscribe({
+      next: (response) => {
+        this.totalDegrees = response.length;
+      },
+      error: (error) => {
+        console.error('Error fetching degrees:', error);
+        this.totalDegrees = 0;
+      }
+    });
+  }
+
+  private loadRegistrations(): void {
+    this.registrationService.getRegistrations().subscribe({
+      next: (response) => {
+        this.totalRegistrations = response.length;
+      },
+      error: (error) => {
+        console.error('Error fetching registrations:', error);
+        this.totalRegistrations = 0;
       }
     });
   }

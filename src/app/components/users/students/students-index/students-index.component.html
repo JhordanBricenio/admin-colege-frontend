@@ -21,8 +21,8 @@
                                 <div>
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal">
-                                        <a routerLink="/admin/teacher/new">
-                                            + Nuevo profesor
+                                        <a routerLink="/admin/student/new">
+                                            + Nuevo estudiante
                                         </a>
                                     </button>
                                 </div>
@@ -44,7 +44,7 @@
                                             <th>DNI</th>
                                             <th>Email</th>
                                             <th>Dirección</th>
-                                            <th>Especialidad</th>
+                                            <th>Estado</th>
                                             <th class="text-end">Acción</th>
                                         </tr>
                                     </thead>
@@ -80,7 +80,7 @@
                                             </td>
                                             <td>
                                                 <div class="badge bg-success">
-                                                    {{item.specialty}}
+                                                    {{item.status? 'Activo' : 'Inactivo'}}
                                                 </div>
                                             </td>
                                             <td>

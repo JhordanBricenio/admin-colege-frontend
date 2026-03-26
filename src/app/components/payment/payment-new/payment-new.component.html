@@ -1,0 +1,188 @@
+<div class="content-body">
+    <div class="container-fluid">
+
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h4 class="mb-1">Pagos del estudiante</h4>
+                <p class="mb-0 text-muted">{{ studentName || 'Estudiante seleccionado' }}</p>
+            </div>
+            <button class="btn btn-outline-primary" (click)="goBack()">
+                <i class="fa fa-arrow-left me-1"></i> Volver
+            </button>
+        </div>
+
+        <div class="row g-3 mb-3" *ngIf="!isLoading">
+            <div class="col-md-4">
+                <div class="summary-card">
+                    <div class="summary-label">Meses pagados</div>
+                    <div class="summary-value">{{ paidMonthsCount }}/12</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="summary-card">
+                    <div class="summary-label">Total pagado</div>
+                    <div class="summary-value">{{ totalPaidAmount | currency:'PEN':'symbol':'1.2-2' }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="summary-card">
+                    <div class="summary-label">Ultimo pago</div>
+                    <div class="summary-value-sm">
+                        <ng-container *ngIf="lastPayment; else noLast">
+                            {{ lastPayment?.paidMonth }} - {{ lastPayment?.paymentDate | date:'dd/MM/yyyy' }}
+                        </ng-container>
+                        <ng-template #noLast>Sin pagos</ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <h5 class="card-title mb-0">Pagos del año</h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-light" (click)="changeYear(-1)">
+                        <i class="fa fa-chevron-left"></i>
+                    </button>
+                    <span class="year-badge">{{ selectedYear }}</span>
+                    <button class="btn btn-sm btn-light" (click)="changeYear(1)">
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div *ngIf="isLoading" class="alert alert-info mb-0">Cargando pagos...</div>
+
+                <div *ngIf="!isLoading && paymentsOfYear.length > 0" class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mes</th>
+                                <th>Estado</th>
+                                <th>Fecha de pago</th>
+                                <th>Monto</th>
+                                <th>Metodo</th>
+                                <th>Comprobante</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let payment of paymentsOfYear">
+                                <td class="fw-semibold">{{ payment.paidMonth }}</td>
+                                <td>
+                                    <span class="badge" [ngClass]="getStatusClass(payment.status)">
+                                        {{ getStatusText(payment.status) }}
+                                    </span>
+                                </td>
+                                <td>{{ payment.paymentDate | date:'dd/MM/yyyy' }}</td>
+                                <td>{{ payment.amountPaid | currency:'PEN':'symbol':'1.2-2' }}</td>
+                                <td>{{ payment.paymentMethod || '-' }}</td>
+                                <td>{{ payment.receiptNumber || '-' }}</td>
+                                <td>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <button type="button" class="btn btn-sm btn-secondary"
+                                            (click)="printPaymentReceipt(payment)" title="Imprimir recibo">
+                                            <i class="fa fa-print"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-info"
+                                            (click)="viewPaymentDetails(payment)" title="Ver detalle">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-warning"
+                                            (click)="editPayment(payment)" title="Editar pago">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-danger"
+                                            (click)="removePayment(payment)" title="Eliminar pago">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div *ngIf="!isLoading && paymentsOfYear.length === 0" class="alert alert-warning mb-0">
+                    No hay pagos registrados para {{ selectedYear }}.
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3" *ngIf="!isLoading">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Meses pendientes</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-2" *ngIf="pendingMonths.length > 0">
+                    <button class="btn btn-outline-primary btn-sm" *ngFor="let month of pendingMonths"
+                        (click)="openPaymentModal(month)">
+                        {{ month }}
+                    </button>
+                </div>
+                <div *ngIf="pendingMonths.length === 0" class="text-success fw-semibold">
+                    Todos los meses del año {{ selectedYear }} estan pagados.
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" *ngIf="isModalOpen">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h5 class="mb-0">
+                        <ng-container *ngIf="editingPaymentId; else createMode">
+                            Editar pago - {{ selectedMonth }} {{ selectedYear }}
+                        </ng-container>
+                        <ng-template #createMode>
+                            Registrar pago - {{ selectedMonth }} {{ selectedYear }}
+                        </ng-template>
+                    </h5>
+                    <button class="btn-close-modal" (click)="closePaymentModal()">&times;</button>
+                </div>
+
+                <form [formGroup]="paymentForm" (ngSubmit)="saveMonthlyPayment()" class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha de pago</label>
+                            <input type="date" class="form-control" formControlName="paymentDate" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Monto pagado</label>
+                            <input type="number" class="form-control" formControlName="amountPaid" min="1" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Metodo de pago</label>
+                            <select class="form-select" formControlName="paymentMethod">
+                                <option value="CASH">Efectivo</option>
+                                <option value="TRANSFER">Transferencia</option>
+                                <option value="YAPE">Yape</option>
+                                <option value="CARD">Tarjeta</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Nro comprobante</label>
+                            <input type="text" class="form-control" formControlName="receiptNumber" />
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Notas</label>
+                            <textarea class="form-control" rows="3" formControlName="notes"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-light" (click)="closePaymentModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <ng-container *ngIf="editingPaymentId; else saveText">Actualizar pago</ng-container>
+                            <ng-template #saveText>Guardar pago</ng-template>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Recibo de Pago Mensual</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 14mm;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Times New Roman', serif;
+            color: #111;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .receipt-sheet {
+            max-width: 180mm;
+            margin: 0 auto;
+        }
+
+        .receipt-copy {
+            border: 1px solid #8a8a8a;
+            border-radius: 4px;
+            padding: 14px 16px 16px;
+            min-height: 120mm;
+            box-sizing: border-box;
+        }
+
+        .copy-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .copy-badge {
+            border: 1px solid #111;
+            border-radius: 3px;
+            padding: 3px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 0.3px;
+        }
+
+        .inst-name {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .title {
+            text-align: center;
+            margin: 4px 0 0;
+            font-size: 15px;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+        }
+
+        .meta {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 14px;
+        }
+
+        .meta p,
+        .student-data p,
+        .payment-data p,
+        .formal p {
+            margin: 0;
+        }
+
+        .section-title {
+            margin: 12px 0 6px;
+            border-bottom: 1px solid #b8b8b8;
+            padding-bottom: 2px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .student-data,
+        .payment-data {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px 14px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .formal {
+            margin-top: 10px;
+            text-align: justify;
+        }
+
+        .signature-row {
+            margin-top: 26px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .sign-box {
+            text-align: center;
+        }
+
+        .sign-line {
+            border-top: 1px solid #111;
+            margin-top: 28px;
+            padding-top: 4px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .cut-line {
+            border-top: 2px dashed #8d8d8d;
+            margin: 12px 0;
+            position: relative;
+            height: 0;
+        }
+
+        .cut-line span {
+            position: absolute;
+            top: -9px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            padding: 0 10px;
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: #666;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        @media print {
+            .receipt-sheet {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="receipt-sheet">
+        <section class="receipt-copy">
+            <div class="copy-header">
+                <span class="copy-badge">RECIBO ORIGINAL</span>
+            </div>
+
+
+            <h2 class="title">RECIBO DE PAGO</h2>
+
+            <div class="meta">
+                <p><span class="label">Fecha de emision:</span> ${issueDate}</p>
+                <p><span class="label">Nro recibo:</span> ${receiptNumber}</p>
+            </div>
+
+            <div class="section-title">Datos del estudiante</div>
+            <div class="student-data">
+                <p class="full"><span class="label">Nombre completo:</span> ${studentName}</p>
+                <p><span class="label">DNI:</span> ${studentDni}</p>
+                <p><span class="label">Carrera / Grado:</span> ${studentDegree}</p>
+                <p><span class="label">Codigo:</span> ${studentCode}</p>
+            </div>
+
+            <div class="section-title">Datos del pago</div>
+            <div class="payment-data">
+                <p><span class="label">Concepto:</span> ${concept}</p>
+                <p><span class="label">Mes correspondiente:</span> ${paymentMonth} ${paymentYear}</p>
+                <p><span class="label">Fecha de pago:</span> ${paymentDate}</p>
+                <p><span class="label">Monto pagado:</span> S/ ${amount}</p>
+                <p><span class="label">Metodo de pago:</span> ${paymentMethod}</p>
+                <p><span class="label">Estado:</span> ${status}</p>
+                <p class="full"><span class="label">Observaciones:</span> ${notes}</p>
+            </div>
+
+            <div class="formal">
+                <p>
+                    Se deja constancia que la institucion ha recibido conforme el pago indicado en este documento,
+                    correspondiente a la mensualidad del periodo senalado, quedando registrado para fines academicos y
+                    administrativos.
+                </p>
+            </div>
+
+            <div class="signature-row">
+                <div class="sign-box">
+                    <div class="sign-line">Responsable de la institucion</div>
+                </div>
+                <div class="sign-box">
+                    <div class="sign-line">Firma del estudiante / apoderado</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="cut-line"><span>CORTE</span></div>
+
+        <section class="receipt-copy">
+            <div class="copy-header">
+                <span class="copy-badge">COPIA</span>
+            </div>
+
+
+            <h2 class="title">RECIBO DE PAGO</h2>
+
+            <div class="meta">
+                <p><span class="label">Fecha de emision:</span> ${issueDate}</p>
+                <p><span class="label">Nro recibo:</span> ${receiptNumber}</p>
+            </div>
+
+            <div class="section-title">Datos del estudiante</div>
+            <div class="student-data">
+                <p class="full"><span class="label">Nombre completo:</span> ${studentName}</p>
+                <p><span class="label">DNI:</span> ${studentDni}</p>
+                <p><span class="label">Carrera / Grado:</span> ${studentDegree}</p>
+                <p><span class="label">Codigo:</span> ${studentCode}</p>
+            </div>
+
+            <div class="section-title">Datos del pago</div>
+            <div class="payment-data">
+                <p><span class="label">Concepto:</span> ${concept}</p>
+                <p><span class="label">Mes correspondiente:</span> ${paymentMonth} ${paymentYear}</p>
+                <p><span class="label">Fecha de pago:</span> ${paymentDate}</p>
+                <p><span class="label">Monto pagado:</span> S/ ${amount}</p>
+                <p><span class="label">Metodo de pago:</span> ${paymentMethod}</p>
+                <p><span class="label">Estado:</span> ${status}</p>
+                <p class="full"><span class="label">Observaciones:</span> ${notes}</p>
+            </div>
+
+            <div class="formal">
+                <p>
+                    Se deja constancia que la institucion ha recibido conforme el pago indicado en este documento,
+                    correspondiente a la mensualidad del periodo senalado, quedando registrado para fines academicos y
+                    administrativos.
+                </p>
+            </div>
+
+            <div class="signature-row">
+                <div class="sign-box">
+                    <div class="sign-line">Responsable de la institucion</div>
+                </div>
+                <div class="sign-box">
+                    <div class="sign-line">Firma del estudiante / apoderado</div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>

@@ -2,106 +2,260 @@
     <div class="container-fluid">
         <div class="col-xl-12">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0 fw-semibold text-dark">Registrar Nueva Matrícula</h5>
+                <div class="card-header bg-light border-bottom">
+                    <h5 class="mb-0 fw-semibold text-dark">
+                        <i class="fas fa-graduation-cap me-2"></i>Registrar Nueva Matrícula
+                    </h5>
                 </div>
 
                 <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
                     <div class="card-body">
-                        <div class="row ">
+                        <!-- Sección 1: Selección de Estudiante y Apoderado -->
+                        <div class="section-header mb-4">
+                            <h6 class="fw-semibold text-primary mb-0">
+                                <span class="badge bg-primary me-2" style="font-size: 0.85rem;">1</span>Información del
+                                Estudiante y Apoderado
+                            </h6>
+                        </div>
 
+                        <div class="row">
                             <!-- Estudiante -->
                             <div class="col-xl-6 col-sm-6">
-                                <div class="mb-3"> <label for="student" class="form-label text-primary">Estudiante<span
+                                <div class="mb-3">
+                                    <label for="student" class="form-label text-primary fw-semibold">Estudiante<span
                                             class="required">*</span></label>
-                                    <div class="autocomplete-wrapper" style="position: relative;"> <input type="text"
-                                            [formControl]="studentSearchControl" class="form-control" id="student"
+                                    <div class="autocomplete-wrapper" style="position: relative;">
+                                        <input type="text" [formControl]="studentSearchControl"
+                                            class="form-control form-control-lg" id="student"
                                             placeholder="Buscar estudiante por nombre..." autocomplete="off">
                                         <div class="autocomplete-dropdown"
                                             *ngIf="filteredStudents.length > 0 && studentSearchControl.value"
-                                            style="position: absolute; z-index: 1000; border: 1px solid #ddd; border-radius: 4px; max-height: 200px; overflow-y: auto; width: 100%; margin-top: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                            style="position: absolute; z-index: 1000; border: 1px solid #ddd; border-radius: 4px; max-height: 250px; overflow-y: auto; width: 100%; margin-top: 2px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
                                             <div *ngFor="let student of filteredStudents"
                                                 (click)="selectStudent(student)"
-                                                style="padding: 10px; cursor: pointer; border-bottom: 1px solid #f0f0f0;">
-                                                {{
-                                                student.name }} {{ student.lastname }} </div>
+                                                style="padding: 12px; cursor: pointer; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s;">
+                                                <div class="fw-medium">{{ student.user.name }} {{ student.user.lastname
+                                                    }}</div>
+                                                <small class="text-muted">DNI: {{ student.user.dni }} - Código: {{
+                                                    student.code }}</small>
+                                            </div>
                                         </div>
-                                    </div> <small
-                                        *ngIf="registrationForm.controls.idStudent.touched && registrationForm.controls.idStudent.invalid"
-                                        class="text-danger"> El estudiante es obligatorio </small>
+                                    </div>
+                                    <small
+                                        *ngIf="registrationForm.get('student')?.touched && registrationForm.get('student')?.invalid"
+                                        class="text-danger d-block mt-2">
+                                        ⚠ El estudiante es obligatorio
+                                    </small>
                                 </div>
                             </div>
-                            <!-- Grado -->
+                            <!-- Apoderado -->
                             <div class="col-xl-6 col-sm-6">
-                                <label class="form-label text-dark fw-medium">Grado <span
-                                        class="text-danger">*</span></label>
-                                <select class="form-select form-select-lg" formControlName="idDegree">
-                                    <option value="" disabled>Seleccione un grado</option>
-                                    <option *ngFor="let degree of degrees" [value]="degree.idDegree">
-                                        {{ degree.course }}
-                                    </option>
-                                </select>
-                            </div>
-                            <!-- Padre -->
-                            <div class="col-xl-6 col-sm-6 mt-5"> <!-- Apoderado/Padre -->
-                                <div class="mb-3"> <label for="parent"
-                                        class="form-label text-primary">Apoderado/Padre<span
+                                <div class="mb-3">
+                                    <label for="parent" class="form-label text-success fw-semibold">Apoderado/Padre<span
                                             class="required">*</span></label>
-                                    <div class="autocomplete-wrapper" style="position: relative;"> <input type="text"
-                                            [formControl]="parentSearchControl" class="form-control" id="parent"
+                                    <div class="autocomplete-wrapper" style="position: relative;">
+                                        <input type="text" [formControl]="parentSearchControl"
+                                            class="form-control form-control-lg" id="parent"
                                             placeholder="Buscar apoderado por nombre..." autocomplete="off">
                                         <div class="autocomplete-dropdown"
                                             *ngIf="filteredParents.length > 0 && parentSearchControl.value"
-                                            style="position: absolute; z-index: 1000;  border: 1px solid #ddd; border-radius: 4px; max-height: 200px; overflow-y: auto; width: 100%; margin-top: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                            style="position: absolute; z-index: 1000; border: 1px solid #ddd; border-radius: 4px; max-height: 250px; overflow-y: auto; width: 100%; margin-top: 2px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
                                             <div *ngFor="let parent of filteredParents" (click)="selectParent(parent)"
-                                                style="padding: 10px; cursor: pointer; border-bottom: 1px solid #f0f0f0;">
-                                                {{ parent.name }} {{ parent.lastname }} </div>
-
+                                                style="padding: 12px; cursor: pointer; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s;">
+                                                <div class="fw-medium">{{ parent.user.name }} {{ parent.user.lastname }}
+                                                </div>
+                                                <small class="text-muted">DNI: {{ parent.user.dni }} - {{
+                                                    parent.relationship }}</small>
+                                            </div>
                                         </div>
-                                    </div> <small
-                                        *ngIf="registrationForm.controls.idParent.touched && registrationForm.controls.idParent.invalid"
-                                        class="text-danger"> El apoderado es obligatorio </small>
-                                </div>
-
-                                <!-- Nivel -->
-                                <div class="col-xl-6 col-sm-6 mt-5">
-                                    <label class="form-label text-dark fw-medium">Nivel Educativo <span
-                                            class="text-danger">*</span></label>
-                                    <select class="form-select form-select-lg" formControlName="idEducationLevel">
-                                        <option value="">Seleccione un nivel</option>
-                                        <option *ngFor="let level of educationLevels" [value]="level.idEducationLevel">
-                                            {{ level.name }}
-                                        </option>
-                                    </select>
+                                    </div>
+                                    <small
+                                        *ngIf="registrationForm.get('parent')?.touched && registrationForm.get('parent')?.invalid"
+                                        class="text-danger d-block mt-2">
+                                        ⚠ El apoderado es obligatorio
+                                    </small>
                                 </div>
                             </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Detalles del Estudiante Seleccionado -->
+                        <div *ngIf="selectedStudent" class="mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-user-check me-2" style="color: #007bff; font-size: 1.2rem;"></i>
+                                <h6 class="mb-0 fw-semibold text-primary">Información del Estudiante - Verificación de
+                                    Identidad</h6>
+                            </div>
+                            <div class="alert alert-info border-start border-4 border-info" role="alert">
+                                <strong>✓ Estudiante Confirmado:</strong> {{ selectedStudent.user.name }} {{
+                                selectedStudent.user.lastname }}
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td class="fw-bold text-primary" style="width: 30%;">
+                                                <i class="fas fa-id-card me-2"></i>Nombre Completo
+                                            </td>
+                                            <td class="fw-medium">{{ selectedStudent.user.name }} {{
+                                                selectedStudent.user.lastname
+                                                }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-primary">
+                                                <i class="fas fa-credit-card me-2"></i>DNI/Cédula
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-secondary fs-6">{{ selectedStudent.user.dni
+                                                    }}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-primary">
+                                                <i class="fas fa-birthday-cake me-2"></i>Fecha de Nacimiento
+                                            </td>
+                                            <td>{{ selectedStudent.user.birthDate | date: 'dd/MM/yyyy' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-primary">
+                                                <i class="fas fa-venus-mars me-2"></i>Género
+                                            </td>
+                                            <td>{{ selectedStudent.user.gender }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-primary">
+                                                <i class="fas fa-envelope me-2"></i>Email
+                                            </td>
+                                            <td><a href="mailto:{{ selectedStudent.user.email }}"
+                                                    class="text-decoration-none">{{ selectedStudent.user.email }}</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-primary">
+                                                <i class="fas fa-phone me-2"></i>Teléfono
+                                            </td>
+                                            <td>{{ selectedStudent.user.phone }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-primary">
+                                                <i class="fas fa-map-marker-alt me-2"></i>Dirección
+                                            </td>
+                                            <td>{{ selectedStudent.user.address }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Detalles del Apoderado Seleccionado -->
+                        <div *ngIf="selectedParent" class="mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-user-shield me-2" style="color: #28a745; font-size: 1.2rem;"></i>
+                                <h6 class="mb-0 fw-semibold text-success">Información del Apoderado - Verificación de
+                                    Identidad</h6>
+                            </div>
+                            <div class="alert alert-success border-start border-4 border-success" role="alert">
+                                <strong>✓ Apoderado Confirmado:</strong> {{ selectedParent.user.name }} {{
+                                selectedParent.user.lastname }}
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td class="fw-bold text-success" style="width: 30%;">
+                                                <i class="fas fa-id-card me-2"></i>Nombre Completo
+                                            </td>
+                                            <td class="fw-medium">{{ selectedParent.user.name }} {{
+                                                selectedParent.user.lastname
+                                                }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-success">
+                                                <i class="fas fa-credit-card me-2"></i>DNI/Cédula
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-secondary fs-6">{{ selectedParent.user.dni
+                                                    }}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-success">
+                                                <i class="fas fa-birthday-cake me-2"></i>Fecha de Nacimiento
+                                            </td>
+                                            <td>{{ selectedParent.user.birthDate | date: 'dd/MM/yyyy' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-success">
+                                                <i class="fas fa-venus-mars me-2"></i>Género
+                                            </td>
+                                            <td>{{ selectedParent.user.gender }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-success">
+                                                <i class="fas fa-envelope me-2"></i>Email
+                                            </td>
+                                            <td><a href="mailto:{{ selectedParent.user.email }}"
+                                                    class="text-decoration-none">{{ selectedParent.user.email }}</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-success">
+                                                <i class="fas fa-phone me-2"></i>Teléfono
+                                            </td>
+                                            <td>{{ selectedParent.user.phone }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold text-success">
+                                                <i class="fas fa-map-marker-alt me-2"></i>Dirección
+                                            </td>
+                                            <td>{{ selectedParent.user.address }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Sección 2: Información Adicional -->
+                        <div class="section-header mb-4">
+                            <h6 class="fw-semibold text-primary mb-0">
+                                <span class="badge bg-primary me-2" style="font-size: 0.85rem;">2</span>Información
+                                Adicional
+                            </h6>
                         </div>
 
                         <!-- Estado -->
-                        <div class="mt-5">
+                        <div class="mb-4">
                             <div class="form-check form-switch fs-5">
                                 <input class="form-check-input" type="checkbox" id="status" formControlName="status"
                                     (change)="registrationForm.patchValue({status: $event.target.checked ? 'ACTIVE' : 'INACTIVE'})">
-                                <label class="form-check-label fw-medium" for="status">Estado Activo</label>
+                                <label class="form-check-label fw-medium" for="status">
+                                    <span style="color: #28a745;">●</span> Estado Activo
+                                </label>
                             </div>
                         </div>
 
-                        <!--Fecha de registro  -->
-
-                        <div class="mt-4 col-xl-6 col-sm-6 mt-5">
-                            <label for="registrationDate" class="form-label text-dark fw-medium">Fecha de
-                                Registro<span class="text-danger">*</span></label>
+                        <!-- Fecha de Registro -->
+                        <div class="col-xl-6 col-sm-6 mb-4">
+                            <label for="registrationDate" class="form-label text-dark fw-semibold">
+                                Fecha de Registro<span class="required">*</span>
+                            </label>
                             <input type="date" class="form-control form-control-lg" id="registrationDate"
                                 formControlName="registrationDate" readonly>
                         </div>
 
                         <!-- Botones -->
-                        <div class="mt-4 d-flex justify-content-end gap-2">
-                            <button type="button" class="btn btn-outline-secondary px-4"
-                                (click)="cancel()">Cancelar</button>
-                            <button class="btn btn-primary px-4" type="submit"
+                        <div class="mt-5 d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-outline-secondary px-4" (click)="cancel()">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </button>
+                            <button class="btn btn-primary px-5" type="submit"
                                 [disabled]="registrationForm.invalid || isLoading">
-                                <span *ngIf="!isLoading">Guardar Matrícula</span>
+                                <span *ngIf="!isLoading">
+                                    <i class="fas fa-save me-2"></i>Guardar Matrícula
+                                </span>
                                 <span *ngIf="isLoading" class="d-flex align-items-center">
                                     <span class="spinner-border spinner-border-sm me-2"></span>
                                     Guardando...

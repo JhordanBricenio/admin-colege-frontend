@@ -1,1 +1,191 @@
-<p>registration-index works!</p>
+<div class="content-body">
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-xl-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="fw-bold mb-2 text-dark">
+                            <i class="fas fa-list me-2" style="color: #007bff;"></i>Matrículas Registradas
+                        </h3>
+                        <p class="text-muted mb-0">{{ filteredRegistrations.length }} matrícula(s) encontrada(s)</p>
+                    </div>
+                    <a routerLink="/admin/registration/new" class="btn btn-primary btn-lg" style="border-radius: 8px;">
+                        <i class="fas fa-plus me-2"></i>Nueva Matrícula
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Búsqueda y Filtros -->
+        <div class="row mb-4">
+            <div class="col-xl-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text bg-white border-end">
+                                <i class="fas fa-search" style="color: #007bff;"></i>
+                            </span>
+                            <input type="text" class="form-control"
+                                placeholder="Buscar por estudiante, apoderado, grado o DNI..." [(ngModel)]="searchTerm"
+                                (keyup)="onSearch()" style="border-left: 0;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-3">
+                        <select class="form-select form-select-lg" [(ngModel)]="filterStatus"
+                            (change)="onFilterChange()">
+                            <option value="ALL">Todos los Estados</option>
+                            <option value="ACTIVE">Activos</option>
+                            <option value="INACTIVE">Inactivos</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estado de Carga -->
+        <div *ngIf="isLoading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="text-muted mt-3">Cargando matrículas...</p>
+        </div>
+
+        <!-- Mensaje si no hay resultados -->
+        <div *ngIf="!isLoading && filteredRegistrations.length === 0" class="text-center py-5">
+            <i class="fas fa-inbox" style="font-size: 4rem; color: #ccc; margin-bottom: 1rem;"></i>
+            <h5 class="text-muted">No hay matrículas que mostrar</h5>
+            <p class="text-muted">Intenta ajustar tus filtros de búsqueda o crea una nueva matrícula</p>
+        </div>
+
+        <!-- Tabla de Matrículas -->
+        <div class="row" *ngIf="!isLoading && filteredRegistrations.length > 0">
+            <div class="col-xl-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="fw-bold text-dark">Estudiante</th>
+                                    <th class="fw-bold text-dark">Apoderado</th>
+                                    <th class="fw-bold text-dark text-center">Grado</th>
+                                    <th class="fw-bold text-dark text-center">Nivel</th>
+                                    <th class="fw-bold text-dark text-center">Fecha Registro</th>
+                                    <th class="fw-bold text-dark text-center">Estado</th>
+                                    <th class="fw-bold text-dark text-end">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let registration of filteredRegistrations"
+                                    style="border-bottom: 1px solid #f0f0f0;">
+                                    <!-- Estudiante -->
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm me-3"
+                                                style="background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.9rem;">
+                                                {{ getInitials(registration.studentFullName) }}
+                                            </div>
+                                            <div style="flex: 1;">
+                                                <h6 class="mb-1 fw-bold text-dark" style="font-size: 0.95rem;">
+                                                    {{
+                                                    registration.studentFullName }}</h6>
+                                                <small class="text-muted d-block">
+                                                    <i class="fas fa-id-card me-1"></i>{{ registration.studentCode
+                                                    }}
+                                                </small>
+                                                <small class="text-muted d-block">
+                                                    <i class="fas fa-code me-1"></i>{{ registration.studentDni }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <!-- Apoderado -->
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm me-3"
+                                                style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.9rem;">
+                                                {{ getInitials(registration.parentFullName) }}
+                                            </div>
+                                            <div style="flex: 1;">
+                                                <h6 class="mb-1 fw-bold text-dark" style="font-size: 0.95rem;">{{
+                                                    registration.parentFullName }}</h6>
+                                                <small class="text-muted d-block">
+                                                    <i class="fas fa-link me-1"></i>{{ registration.parentPhone
+                                                    }}
+                                                </small>
+                                                <small class="text-muted d-block">
+                                                    <i class="fas fa-id-card me-1"></i>{{
+                                                    registration.parentRelationship
+                                                    }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <!-- Grado -->
+                                    <td class="text-center">
+                                        <span class="badge bg-primary"
+                                            style="padding: 0.5rem 0.75rem; font-size: 0.85rem;">
+                                            {{ registration.degreeCourse }}
+                                        </span>
+                                    </td>
+
+                                    <!-- Nivel -->
+                                    <td class="text-center">
+                                        <span class="badge bg-info"
+                                            style="padding: 0.5rem 0.75rem; font-size: 0.85rem;">
+                                            {{ registration.educationLevelName }}
+                                        </span>
+                                    </td>
+
+                                    <!-- Fecha Registro -->
+                                    <td class="text-center">
+                                        <small class="text-muted d-block">
+                                            <i class="fas fa-calendar me-1"></i>{{ registration.createdAt | date:
+                                            'dd/MM/yyyy' }}
+                                        </small>
+                                    </td>
+
+                                    <!-- Estado -->
+                                    <td class="text-center">
+                                        <span [ngClass]="{
+                                                    'badge light badge-success': registration.status,
+                                                    'badge badge-danger': !registration.status
+                                                }">
+                                            {{ registration.status ? 'Activo' : 'Inactivo' }}
+                                        </span>
+                                    </td>
+
+                                    <!-- Acciones -->
+                                    <td class="text-end">
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                [routerLink]="['/admin/registration/detail', registration.idRegistration]"
+                                                style="border-radius: 6px 0 0 6px;" title="Ver detalle">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm"
+                                                [ngClass]="registration.status ? 'btn-outline-danger' : 'btn-outline-success'"
+                                                style="border-radius: 0 6px 6px 0;"
+                                                (click)="toggleRegistrationStatus(registration)"
+                                                [title]="registration.status ? 'Inactivar matrícula' : 'Activar matrícula'">
+                                                <i class="fas"
+                                                    [ngClass]="registration.status ? 'fa-user-slash' : 'fa-user-check'"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <app-paginator *ngIf="pagination" [pagination]="pagination"></app-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

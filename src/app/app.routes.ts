@@ -23,6 +23,12 @@ import { RegistrationCreateComponent } from './components/registration/registrat
 import { TeacherIndexComponent } from './components/users/teachers/teacher-index/teacher-index.component';
 import { TeacherNewComponent } from './components/users/teachers/teacher-new/teacher-new.component';
 import { StudentsIndexComponent } from './components/users/students/students-index/students-index.component';
+import { StudentsNewComponent } from './components/users/students/students-new/students-new.component';
+import { ParentsIndexComponent } from './components/users/parents/parents-index/parents-index.component';
+import { ParentsNewComponent } from './components/users/parents/parents-new/parents-new.component';
+import { RegistrationDetailComponent } from './components/registration/registration-detail/registration-detail.component';
+import { PaymentIndexComponent } from './components/payment/payment-index/payment-index.component';
+import { PaymentNewComponent } from './components/payment/payment-new/payment-new.component';
 
 export const routes: Routes = [
     {
@@ -45,10 +51,16 @@ export const routes: Routes = [
             { path: 'teacher/paged/:page', component: TeacherIndexComponent },
 
             { path: 'student', component: StudentsIndexComponent },
-            { path: 'student/new', component: StudentsIndexComponent },
+            { path: 'student/new', component: StudentsNewComponent },
             { path: 'student/detail', component: UserDetailComponent },
-            { path: 'student/edit/:idStudent', component: StudentsIndexComponent },
+            { path: 'student/edit/:idStudent', component: StudentsNewComponent },
             { path: 'student/paged/:page', component: StudentsIndexComponent },
+
+            { path: 'parent', component: ParentsIndexComponent },
+            { path: 'parent/new', component: ParentsNewComponent },
+            { path: 'parent/detail', component: UserDetailComponent },
+            { path: 'parent/edit/:idParent', component: ParentsNewComponent },
+            { path: 'parent/paged/:page', component: ParentsIndexComponent },
 
             { path: 'settings', component: SettingIndexComponent },
             { path: 'settings/new', component: SettingNewComponent },
@@ -75,7 +87,16 @@ export const routes: Routes = [
 
             { path: 'registration', component: RegistrationIndexComponent },
             { path: 'registration/new', component: RegistrationCreateComponent },
+            { path: 'registration/detail/:id', component: RegistrationDetailComponent },
             { path: 'registration/edit/:id', component: RegistrationCreateComponent },
+            { path: 'registration/paged/:page', component: RegistrationIndexComponent },
+
+            { path: 'payment', component: PaymentIndexComponent },
+            { path: 'payment/index', component: PaymentIndexComponent },
+            { path: 'payment/index/:page', component: PaymentIndexComponent },
+            { path: 'payment/new', component: PaymentNewComponent },
+            { path: 'payment/student/:idStudent', component: PaymentNewComponent },
+
 
             { path: '', component: HomeComponent },
 

@@ -1,0 +1,87 @@
+.year-badge {
+    min-width: 90px;
+    text-align: center;
+    font-weight: 700;
+    background: #f1f5f9;
+    border: 1px solid #dbe2ea;
+    border-radius: 8px;
+    padding: 0.3rem 0.7rem;
+}
+
+.summary-card {
+    border: 1px solid #e7edf3;
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    background: #fbfdff;
+    min-height: 90px;
+}
+
+.summary-label {
+    color: #6c757d;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.3rem;
+}
+
+.summary-value {
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #1d3557;
+}
+
+.summary-value-sm {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #1d3557;
+}
+
+.table th,
+.table td {
+    white-space: nowrap;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 1rem;
+}
+
+.modal-card {
+    width: min(760px, 100%);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e7e7e7;
+    padding: 1rem 1.2rem;
+}
+
+.modal-body {
+    padding: 1rem 1.2rem 1.2rem;
+}
+
+.btn-close-modal {
+    border: 0;
+    background: transparent;
+    font-size: 1.7rem;
+    line-height: 1;
+    color: #6c757d;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}

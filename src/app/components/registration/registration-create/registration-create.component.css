@@ -1,0 +1,203 @@
+/* Estilos para las tablas de detalle */
+.table {
+    margin-bottom: 0;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.table-bordered td {
+    vertical-align: middle;
+    padding: 12px;
+}
+
+/* Headers de secciones */
+.section-header {
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 0.75rem;
+}
+
+.section-header h6 {
+    font-size: 1.1rem;
+    letter-spacing: 0.3px;
+}
+
+/* Alertas mejoradas */
+.alert {
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    animation: slideDown 0.3s ease-out;
+}
+
+.alert-info {
+    background-color: #e7f3ff;
+    border-color: #b3d9ff;
+    color: #004085;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.badge {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+}
+
+.badge.fs-6 {
+    font-size: 1rem !important;
+}
+
+/* Mejorar el estilo de los links en las tablas */
+.table a {
+    text-decoration: none;
+    color: #007bff;
+    transition: color 0.2s ease;
+}
+
+.table a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+/* Estilos para campos requeridos */
+.required {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Mejorar apariencia del autocomplete */
+.autocomplete-wrapper {
+    position: relative;
+}
+
+.autocomplete-dropdown {
+    background: white;
+    border-radius: 4px;
+}
+
+.autocomplete-dropdown>div:hover {
+    background-color: #e9ecef;
+    transition: background-color 0.2s ease;
+}
+
+/* Input mejorados */
+.form-control-lg {
+    font-weight: 500;
+    border-radius: 6px;
+}
+
+.form-control-lg:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Botones mejorados */
+.btn {
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline-secondary:hover:not(:disabled) {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* Card mejorada */
+.card {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    border-radius: 8px 8px 0 0;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+
+    .table-bordered td {
+        padding: 8px;
+    }
+
+    .section-header h6 {
+        font-size: 1rem;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+/* Animación suave para cambios */
+.ng-enter {
+    animation: slideDown 0.3s ease-out;
+}
+
+/* Estado del checkbox mejorado */
+.form-check-input {
+    width: 2rem;
+    height: 1.25rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.form-check-label {
+    cursor: pointer;
+    user-select: none;
+}

@@ -1,0 +1,269 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header bg-light border-bottom d-flex align-items-center gap-2">
+                        <i class="fas fa-user-friends" style="color: #007bff; font-size: 1.2rem;"></i>
+                        <h5 class="mb-0 fw-semibold text-dark">
+                            {{ isEditMode ? 'Editar apoderado' : 'Registrar nuevo apoderado' }}
+                        </h5>
+                    </div>
+
+                    <form [formGroup]="parentForm" (ngSubmit)="onSubmit()">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-6 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="dni" class="form-label text-primary fw-semibold">
+                                            DNI <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" formControlName="dni" id="dni"
+                                                placeholder="Ej. 45123678" maxlength="8">
+                                            <button type="button" class="btn btn-secondary" (click)="buscar()"
+                                                [disabled]="!parentForm.get('dni')?.value || isSearching">
+                                                <span *ngIf="isSearching"
+                                                    class="spinner-border spinner-border-sm me-1"></span>
+                                                <i *ngIf="!isSearching" class="fas fa-search me-1"></i>
+                                                Buscar
+                                            </button>
+                                        </div>
+                                        <small *ngIf="parentForm.get('dni')?.touched && parentForm.get('dni')?.invalid"
+                                            class="text-danger d-block mt-1">
+                                            El DNI es obligatorio y debe tener 8 digitos
+                                        </small>
+                                        <small *ngIf="error" class="text-danger d-block mt-1">
+                                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                        </small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label text-primary fw-semibold">
+                                            Nombres <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="name" formControlName="name"
+                                            placeholder="Ej. Maria Elena">
+                                        <small
+                                            *ngIf="parentForm.get('name')?.touched && parentForm.get('name')?.invalid"
+                                            class="text-danger d-block mt-1">
+                                            El nombre es obligatorio
+                                        </small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="fatherLastName" class="form-label text-primary fw-semibold">
+                                            Apellido paterno <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="fatherLastName"
+                                            formControlName="fatherLastName" placeholder="Ej. Perez">
+                                        <small
+                                            *ngIf="parentForm.get('fatherLastName')?.touched && parentForm.get('fatherLastName')?.invalid"
+                                            class="text-danger d-block mt-1">
+                                            El apellido paterno es obligatorio
+                                        </small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="motherLastName" class="form-label text-primary fw-semibold">
+                                            Apellido materno <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="motherLastName"
+                                            formControlName="motherLastName" placeholder="Ej. Garcia">
+                                        <small
+                                            *ngIf="parentForm.get('motherLastName')?.touched && parentForm.get('motherLastName')?.invalid"
+                                            class="text-danger d-block mt-1">
+                                            El apellido materno es obligatorio
+                                        </small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="birthDate" class="form-label text-primary fw-semibold">
+                                            Fecha de nacimiento <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="date" class="form-control" id="birthDate"
+                                            formControlName="birthDate">
+                                        <small
+                                            *ngIf="parentForm.get('birthDate')?.touched && parentForm.get('birthDate')?.invalid"
+                                            class="text-danger d-block mt-1">
+                                            La fecha de nacimiento es obligatoria
+                                        </small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary fw-semibold">
+                                            Genero <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="d-flex gap-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" formControlName="gender"
+                                                    id="genM" value="MASCULINO">
+                                                <label class="form-check-label" for="genM">Masculino</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" formControlName="gender"
+                                                    id="genF" value="FEMENINO">
+                                                <label class="form-check-label" for="genF">Femenino</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" formControlName="gender"
+                                                    id="genO" value="OTRO">
+                                                <label class="form-check-label" for="genO">Otro</label>
+                                            </div>
+                                        </div>
+                                        <small
+                                            *ngIf="parentForm.get('gender')?.touched && parentForm.get('gender')?.invalid"
+                                            class="text-danger d-block mt-1">
+                                            El genero es obligatorio
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label text-primary fw-semibold">
+                                            Correo electronico <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="email" class="form-control" id="email" formControlName="email"
+                                            placeholder="ejemplo@correo.com">
+                                        <small
+                                            *ngIf="parentForm.get('email')?.touched && parentForm.get('email')?.invalid"
+                                            class="text-danger d-block mt-1">
+                                            Ingrese un correo electronico valido
+                                        </small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="phone" class="form-label text-primary fw-semibold">
+                                            Celular <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="phone" formControlName="phone"
+                                            placeholder="Ej. 987654321">
+                                        <small
+                                            *ngIf="parentForm.get('phone')?.touched && parentForm.get('phone')?.invalid"
+                                            class="text-danger d-block mt-1">
+                                            El celular es obligatorio
+                                        </small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="address" class="form-label text-primary fw-semibold">
+                                            Direccion <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="address" formControlName="address"
+                                            placeholder="Av. Los Alamos 123">
+                                        <small
+                                            *ngIf="parentForm.get('address')?.touched && parentForm.get('address')?.invalid"
+                                            class="text-danger d-block mt-1">
+                                            La direccion es obligatoria
+                                        </small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="role" class="form-label text-primary fw-semibold">
+                                            Rol <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-select" formControlName="role" id="role">
+                                            <option value="" disabled>Seleccione un rol</option>
+                                            <option *ngFor="let role of roles" [value]="getRoleValue(role)">
+                                                {{ role.name }}
+                                            </option>
+                                        </select>
+                                        <small
+                                            *ngIf="parentForm.get('role')?.touched && parentForm.get('role')?.invalid"
+                                            class="text-danger d-block mt-1">
+                                            El rol es obligatorio
+                                        </small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="relationship" class="form-label text-primary fw-semibold">
+                                            Parentesco <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-select" id="relationship" formControlName="relationship">
+                                            <option value="" disabled>Seleccione parentesco</option>
+                                            <option value="MADRE">Madre</option>
+                                            <option value="PADRE">Padre</option>
+                                            <option value="TUTOR">Tutor</option>
+                                            <option value="ABUELO">Abuelo(a)</option>
+                                            <option value="OTRO">Otro</option>
+                                        </select>
+                                        <small
+                                            *ngIf="parentForm.get('relationship')?.touched && parentForm.get('relationship')?.invalid"
+                                            class="text-danger d-block mt-1">
+                                            El parentesco es obligatorio
+                                        </small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="occupation" class="form-label text-primary fw-semibold">
+                                            Ocupacion <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="occupation"
+                                            formControlName="occupation" placeholder="Ej. Comerciante">
+                                        <small
+                                            *ngIf="parentForm.get('occupation')?.touched && parentForm.get('occupation')?.invalid"
+                                            class="text-danger d-block mt-1">
+                                            La ocupacion es obligatoria
+                                        </small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="student" class="form-label text-primary fw-semibold">
+                                            Estudiante asociado <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="hidden" formControlName="student">
+                                        <div class="autocomplete-wrapper" style="position: relative;">
+                                            <input type="text" class="form-control" id="student"
+                                                [formControl]="studentSearchControl"
+                                                placeholder="Buscar por nombre, DNI o codigo" autocomplete="off"
+                                                (blur)="onStudentInputBlur()">
+
+                                            <div class="autocomplete-dropdown"
+                                                *ngIf="filteredStudents.length > 0 && studentSearchControl.value"
+                                                style="position: absolute; z-index: 1100; border: 1px solid #ddd; border-radius: 4px; max-height: 250px; overflow-y: auto; width: 100%; margin-top: 2px; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                                                <div *ngFor="let student of filteredStudents"
+                                                    (click)="selectStudent(student)"
+                                                    style="padding: 12px; cursor: pointer; border-bottom: 1px solid #f0f0f0;">
+                                                    <div class="fw-medium">{{ student.user.name }} {{
+                                                        student.user.lastname }}</div>
+                                                    <small class="text-muted">DNI: {{ student.user.dni }} - Codigo: {{
+                                                        student.code }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <small
+                                            *ngIf="parentForm.get('student')?.touched && parentForm.get('student')?.invalid"
+                                            class="text-danger d-block mt-1">
+                                            Debe seleccionar un estudiante
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-12 d-flex justify-content-end gap-2">
+                                    <button type="button" class="btn btn-outline-secondary px-4"
+                                        [routerLink]="['/admin/parent']">
+                                        <i class="fas fa-times me-2"></i>Cancelar
+                                    </button>
+                                    <button type="submit" class="btn btn-primary px-5"
+                                        [disabled]="parentForm.invalid || isLoading">
+                                        <span *ngIf="!isLoading">
+                                            <i class="fas fa-save me-2"></i>
+                                            {{ isEditMode ? 'Actualizar apoderado' : 'Guardar apoderado' }}
+                                        </span>
+                                        <span *ngIf="isLoading" class="d-flex align-items-center">
+                                            <span class="spinner-border spinner-border-sm me-2"></span>
+                                            Guardando...
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

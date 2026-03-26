@@ -1,1 +1,303 @@
-<p>students-new works!</p>
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header bg-light border-bottom d-flex align-items-center gap-2">
+                        <i class="fas fa-user-graduate" style="color: #007bff; font-size: 1.2rem;"></i>
+                        <h5 class="mb-0 fw-semibold text-dark">
+                            {{ isEditMode ? 'Editar estudiante' : 'Registrar nuevo estudiante' }}
+                        </h5>
+                    </div>
+
+                    <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+                        <div class="card-body">
+
+                            <!-- Fila principal -->
+                            <div class="row">
+
+                                <!-- Columna: foto -->
+                                <div class="col-xl-3 col-lg-4 mb-4">
+                                    <label class="form-label text-primary fw-semibold">Foto del estudiante</label>
+                                    <div class="avatar-upload">
+                                        <div class="avatar-preview">
+                                            <div id="imagePreview"
+                                                style="background-image: url(assets/images/avatar/avatar.png);">
+                                            </div>
+                                        </div>
+                                        <div class="change-btn mt-2 mb-lg-0 mb-3">
+                                            <input type="file" class="form-control d-none" id="imageUpload"
+                                                accept=".png, .jpg, .jpeg">
+                                            <label for="imageUpload"
+                                                class="dlab-upload mb-0 btn btn-primary btn-sm">Cargar imagen</label>
+                                            <a href="javascript:void(0)"
+                                                class="btn btn-danger light remove-img ms-2 btn-sm">Eliminar</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Columna: datos -->
+                                <div class="col-xl-9 col-lg-8">
+                                    <div class="row">
+
+                                        <!-- Columna izquierda -->
+                                        <div class="col-xl-6 col-sm-6">
+
+                                            <!-- DNI + Buscar -->
+                                            <div class="mb-3">
+                                                <label for="dni" class="form-label text-primary fw-semibold">
+                                                    DNI <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" formControlName="dni"
+                                                        id="dni" placeholder="Ej. 45123678" maxlength="8">
+                                                    <button type="button" class="btn btn-secondary" (click)="buscar()"
+                                                        [disabled]="!studentForm.get('dni')?.value || isSearching">
+                                                        <span *ngIf="isSearching"
+                                                            class="spinner-border spinner-border-sm me-1"></span>
+                                                        <i *ngIf="!isSearching" class="fas fa-search me-1"></i>
+                                                        Buscar
+                                                    </button>
+                                                </div>
+                                                <small
+                                                    *ngIf="studentForm.get('dni')?.touched && studentForm.get('dni')?.invalid"
+                                                    class="text-danger d-block mt-1">
+                                                    El DNI es obligatorio y debe tener 8 dígitos
+                                                </small>
+                                                <small *ngIf="error" class="text-danger d-block mt-1">
+                                                    <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                                </small>
+                                            </div>
+
+                                            <!-- Nombres -->
+                                            <div class="mb-3">
+                                                <label for="name" class="form-label text-primary fw-semibold">
+                                                    Nombres <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="name" formControlName="name"
+                                                    placeholder="Ej. Juan Carlos">
+                                                <small
+                                                    *ngIf="studentForm.get('name')?.touched && studentForm.get('name')?.invalid"
+                                                    class="text-danger d-block mt-1">
+                                                    El nombre es obligatorio
+                                                </small>
+                                            </div>
+
+                                            <!-- Apellido paterno -->
+                                            <div class="mb-3">
+                                                <label for="fatherLastName" class="form-label text-primary fw-semibold">
+                                                    Apellido paterno <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="fatherLastName"
+                                                    formControlName="fatherLastName" placeholder="Ej. García">
+                                                <small
+                                                    *ngIf="studentForm.get('fatherLastName')?.touched && studentForm.get('fatherLastName')?.invalid"
+                                                    class="text-danger d-block mt-1">
+                                                    El apellido paterno es obligatorio
+                                                </small>
+                                            </div>
+
+                                            <!-- Apellido materno -->
+                                            <div class="mb-3">
+                                                <label for="motherLastName" class="form-label text-primary fw-semibold">
+                                                    Apellido materno <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="motherLastName"
+                                                    formControlName="motherLastName" placeholder="Ej. López">
+                                                <small
+                                                    *ngIf="studentForm.get('motherLastName')?.touched && studentForm.get('motherLastName')?.invalid"
+                                                    class="text-danger d-block mt-1">
+                                                    El apellido materno es obligatorio
+                                                </small>
+                                            </div>
+
+                                            <!-- Fecha de nacimiento -->
+                                            <div class="mb-3">
+                                                <label for="birthDate" class="form-label text-primary fw-semibold">
+                                                    Fecha de nacimiento <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="date" class="form-control" id="birthDate"
+                                                    formControlName="birthDate">
+                                                <small
+                                                    *ngIf="studentForm.get('birthDate')?.touched && studentForm.get('birthDate')?.invalid"
+                                                    class="text-danger d-block mt-1">
+                                                    La fecha de nacimiento es obligatoria
+                                                </small>
+                                            </div>
+
+                                            <!-- Género -->
+                                            <div class="mb-3">
+                                                <label class="form-label text-primary fw-semibold">
+                                                    Género <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="d-flex gap-3">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            formControlName="gender" id="genM" value="MASCULINO">
+                                                        <label class="form-check-label" for="genM">Masculino</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            formControlName="gender" id="genF" value="FEMENINO">
+                                                        <label class="form-check-label" for="genF">Femenino</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            formControlName="gender" id="genO" value="OTRO">
+                                                        <label class="form-check-label" for="genO">Otro</label>
+                                                    </div>
+                                                </div>
+                                                <small
+                                                    *ngIf="studentForm.get('gender')?.touched && studentForm.get('gender')?.invalid"
+                                                    class="text-danger d-block mt-1">
+                                                    El género es obligatorio
+                                                </small>
+                                            </div>
+
+                                        </div>
+
+                                        <!-- Columna derecha -->
+                                        <div class="col-xl-6 col-sm-6">
+
+                                            <!-- Correo -->
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label text-primary fw-semibold">
+                                                    Correo electrónico <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="email" class="form-control" id="email"
+                                                    formControlName="email" placeholder="ejemplo@correo.com">
+                                                <small
+                                                    *ngIf="studentForm.get('email')?.touched && studentForm.get('email')?.invalid"
+                                                    class="text-danger d-block mt-1">
+                                                    Ingrese un correo electrónico válido
+                                                </small>
+                                            </div>
+
+                                            <!-- Teléfono -->
+                                            <div class="mb-3">
+                                                <label for="phone" class="form-label text-primary fw-semibold">
+                                                    Celular <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="phone"
+                                                    formControlName="phone" placeholder="Ej. 987654321">
+                                                <small
+                                                    *ngIf="studentForm.get('phone')?.touched && studentForm.get('phone')?.invalid"
+                                                    class="text-danger d-block mt-1">
+                                                    El celular es obligatorio
+                                                </small>
+                                            </div>
+
+                                            <!-- Dirección -->
+                                            <div class="mb-3">
+                                                <label for="address" class="form-label text-primary fw-semibold">
+                                                    Dirección <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="address"
+                                                    formControlName="address" placeholder="Av. Los Álamos 123">
+                                                <small
+                                                    *ngIf="studentForm.get('address')?.touched && studentForm.get('address')?.invalid"
+                                                    class="text-danger d-block mt-1">
+                                                    La dirección es obligatoria
+                                                </small>
+                                            </div>
+
+                                            <!-- Rol -->
+                                            <div class="mb-3">
+                                                <label for="role" class="form-label text-primary fw-semibold">
+                                                    Rol <span class="text-danger">*</span>
+                                                </label>
+                                                <select class="form-select" formControlName="role" id="role">
+                                                    <option value="" disabled>Seleccione un rol</option>
+                                                    <option *ngFor="let role of roles" [value]="role.idRole">
+                                                        {{ role.name }}
+                                                    </option>
+                                                </select>
+                                                <small
+                                                    *ngIf="studentForm.get('role')?.touched && studentForm.get('role')?.invalid"
+                                                    class="text-danger d-block mt-1">
+                                                    El rol es obligatorio
+                                                </small>
+                                            </div>
+
+                                            <!-- Grado -->
+                                            <div class="mb-3">
+                                                <label for="degree" class="form-label text-primary fw-semibold">
+                                                    Grado <span class="text-danger">*</span>
+                                                </label>
+                                                <select class="form-select" formControlName="degree" id="degree">
+                                                    <option value="" disabled>Seleccione un grado</option>
+                                                    <option *ngFor="let degree of degrees" [value]="degree.idDegree">
+                                                        {{ degree.course }} - Sección {{ degree.section }}
+                                                    </option>
+                                                </select>
+                                                <small
+                                                    *ngIf="studentForm.get('degree')?.touched && studentForm.get('degree')?.invalid"
+                                                    class="text-danger d-block mt-1">
+                                                    El grado es obligatorio
+                                                </small>
+                                            </div>
+
+                                            <!-- Nivel educativo -->
+                                            <div class="mb-3">
+                                                <label for="educationLevel" class="form-label text-primary fw-semibold">
+                                                    Nivel educativo <span class="text-danger">*</span>
+                                                </label>
+                                                <select class="form-select" formControlName="educationLevel"
+                                                    id="educationLevel">
+                                                    <option value="" disabled>Seleccione un nivel</option>
+                                                    <option *ngFor="let level of educationLevels"
+                                                        [value]="level.idEducationLevel">
+                                                        {{ level.name }} - {{ level.shift }}
+                                                    </option>
+                                                </select>
+                                                <small
+                                                    *ngIf="studentForm.get('educationLevel')?.touched && studentForm.get('educationLevel')?.invalid"
+                                                    class="text-danger d-block mt-1">
+                                                    El nivel educativo es obligatorio
+                                                </small>
+                                            </div>
+
+                                            <!-- Estado -->
+                                            <div class="mb-3">
+                                                <div class="form-check form-switch fs-5">
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        id="status" formControlName="status">
+                                                    <label class="form-check-label fw-medium" for="status">
+                                                        <span style="color: #28a745;">●</span> Estado activo
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="row mt-3">
+                                <div class="col-12 d-flex justify-content-end gap-2">
+                                    <button type="button" class="btn btn-outline-secondary px-4"
+                                        [routerLink]="['/admin/student']">
+                                        <i class="fas fa-times me-2"></i>Cancelar
+                                    </button>
+                                    <button type="submit" class="btn btn-primary px-5"
+                                        [disabled]="studentForm.invalid || isLoading">
+                                        <span *ngIf="!isLoading">
+                                            <i class="fas fa-save me-2"></i>
+                                            {{ isEditMode ? 'Actualizar estudiante' : 'Guardar estudiante' }}
+                                        </span>
+                                        <span *ngIf="isLoading" class="d-flex align-items-center">
+                                            <span class="spinner-border spinner-border-sm me-2"></span>
+                                            Guardando...
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
