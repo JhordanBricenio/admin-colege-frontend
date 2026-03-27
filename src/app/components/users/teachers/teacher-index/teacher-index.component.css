@@ -1,0 +1,50 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1055;
+    padding: 20px;
+}
+
+.modal-card {
+    width: 100%;
+    max-width: 760px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.modal-card-lg {
+    max-width: 980px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid #ececec;
+}
+
+.modal-body {
+    padding: 18px;
+}
+
+.btn-close-modal {
+    border: 0;
+    background: transparent;
+    font-size: 26px;
+    line-height: 1;
+    color: #555;
+}
+
+.modal-actions {
+    margin-top: 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}

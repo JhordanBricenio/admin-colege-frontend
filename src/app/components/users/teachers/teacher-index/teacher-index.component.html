@@ -25,6 +25,10 @@
                                             + Nuevo profesor
                                         </a>
                                     </button>
+                                    <button type="button" class="btn btn-outline-success ms-2"
+                                        (click)="openAssignModal()">
+                                        + Asignar materia
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -97,6 +101,10 @@
                                                     <div class="dropdown-menu dropdown-menu-end">
                                                         <a class="dropdown-item" style="cursor: pointer;"
                                                             (click)="verUser(item.user.dni)">Ver usuario</a>
+                                                        <a class="dropdown-item" style="cursor: pointer;"
+                                                            (click)="openAssignModal(item)">Asignar materia/curso</a>
+                                                        <a class="dropdown-item" style="cursor: pointer;"
+                                                            (click)="openAssignmentsModal(item)">Ver asignaciones</a>
                                                         <a class="dropdown-item"
                                                             [routerLink]="['/admin/teacher/edit', item.idTeacher]">Editar</a>
                                                         <a class="dropdown-item" style="cursor: pointer;"
@@ -128,6 +136,145 @@
                 </button>
             </div>
         </ng-container>
+
+
+        <div class="modal-overlay" *ngIf="isAssignModalOpen">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h5 class="mb-0">{{ editingAssignmentId ? 'Editar asignacion de docente' : 'Asignar materia/curso a
+                        docente' }}</h5>
+                    <button class="btn-close-modal" (click)="closeAssignModal()">&times;</button>
+                </div>
+
+                <form [formGroup]="assignmentForm" (ngSubmit)="saveAssignment()" class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Buscar docente (nombre o DNI)</label>
+                            <input type="text" class="form-control" [value]="teacherSearchText"
+                                (input)="onTeacherSearch($any($event.target).value)"
+                                placeholder="Ej: Juan Perez o 12345678" />
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Docente</label>
+                            <select class="form-select" formControlName="teacherId"
+                                (change)="onTeacherChange($any($event.target).value)">
+                                <option value="">Selecciona un docente</option>
+                                <option *ngFor="let teacher of filteredTeachers" [value]="teacher.idTeacher">
+                                    {{ getTeacherDisplayName(teacher) }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Nivel educativo</label>
+                            <select class="form-select" formControlName="educationLevelId"
+                                (change)="onEducationLevelChange()">
+                                <option value="">Selecciona nivel</option>
+                                <option *ngFor="let level of educationLevels" [value]="level.idEducationLevel">
+                                    {{ level.name }} - {{ level.shift }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Grado</label>
+                            <select class="form-select" formControlName="degreeId">
+                                <option value="">Selecciona grado</option>
+                                <option *ngFor="let degree of filteredDegreesByLevel" [value]="degree.idDegree">
+                                    {{ degree.course }} - Seccion {{ degree.section }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Curso / Materia</label>
+                            <select class="form-select" formControlName="courseId">
+                                <option value="">Selecciona curso</option>
+                                <option *ngFor="let course of courses" [value]="course.idCourse">
+                                    {{ course.name }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" formControlName="status">
+                                <option [ngValue]="true">Activo</option>
+                                <option [ngValue]="false">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-light" (click)="closeAssignModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">{{ editingAssignmentId ? 'Actualizar asignacion' :
+                            'Guardar asignacion' }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal-overlay" *ngIf="isAssignmentsModalOpen">
+            <div class="modal-card modal-card-lg">
+                <div class="modal-header">
+                    <h5 class="mb-0">Asignaciones del docente</h5>
+                    <button class="btn-close-modal" (click)="closeAssignmentsModal()">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">{{ selectedTeacherForAssignments ?
+                            getTeacherDisplayName(selectedTeacherForAssignments) : '' }}</h6>
+                        <button class="btn btn-sm btn-primary" type="button"
+                            (click)="closeAssignmentsModal(); openAssignModal(selectedTeacherForAssignments || undefined)">
+                            + Nueva asignacion
+                        </button>
+                    </div>
+
+                    <div class="table-responsive" *ngIf="selectedTeacherAssignments.length > 0">
+                        <table class="table table-bordered align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Nivel</th>
+                                    <th>Grado</th>
+                                    <th>Curso</th>
+                                    <th>Estado</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let assignment of selectedTeacherAssignments">
+                                    <td>{{ getEducationLevelNameById(assignment.educationLevelId) }}</td>
+                                    <td>{{ getDegreeNameById(assignment.degreeId) }}</td>
+                                    <td>{{ getCourseNameById(assignment.courseId) }}</td>
+                                    <td>
+                                        <span
+                                            [ngClass]="assignment.status ? 'badge light badge-success' : 'badge light badge-secondary'">
+                                            {{ assignment.status ? 'Activo' : 'Inactivo' }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-sm btn-outline-primary me-2"
+                                            (click)="editAssignment(assignment)">
+                                            Editar
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                            (click)="deleteAssignment(assignment)">
+                                            Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="alert alert-info mb-0" *ngIf="selectedTeacherAssignments.length === 0">
+                        Este docente aun no tiene asignaciones registradas.
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
     </div>
