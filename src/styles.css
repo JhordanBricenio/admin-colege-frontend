@@ -1,4 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
-.dlab-demo-trigger{
+.dlab-demo-trigger {
+    display: none !important;
+}
+
+/* Disable right wallet panel spacing so main content stays full-width. */
+.wallet-open .header .page-titles,
+.wallet-open .header .header-content,
+.wallet-open.active .header .page-titles,
+.wallet-open.active .header .header-content {
+    padding-right: 1.875rem !important;
+}
+
+.wallet-open .content-body,
+.wallet-open.active .content-body {
+    padding-right: 0 !important;
+}
+
+.wallet-bar,
+#wallet-bar {
     display: none !important;
 }

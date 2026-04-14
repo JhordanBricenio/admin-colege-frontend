@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { forkJoin, of } from 'rxjs';
-import { catchError, take } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { Student } from '../models/student';
 import { Setting } from '../models/setting';
 import { SettingService } from './setting.service';
 import { RegistrationService } from './registration.service';
 import { Registration } from '../models/registration';
 import { Payment } from '../models/payment';
+import { ParentService } from './parent.service';
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +17,8 @@ export class ContractPrintService {
     private readonly http = inject(HttpClient);
     private readonly settingService = inject(SettingService);
     private readonly registrationService = inject(RegistrationService);
+    private readonly parentService = inject(ParentService);
+
 
     printStudentContract(student: Student): void {
         forkJoin({
@@ -23,10 +26,16 @@ export class ContractPrintService {
             settings: this.settingService.getSettings().pipe(catchError(() => of([] as Setting[]))),
             registrations: this.registrationService.getRegistrations().pipe(catchError(() => of([] as Registration[])))
         })
-            .pipe(take(1))
-            .subscribe(({ template, settings, registrations }) => {
+            .pipe(
+                take(1),
+                switchMap(({ template, settings, registrations }) =>
+                    this.pickGuardianByStudent(student.idStudent, registrations).pipe(
+                        map((guardian) => ({ template, settings, guardian }))
+                    )
+                )
+            )
+            .subscribe(({ template, settings, guardian }) => {
                 const institution = this.pickInstitutionSetting(settings);
-                const guardian = this.pickGuardianByStudent(student.idStudent, registrations);
                 const html = this.buildContractHtml(template, student, institution, guardian);
                 this.openPrintWindow(html);
             });
@@ -59,11 +68,11 @@ export class ContractPrintService {
             '__INSTITUTION_EMAIL__': this.escapeHtml(setting?.email || 'No registrado'),
             '__INSTITUTION_PHONE__': this.escapeHtml(setting?.phone || 'No registrado'),
             '__INSTITUTION_ADDRESS__': this.escapeHtml(setting?.address || 'No registrada'),
-            '__INSTITUTION_REPRESENTATIVE__': '__________________________',
+            '__INSTITUTION_REPRESENTATIVE__': 'Jose luis gomez',
             '__INSTITUTION_LOGO__': logoUrl
                 ? `<img src="${this.escapeAttribute(logoUrl)}" alt="Logo institucional" />`
                 : '',
-            '__CITY__': '____________________',
+            '__CITY__': 'Huamachuco',
             '__DAY__': String(today.getDate()).padStart(2, '0'),
             '__MONTH__': this.escapeHtml(today.toLocaleDateString('es-PE', { month: 'long' })),
             '__YEAR__': String(today.getFullYear()),
@@ -136,7 +145,7 @@ export class ContractPrintService {
     private pickGuardianByStudent(
         studentId: string,
         registrations: Registration[]
-    ): { fullName: string; dni: string; relationship: string; address: string } {
+    ) {
         const fallback = {
             fullName: '__________________________',
             dni: '________________',
@@ -145,7 +154,7 @@ export class ContractPrintService {
         };
 
         if (!studentId || !registrations || registrations.length === 0) {
-            return fallback;
+            return of(fallback);
         }
 
         const candidates = registrations.filter((reg) => {
@@ -154,19 +163,25 @@ export class ContractPrintService {
         });
 
         if (candidates.length === 0) {
-            return fallback;
+            return of(fallback);
         }
 
         const preferred = candidates.find((item) => item.status) || candidates[0];
-        const parent = preferred.parent;
-        const name = `${parent?.user?.name || ''} ${parent?.user?.lastname || ''}`.trim();
+        const parentId = preferred.idParent || preferred.parent?.idParent;
 
-        return {
-            fullName: name || fallback.fullName,
-            dni: parent?.user?.dni || fallback.dni,
-            relationship: parent?.relationship || fallback.relationship,
-            address: parent?.user?.address || fallback.address
-        };
+        if (!parentId) {
+            return of(fallback);
+        }
+
+        return this.parentService.getUserById(parentId).pipe(
+            map((parentData) => ({
+                fullName: `${parentData?.user?.name || ''} ${parentData?.user?.lastname || ''}`.trim() || fallback.fullName,
+                dni: parentData?.user?.dni || fallback.dni,
+                relationship: parentData?.relationship || fallback.relationship,
+                address: parentData?.user?.address || fallback.address
+            })),
+            catchError(() => of(fallback))
+        );
     }
 
     private pickInstitutionSetting(settings: Setting[]): Setting | null {

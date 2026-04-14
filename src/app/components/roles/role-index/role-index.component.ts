@@ -17,6 +17,16 @@ export class RoleIndexComponent {
   private userService = inject(RoleService);
   public roles: Role[] = [];
 
+  // Mapa de traducción para mostrar en español
+  roleLabels: { [key: string]: string } = {
+    'ADMIN': 'Administrador',
+    'TEACHER': 'Profesor',
+    'STUDENT': 'Estudiante',
+    'PARENT': 'Padre/Madre',
+    'TUTOR': 'Tutor',
+    'OTHER': 'Otro'
+  };
+
   constructor() { }
 
 

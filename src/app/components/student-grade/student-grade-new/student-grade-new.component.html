@@ -1,0 +1,180 @@
+<div class="content-body">
+    <div class="container-fluid">
+
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h4 class="mb-1">Registrar nota</h4>
+                <p class="mb-0 text-muted">{{ teacherName || 'Docente seleccionado' }}</p>
+            </div>
+            <button class="btn btn-outline-primary" type="button" (click)="goBack()">
+                <i class="fa fa-arrow-left me-1"></i> Volver
+            </button>
+        </div>
+
+        <div class="card form-card">
+            <div class="card-body">
+                <div class="alert alert-info" *ngIf="educationLevelId || degreeId || courseId">
+                    <div><strong>Contexto de asignacion</strong></div>
+                    <div *ngIf="contextEducationLevelName">Nivel: {{ contextEducationLevelName }}</div>
+                    <div *ngIf="contextDegreeName">Grado y seccion: {{ contextDegreeName }}</div>
+                    <div *ngIf="contextCourseName">Curso: {{ contextCourseName }}</div>
+                </div>
+
+                <div class="alert alert-warning" *ngIf="needsManualCourseSelection && !selectedCourseId">
+                    No se recibió un curso desde la asignación. Selecciona uno para poder registrar las notas.
+                </div>
+
+                <div class="alert alert-warning" *ngIf="!degreeId || !educationLevelId">
+                    No se recibio el contexto completo de grado y nivel. Vuelve desde la lista de asignaciones para
+                    filtrar correctamente los estudiantes.
+                </div>
+
+                <form [formGroup]="gradeForm" (ngSubmit)="onSubmit()" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Estudiante</label>
+                        <select class="form-select" formControlName="idStudent">
+                            <option value="">Selecciona un estudiante</option>
+                            <option *ngFor="let student of studentOptions" [value]="student.idStudent">
+                                {{ getStudentDisplayName(student) }} - DNI: {{ student.user?.dni }}
+                            </option>
+                        </select>
+                        <small class="text-muted" *ngIf="degreeId && educationLevelId">
+                            Mostrando solo alumnos del grado/nivel de la asignacion.
+                        </small>
+                        <small class="text-danger d-block"
+                            *ngIf="degreeId && educationLevelId && studentOptions.length === 0">
+                            No hay estudiantes registrados en este grado y nivel.
+                        </small>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Periodo</label>
+                        <select class="form-select" formControlName="term">
+                            <option value="">Selecciona periodo</option>
+                            <option value="BIMESTER_1">Bimestre 1</option>
+                            <option value="BIMESTER_2">Bimestre 2</option>
+                            <option value="BIMESTER_3">Bimestre 3</option>
+                            <option value="BIMESTER_4">Bimestre 4</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Nota</label>
+                        <input type="text" class="form-control" formControlName="grade" placeholder="Ej: 18" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Estado</label>
+                        <select class="form-select" formControlName="status">
+                            <option [ngValue]="true">Activo</option>
+                            <option [ngValue]="false">Inactivo</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6" *ngIf="needsManualCourseSelection">
+                        <label class="form-label">Curso</label>
+                        <select class="form-select" [value]="selectedCourseId"
+                            (change)="onCourseChange($any($event.target).value)">
+                            <option value="">Selecciona un curso</option>
+                            <option *ngFor="let course of filteredCoursesByEducationLevel" [value]="course.idCourse">
+                                {{ course.name }}
+                            </option>
+                        </select>
+                        <small class="text-muted">
+                            En este contexto el curso no llegó por la asignación; se muestran solo los cursos del
+                            nivel educativo actual.
+                        </small>
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-end gap-2 mt-2">
+                        <button type="button" class="btn btn-light" (click)="goBack()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="loading">
+                            {{ loading ? 'Guardando...' : 'Guardar nota' }}
+                        </button>
+                    </div>
+                </form>
+
+                <hr class="my-4" />
+
+                <div>
+                    <h5 class="mb-3">Notas por bimestre</h5>
+
+                    <div class="table-responsive" *ngIf="studentOptions.length > 0">
+                        <table class="table table-bordered align-middle grade-matrix-table">
+                            <thead>
+                                <tr>
+                                    <th>Estudiante</th>
+                                    <th *ngFor="let term of terms">{{ term.label }}</th>
+                                    <th>Promedio anual</th>
+                                    <th>Condicion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let student of studentOptions">
+                                    <td class="student-col">
+                                        <div class="fw-semibold">{{ getStudentDisplayName(student) }}</div>
+                                        <small class="text-muted">DNI: {{ student.user?.dni }}</small>
+                                    </td>
+
+                                    <td *ngFor="let term of terms">
+                                        <div class="cell-edit-wrap">
+                                            <input type="text" class="form-control form-control-sm"
+                                                [value]="getCellValue(student.idStudent, term.value)"
+                                                (input)="onCellInput(student.idStudent, term.value, $any($event.target).value)"
+                                                placeholder="Nota" />
+
+                                            <button type="button" class="btn btn-sm btn-success"
+                                                [disabled]="savingCellKey === (student.idStudent + '_' + term.value)"
+                                                (click)="saveCellGrade(student, term.value)" title="Guardar nota">
+                                                <i class="fa fa-check"></i>
+                                            </button>
+
+                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                *ngIf="getGradeCell(student.idStudent, term.value)?.idStudentGrade"
+                                                [disabled]="deletingCellKey === (student.idStudent + '_' + term.value)"
+                                                (click)="deleteCellGrade(student.idStudent, term.value)"
+                                                title="Eliminar nota">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+
+                                    <td class="text-center fw-semibold">
+                                        <ng-container
+                                            *ngIf="getAnnualAverage(student.idStudent) !== null; else noAverage">
+                                            {{ getAnnualAverage(student.idStudent) }}
+                                        </ng-container>
+                                        <ng-template #noAverage>-</ng-template>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <span class="badge bg-warning" *ngIf="!hasCompleteYear(student.idStudent)">
+                                            Pendiente
+                                        </span>
+                                        <span class="badge bg-success"
+                                            *ngIf="hasCompleteYear(student.idStudent) && isPromoted(student.idStudent)">
+                                            Promovido
+                                        </span>
+                                        <span class="badge bg-danger"
+                                            *ngIf="hasCompleteYear(student.idStudent) && !isPromoted(student.idStudent)">
+                                            No promovido
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <small class="text-muted d-block mt-2">
+                        Criterio actual: promovido con promedio anual mayor o igual a {{ promotionMinGrade }} y 4
+                        bimestres registrados.
+                    </small>
+
+                    <div class="alert alert-secondary mb-0" *ngIf="studentOptions.length === 0">
+                        No hay alumnos para mostrar en la tabla de notas.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

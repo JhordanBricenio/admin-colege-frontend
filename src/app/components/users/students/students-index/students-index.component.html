@@ -98,9 +98,9 @@
                                                         <a class="dropdown-item" style="cursor: pointer;"
                                                             (click)="verUser(item.user.dni)">Ver usuario</a>
                                                         <a class="dropdown-item"
-                                                            [routerLink]="['/admin/teacher/edit', item.idTeacher]">Editar</a>
+                                                            [routerLink]="['/admin/student/edit', item.idStudent]">Editar</a>
                                                         <a class="dropdown-item" style="cursor: pointer;"
-                                                            (click)="deleteUser(item.idTeacher)">Eliminar</a>
+                                                            (click)="deleteUser(item.idStudent)">Eliminar</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -108,7 +108,8 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <app-paginator *ngIf="pagination" [pagination]="pagination"></app-paginator>
+                            <app-paginator *ngIf="pagination" [pagination]="pagination"
+                                [pagedRoute]="'/admin/student/paged'"></app-paginator>
                         </div>
                     </div>
                 </div>

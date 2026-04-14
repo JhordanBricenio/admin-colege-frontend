@@ -21,6 +21,22 @@
                                     </small>
                                 </div>
                                 <div class="mb-3">
+                                    <label for="levelType" class="form-label text-primary">Tipo de nivel<span
+                                            class="required">*</span></label>
+                                    <select formControlName="levelType" id="levelType" class="form-select">
+                                        <option value="" disabled>Seleccione un tipo</option>
+                                        <option value="INITIAL">INITIAL</option>
+                                        <option value="PRIMARY">PRIMARY</option>
+                                        <option value="SECONDARY">SECONDARY</option>
+                                        <option value="OTHER">OTHER</option>
+                                    </select>
+                                    <small
+                                        *ngIf="educationLevelForm.controls.levelType.touched && educationLevelForm.controls.levelType.invalid"
+                                        class="text-red-500">
+                                        El tipo de nivel es obligatorio
+                                    </small>
+                                </div>
+                                <div class="mb-3">
                                     <label for="shift" class="form-label text-primary">Turno<span
                                             class="required">*</span></label>
                                     <select formControlName="shift" id="shift" class="form-select">

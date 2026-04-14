@@ -10,13 +10,17 @@
                         <div class="row">
                             <div class="col-xl-6 col-sm-6">
                                 <div class="mb-3">
-                                    <label for="exampleFormControlInput9" class="form-label text-primary">Nombre del
+                                    <label for="roleName" class="form-label text-primary">Nombre del
                                         rol<span class="required">*</span></label>
-                                    <input formControlName="name" type="text" class="form-control"
-                                        id="exampleFormControlInput9" placeholder="Nombre del rol">
+                                    <select formControlName="name" class="form-select" id="roleName">
+                                        <option value="">Selecciona un rol</option>
+                                        <option *ngFor="let role of roleOptions" [value]="role">
+                                            {{ roleLabels[role] }}
+                                        </option>
+                                    </select>
                                     <small *ngIf="roleForm.controls.name.touched && roleForm.controls.name.invalid"
                                         class="text-red-500">
-                                        El nombre es obligatorio y debe tener al menos 3 caracteres
+                                        El nombre del rol es obligatorio
                                     </small>
                                 </div>
                                 <div class="mb-3">

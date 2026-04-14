@@ -50,9 +50,9 @@ export class TeacherIndexComponent {
 
   assignmentForm = this.fb.nonNullable.group({
     teacherId: ['', Validators.required],
-    educationLevelId: ['', Validators.required],
-    degreeId: ['', Validators.required],
-    courseId: ['', Validators.required],
+    educationLevelId: [''],
+    degreeId: [''],
+    courseId: [''],
     status: [true, Validators.required]
   });
 
@@ -198,9 +198,11 @@ export class TeacherIndexComponent {
 
     this.editingAssignmentId = assignment?.idTeacherSubjectAssignments ?? null;
 
+    const resolvedEducationLevelId = assignment?.educationLevelId || this.resolveEducationLevelFromAssignment(assignment);
+
     this.assignmentForm.reset({
       teacherId: assignment?.teacherId || teacher?.idTeacher || '',
-      educationLevelId: assignment?.educationLevelId || '',
+      educationLevelId: resolvedEducationLevelId || '',
       degreeId: assignment?.degreeId || '',
       courseId: assignment?.courseId || '',
       status: assignment?.status ?? true
@@ -239,18 +241,51 @@ export class TeacherIndexComponent {
     }
 
     const formValue = this.assignmentForm.getRawValue();
-    const payload: TeacherSubjectAssignments = {
-      idTeacherSubjectAssignments: this.editingAssignmentId ?? undefined,
+    const hasDegree = !!(formValue.degreeId || '').trim();
+    const hasCourse = !!(formValue.courseId || '').trim();
+    const isPrimaryOrInitial = this.isPrimaryOrInitialByLevelId(formValue.educationLevelId || '');
+
+    // Validación por tipo de nivel educativo
+    if (isPrimaryOrInitial) {
+      // Para Inicial/Primaria: degree_id obligatorio, course_id debe ser nulo
+      if (!hasDegree) {
+        Swal.fire('Atencion', 'Para niveles Inicial/Primaria se requiere seleccionar un grado.', 'warning');
+        return;
+      }
+      if (hasCourse) {
+        Swal.fire('Atencion', 'Para niveles Inicial/Primaria no se asigna por curso. Dejar curso vacío.', 'warning');
+        return;
+      }
+    } else {
+      // Para Secundaria: degree_id y course_id obligatorios
+      if (!hasDegree || !hasCourse) {
+        Swal.fire('Atencion', 'Para Secundaria se requiere seleccionar tanto el grado como el curso.', 'warning');
+        return;
+      }
+    }
+
+    const payload: Record<string, any> = {
       teacherId: formValue.teacherId,
-      educationLevelId: formValue.educationLevelId,
-      degreeId: formValue.degreeId,
-      courseId: formValue.courseId,
       status: formValue.status
     };
 
+    if (isPrimaryOrInitial) {
+      // Inicial/Primaria: enviar solo degreeId
+      payload['degreeId'] = formValue.degreeId;
+    } else {
+      // Secundaria: enviar ambos degreeId y courseId
+      payload['degreeId'] = formValue.degreeId;
+      payload['courseId'] = formValue.courseId;
+    }
+
+    console.log('Teacher assignment payload:', payload);
+
     const request$ = this.editingAssignmentId
-      ? this.assignmentsService.updateTeacherSubjectAssignments(payload)
-      : this.assignmentsService.saveTeacherSubjectAssignments(payload);
+      ? this.assignmentsService.updateTeacherSubjectAssignments({
+        ...payload,
+        idTeacherSubjectAssignments: this.editingAssignmentId
+      } as TeacherSubjectAssignments)
+      : this.assignmentsService.saveTeacherSubjectAssignments(payload as TeacherSubjectAssignments);
 
     request$.subscribe({
       next: () => {
@@ -264,12 +299,18 @@ export class TeacherIndexComponent {
         this.closeAssignModal();
         this.loadAssignments();
       },
-      error: () => {
+      error: (errorResponse) => {
+        const backendMessage =
+          errorResponse?.error?.message ||
+          errorResponse?.error?.error ||
+          errorResponse?.message ||
+          '';
+
         Swal.fire(
           'Error',
-          this.editingAssignmentId
+          backendMessage || (this.editingAssignmentId
             ? 'No se pudo actualizar la asignacion'
-            : 'No se pudo registrar la asignacion',
+            : 'No se pudo registrar la asignacion'),
           'error'
         );
       }
@@ -328,7 +369,12 @@ export class TeacherIndexComponent {
   }
 
   onEducationLevelChange(): void {
-    this.assignmentForm.patchValue({ degreeId: '' });
+    this.assignmentForm.patchValue({ degreeId: '', courseId: '' });
+  }
+
+  get isPrimaryOrInitialSelected(): boolean {
+    const levelId = this.assignmentForm.controls.educationLevelId.value || '';
+    return this.isPrimaryOrInitialByLevelId(levelId);
   }
 
   get filteredTeachers(): Teacher[] {
@@ -372,17 +418,61 @@ export class TeacherIndexComponent {
 
   getEducationLevelNameById(idEducationLevel: string): string {
     const level = this.educationLevels.find((item) => item.idEducationLevel === idEducationLevel);
+    console.log('Resolviendo nombre de nivel educativo para ID:', idEducationLevel, 'Encontrado:', level);
     return level ? `${level.name} - ${level.shift}` : idEducationLevel;
   }
 
+  getEducationLevelNameByAssignment(assignment: TeacherSubjectAssignments): string {
+    const resolvedLevelId = this.resolveEducationLevelFromAssignment(assignment);
+    return resolvedLevelId ? this.getEducationLevelNameById(resolvedLevelId) : '-';
+  }
+
   getDegreeNameById(idDegree: string): string {
+    if (!idDegree) {
+      return '-';
+    }
     const degree = this.degrees.find((item) => item.idDegree === idDegree);
     return degree ? `${degree.course} - Seccion ${degree.section}` : idDegree;
   }
 
   getCourseNameById(idCourse: string): string {
+    if (!idCourse) {
+      return '-';
+    }
     const course = this.courses.find((item) => item.idCourse === idCourse);
     return course ? course.name : idCourse;
+  }
+
+  private resolveEducationLevelFromAssignment(assignment?: TeacherSubjectAssignments): string {
+    if (!assignment) {
+      return '';
+    }
+
+    if (assignment.educationLevelId) {
+      return assignment.educationLevelId;
+    }
+
+    if (assignment.degreeId) {
+      const degree = this.degrees.find((item) => item.idDegree === assignment.degreeId);
+      return degree?.idEducationLevel || '';
+    }
+
+    return '';
+  }
+
+  private isPrimaryOrInitialByLevelId(levelId: string): boolean {
+    if (!levelId) {
+      return false;
+    }
+
+    const level = this.educationLevels.find((item) => item.idEducationLevel === levelId);
+    const normalizedType = String(level?.levelType || '').toUpperCase();
+    if (normalizedType === 'PRIMARY' || normalizedType === 'INITIAL') {
+      return true;
+    }
+
+    const normalizedName = (level?.name || '').toUpperCase();
+    return normalizedName.includes('PRIMARIA') || normalizedName.includes('INICIAL') || normalizedName.includes('INITIAL') || normalizedName.includes('PRIMARY');
   }
 
 

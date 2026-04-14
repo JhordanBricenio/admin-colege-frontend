@@ -1,0 +1,142 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h4 class="mb-1">Kardex General</h4>
+                <p class="mb-0 text-muted">Historial académico de estudiantes</p>
+            </div>
+            <button class="btn btn-outline-primary" type="button" (click)="goBack()" *ngIf="false">
+                <i class="fa fa-arrow-left me-1"></i> Volver
+            </button>
+        </div>
+
+        <!-- Search & Filter -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row g-2 align-items-end">
+                    <div class="col-lg-6">
+                        <label class="form-label mb-1">Buscar</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                            <input type="text" class="form-control"
+                                placeholder="Buscar por nombre, código, DNI, email, grado o sección"
+                                [(ngModel)]="searchQuery">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-md-4">
+                        <label class="form-label mb-1">Grado</label>
+                        <select class="form-select" [ngModel]="selectedDegreeCourse"
+                            (ngModelChange)="onDegreeCourseChange($event)">
+                            <option value="">Todos</option>
+                            <option *ngFor="let degreeCourse of availableDegreeCourses" [ngValue]="degreeCourse">
+                                {{ degreeCourse }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-2 col-md-4">
+                        <label class="form-label mb-1">Sección</label>
+                        <select class="form-select" [(ngModel)]="selectedDegreeSection">
+                            <option value="">Todas</option>
+                            <option *ngFor="let section of availableDegreeSections" [ngValue]="section">
+                                {{ section }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-2 col-md-4">
+                        <button type="button" class="btn btn-outline-secondary w-100" (click)="clearFilters()">
+                            Limpiar filtros
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Registros ({{ filteredRecords.length }} de {{ kardexRecords.length }})</h5>
+                <span class="badge bg-primary" *ngIf="loading">Cargando...</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover table-sm mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Código</th>
+                            <th>Estudiante</th>
+                            <th>DNI</th>
+                            <th>Nivel</th>
+                            <th>Grado</th>
+                            <th>Pagos</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let record of filteredRecords" [class.table-active]="false">
+                            <td>
+                                <small class="badge bg-info">{{ record.studentCode }}</small>
+                            </td>
+                            <td>
+                                <div>{{ record.studentFullName }}</div>
+                                <small class="text-muted">{{ record.studentEmail }}</small>
+                            </td>
+                            <td>{{ record.studentDni }}</td>
+                            <td>
+                                <small>{{ record.educationLevelName || 'N/A' }}</small>
+                            </td>
+                            <td>
+                                <small>{{ record.degreeCourse }} - {{ record.degreeSection }}</small>
+                            </td>
+
+                            <td>
+                                <small>
+                                    {{ record.paymentsCount }} pagos
+                                    <br />
+                                    S/ {{ record.paymentsTotal | number:'1.2-2' }}
+                                </small>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" (click)="viewDetail(record)" title="Ver Kardex">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="filteredRecords.length === 0">
+                            <td colspan="8" class="text-center text-muted py-4">
+                                No hay registros disponibles
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="card-footer bg-light d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <small class="text-muted">
+                    Página {{ currentPage + 1 }} de {{ totalPages }}
+                </small>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item" [class.disabled]="currentPage === 0">
+                            <button class="page-link" (click)="prevPage()" [disabled]="currentPage === 0">
+                                Anterior
+                            </button>
+                        </li>
+                        <li class="page-item active" *ngFor="let page of [].constructor(totalPages); let i = index"
+                            [class.active]="i === currentPage">
+                            <button class="page-link" (click)="goToPage(i)">{{ i + 1 }}</button>
+                        </li>
+                        <li class="page-item" [class.disabled]="currentPage >= totalPages - 1">
+                            <button class="page-link" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">
+                                Siguiente
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

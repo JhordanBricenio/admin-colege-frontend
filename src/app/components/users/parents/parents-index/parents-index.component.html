@@ -108,7 +108,8 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <app-paginator *ngIf="pagination" [pagination]="pagination"></app-paginator>
+                            <app-paginator *ngIf="pagination" [pagination]="pagination"
+                                [pagedRoute]="'/admin/parent/paged'"></app-paginator>
                         </div>
                     </div>
                 </div>

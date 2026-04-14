@@ -3,6 +3,12 @@ import { Injectable } from '@angular/core';
 import { GLOBAL } from './GLOBAL';
 import { Observable, catchError, throwError } from 'rxjs';
 import { User } from '../models/user';
+import { AuthResponse } from '../models/auth';
+
+export interface LoginRequest {
+  identifier: string;
+  password: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +20,17 @@ export class UserService {
   constructor(private _http: HttpClient) {
     this.url = GLOBAL.url;
   }
+
+  login(credentials: LoginRequest): Observable<AuthResponse> {
+    const identifier = (credentials.identifier || '').trim();
+    const password = credentials.password || '';
+
+    return this._http.post<AuthResponse>(`${this.url}auth/login`, {
+      identifier,
+      password
+    });
+  }
+
   getUsers(): Observable<User[]> {
     return this._http.get<User[]>(this.url + 'users');
   }

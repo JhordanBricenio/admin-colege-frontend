@@ -1,0 +1,205 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h4 class="mb-1">{{ isEditMode ? 'Editar asistencia docente' : 'Registrar asistencia docente' }}</h4>
+                <p class="mb-0 text-muted">{{ isEditMode ? 'Actualiza un registro individual de asistencia.' : 'Puedes
+                    registrar en modo individual o con envio masivo.' }}</p>
+            </div>
+            <a class="btn btn-outline-primary" [routerLink]="['/admin/teacher-attendance']">
+                <i class="fa fa-arrow-left me-1"></i> Volver
+            </a>
+        </div>
+
+        <div class="card mb-3" *ngIf="!isEditMode">
+            <div class="card-body">
+                <label class="form-label fw-semibold">Modo de registro</label>
+                <div class="d-flex flex-wrap gap-3">
+                    <div class="form-check" *ngFor="let option of modeOptions">
+                        <input class="form-check-input" type="radio" name="mode" [id]="option.value"
+                            [checked]="mode === option.value" (change)="mode = option.value">
+                        <label class="form-check-label" [for]="option.value">{{ option.label }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="mode === 'single'">
+            <div class="card-body">
+                <form [formGroup]="form" (ngSubmit)="submitSingle()" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Docente (nombre o DNI)</label>
+                        <input type="text" class="form-control" [value]="singleTeacherSearchText" list="teacherOptions"
+                            placeholder="Ej: Ana Perez o 74379877"
+                            (input)="onSingleTeacherSearch($any($event.target).value)">
+                        <datalist id="teacherOptions">
+                            <option *ngFor="let teacher of teachers" [value]="getTeacherFullName(teacher)"></option>
+                        </datalist>
+                        <small class="text-muted">Busca por nombre o DNI. El sistema envia el teacherId al
+                            backend.</small>
+                        <input type="hidden" formControlName="teacherId">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" class="form-control" formControlName="attendanceDate">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">DNI verificado</label>
+                        <input type="text" class="form-control" [value]="selectedTeacherDni || ''" readonly>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="selected-teacher-card" *ngIf="selectedTeacher; else unresolvedTeacher">
+                            <div class="selected-teacher-title">Docente seleccionado</div>
+                            <div><strong>{{ selectedTeacherName }}</strong></div>
+                            <div class="text-muted">DNI: {{ selectedTeacherDni || 'Sin DNI' }}</div>
+                            <div class="text-muted" *ngIf="selectedTeacherEmail">Email: {{ selectedTeacherEmail }}</div>
+                            <div class="text-muted" *ngIf="selectedTeacherPhone">Telefono: {{ selectedTeacherPhone }}
+                            </div>
+                        </div>
+                        <ng-template #unresolvedTeacher>
+                            <div class="alert alert-warning mb-0" *ngIf="singleTeacherSearchText.trim()">
+                                No se pudo validar el docente. Selecciona un nombre o DNI de la lista sugerida antes de
+                                guardar.
+                            </div>
+                        </ng-template>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Turno</label>
+                        <select class="form-select" formControlName="session">
+                            <option value="Mañana">Mañana</option>
+                            <option value="Tarde">Tarde</option>
+                            <option value="Noche">Noche</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Estado</label>
+                        <select class="form-select" formControlName="status">
+                            <option *ngFor="let option of statusOptions" [value]="option.value">{{ option.label }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Minutos de tardanza</label>
+                        <input type="number" class="form-control" min="0" formControlName="minutesLate">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Origen</label>
+                        <input type="text" class="form-control" formControlName="source">
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Justificacion</label>
+                        <textarea class="form-control" rows="2" formControlName="justification"></textarea>
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-end gap-2">
+                        <a class="btn btn-light" [routerLink]="['/admin/teacher-attendance']">Cancelar</a>
+                        <button type="submit" class="btn btn-primary" [disabled]="saving">{{ saving ? 'Guardando...' :
+                            (isEditMode ? 'Actualizar asistencia' : 'Guardar asistencia') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="mode === 'bulk'">
+            <div class="card-body">
+                <form [formGroup]="bulkForm" (ngSubmit)="submitBulk()">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" class="form-control" formControlName="date">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Turno</label>
+                            <select class="form-select" formControlName="session">
+                                <option value="Mañana">Mañana</option>
+                                <option value="Tarde">Tarde</option>
+                                <option value="Noche">Noche</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Estrategia de conflicto</label>
+                            <select class="form-select" formControlName="conflictStrategy">
+                                <option value="SKIP">SKIP</option>
+                                <option value="OVERWRITE">OVERWRITE</option>
+                                <option value="REJECT">REJECT</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end justify-content-end">
+                            <button type="button" class="btn btn-outline-primary" (click)="addBulkRow()">
+                                + Agregar fila
+                            </button>
+                        </div>
+                    </div>
+
+                    <div formArrayName="records" class="table-responsive">
+                        <table class="table table-bordered align-middle mb-3">
+                            <thead>
+                                <tr>
+                                    <th>Docente (nombre o DNI)</th>
+                                    <th>Teacher ID</th>
+                                    <th>Estado</th>
+                                    <th>Tardanza (min)</th>
+                                    <th>Justificacion</th>
+                                    <th>Origen</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let row of recordsArray.controls; let i = index" [formGroupName]="i">
+                                    <td>
+                                        <input type="text" class="form-control" [value]="bulkTeacherSearch[i] || ''"
+                                            placeholder="Nombre o DNI"
+                                            (input)="onBulkTeacherSearch(i, $any($event.target).value)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" formControlName="teacherId" readonly>
+                                    </td>
+                                    <td>
+                                        <select class="form-select" formControlName="status">
+                                            <option *ngFor="let option of statusOptions" [value]="option.value">{{
+                                                option.label }}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="0" class="form-control" formControlName="minutesLate">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" formControlName="justification">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" formControlName="source">
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                            (click)="removeBulkRow(i)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="alert alert-info">
+                        Se enviara un objeto masivo con la misma fecha y turno para todos los registros, incluyendo la
+                        estrategia de conflicto.
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a class="btn btn-light" [routerLink]="['/admin/teacher-attendance']">Cancelar</a>
+                        <button type="submit" class="btn btn-primary" [disabled]="saving">{{ saving ? 'Guardando...' :
+                            'Guardar masivo' }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

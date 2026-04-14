@@ -4,6 +4,8 @@ import { Course } from '../../../models/course';
 import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
+import { EducationLevelService } from '../../../services/education-level.service';
+import { EducationLevel } from '../../../models/education-level';
 
 @Component({
   selector: 'app-subject-index',
@@ -16,10 +18,13 @@ export class SubjectIndexComponent {
 
 
   public courses: Course[] = [];
+  public allCourses: Course[] = [];
+  public educationLevels: EducationLevel[] = [];
 
   constructor() { }
 
   private courseService = inject(CourseService);
+  private educationLevelService = inject(EducationLevelService);
 
   ngOnInit(): void {
 
@@ -29,8 +34,35 @@ export class SubjectIndexComponent {
   initData(): void {
     this.courseService.getCourses().subscribe((data) => {
       console.log(data);
-      this.courses = data;
+      this.allCourses = data || [];
+      this.courses = [...this.allCourses];
     });
+
+    this.educationLevelService.getEducationLevels().subscribe((data) => {
+      this.educationLevels = data || [];
+    });
+  }
+
+  onSearch(name: string): void {
+    const query = (name || '').trim().toLowerCase();
+    if (!query) {
+      this.courses = [...this.allCourses];
+      return;
+    }
+
+    this.courses = this.allCourses.filter((course) => {
+      const courseName = (course.name || '').toLowerCase();
+      const levelName = this.getEducationLevelNameById(course.educationLevelId).toLowerCase();
+      return courseName.includes(query) || levelName.includes(query);
+    });
+  }
+
+  getEducationLevelNameById(educationLevelId?: string): string {
+    if (!educationLevelId) {
+      return '-';
+    }
+    const level = this.educationLevels.find((item) => String(item.idEducationLevel) === String(educationLevelId));
+    return level ? `${level.name} - ${level.shift}` : educationLevelId;
   }
 
   deleteCourse(id: string): void {

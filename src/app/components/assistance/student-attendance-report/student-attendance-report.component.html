@@ -1,0 +1,123 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h4 class="mb-1">Reporte mensual de asistencia de alumnos</h4>
+                <p class="mb-0 text-muted">Vista por alumno con estados diarios y contador de faltas del mes.</p>
+            </div>
+            <a class="btn btn-outline-primary" [routerLink]="['/admin/student-attendance/new']">
+                <i class="fa fa-arrow-left me-1"></i> Volver al registro diario
+            </a>
+        </div>
+
+        <div class="card mb-3" *ngIf="authSession.currentRole !== 'TEACHER'">
+            <div class="card-body">
+                <label class="form-label fw-semibold">Docente</label>
+                <select class="form-select" [ngModel]="selectedTeacherId" (ngModelChange)="onTeacherChange($event)">
+                    <option value="">Selecciona docente</option>
+                    <option *ngFor="let teacher of teachers" [value]="teacher.idTeacher">
+                        {{ teacher.user?.lastname }}, {{ teacher.user?.name }} - DNI: {{ teacher.user?.dni }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Contexto académico</label>
+                        <select class="form-select" [ngModel]="selectedScopeKey"
+                            (ngModelChange)="onScopeChange($event)">
+                            <option value="">Selecciona curso o grado</option>
+                            <option *ngFor="let option of scopeOptions" [value]="option.key">
+                                {{ option.label }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Mes</label>
+                        <input type="month" class="form-control" [ngModel]="monthValue"
+                            (ngModelChange)="monthValue = $event">
+                    </div>
+
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="button" class="btn btn-primary w-100" [disabled]="loadingReport"
+                            (click)="loadMonthlyReport()">
+                            {{ loadingReport ? 'Cargando...' : 'Ver reporte mensual' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3 mb-3" *ngIf="monthRows.length > 0">
+            <div class="col-md-3">
+                <div class="summary-card bg-danger-subtle">
+                    <div class="summary-title">Faltas del mes</div>
+                    <div class="summary-value">{{ totalAbsences }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="summary-card bg-warning-subtle">
+                    <div class="summary-title">Tardanzas del mes</div>
+                    <div class="summary-value">{{ totalLates }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="summary-card bg-primary-subtle">
+                    <div class="summary-title">Alumnos con faltas</div>
+                    <div class="summary-value">{{ studentsWithAbsencesCount }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="summary-card bg-success-subtle">
+                    <div class="summary-title">Alumnos en lista</div>
+                    <div class="summary-value">{{ monthRows.length }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="monthRows.length > 0">
+            <div class="card-body">
+                <div class="table-responsive monthly-table-wrap">
+                    <table class="table table-bordered align-middle mb-0 monthly-table">
+                        <thead>
+                            <tr>
+                                <th class="sticky-left">Alumno</th>
+                                <th class="sticky-left-2">DNI</th>
+                                <th *ngFor="let day of monthDays" class="text-center day-col">{{ day }}</th>
+                                <th class="text-center summary-col">Faltas</th>
+                                <th class="text-center summary-col">Tardanzas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of monthRows">
+                                <td class="sticky-left">
+                                    <div class="fw-semibold">{{ row.fullName }}</div>
+                                    <small class="text-muted" *ngIf="row.code">{{ row.code }}</small>
+                                </td>
+                                <td class="sticky-left-2">{{ row.dni || '-' }}</td>
+                                <td *ngFor="let day of monthDays" class="text-center day-col">
+                                    <span [ngClass]="getStatusClass(row.statusByDay[day])">{{
+                                        getStatusShort(row.statusByDay[day]) || '-' }}</span>
+                                </td>
+                                <td class="text-center fw-semibold text-danger">{{ row.absences }}</td>
+                                <td class="text-center fw-semibold text-warning">{{ row.lates }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert alert-info mt-3 mb-0">
+                    Leyenda: A = Asistio, F = Falto, T = Tardanza, J = Justificado.
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-warning" *ngIf="!loadingReport && monthRows.length === 0">
+            Aun no hay datos para mostrar. Selecciona contexto y mes, luego consulta el reporte.
+        </div>
+    </div>
+</div>

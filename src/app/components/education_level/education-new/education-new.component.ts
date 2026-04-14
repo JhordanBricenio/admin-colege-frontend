@@ -32,6 +32,7 @@ export class EducationNewComponent {
 
   educationLevelForm = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
+    levelType: ['', Validators.required],
     shift: ['', Validators.required],
     status: [true, Validators.required],
     idManagement: ['', Validators.required],
@@ -62,6 +63,7 @@ export class EducationNewComponent {
         next: (educationLevel) => {
           this.educationLevelForm.setValue({
             name: educationLevel.name,
+            levelType: educationLevel.levelType,
             shift: educationLevel.shift,
             status: educationLevel.status,
             idManagement: educationLevel.idManagement,

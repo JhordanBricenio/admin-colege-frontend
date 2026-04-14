@@ -3,6 +3,8 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CourseService } from '../../../services/course.service';
+import { EducationLevelService } from '../../../services/education-level.service';
+import { EducationLevel } from '../../../models/education-level';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -16,19 +18,23 @@ export class SubjectNewComponent {
 
   private fb = inject(FormBuilder);
   private courseService = inject(CourseService);
+  private educationLevelService = inject(EducationLevelService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
   isEditMode = false;
   idCourse: string | null = null;
+  educationLevels: EducationLevel[] = [];
 
 
   courseForm = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
+    educationLevelId: ['', Validators.required],
     status: [true, Validators.required],
   });
 
   ngOnInit(): void {
+    this.loadEducationLevels();
     this.idCourse = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.idCourse;
     if (this.isEditMode && this.idCourse) {
@@ -50,8 +56,20 @@ export class SubjectNewComponent {
     this.courseService.getCourse(id).subscribe((data) => {
       this.courseForm.patchValue({
         name: data.name,
+        educationLevelId: data.educationLevelId || '',
         status: data.status,
       });
+    });
+  }
+
+  loadEducationLevels(): void {
+    this.educationLevelService.getEducationLevels().subscribe({
+      next: (response) => {
+        this.educationLevels = response || [];
+      },
+      error: () => {
+        this.educationLevels = [];
+      }
     });
   }
 

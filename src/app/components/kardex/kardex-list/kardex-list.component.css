@@ -1,0 +1,19 @@
+/* Kardex List Styles */
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+    cursor: pointer;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+}
+
+.text-muted {
+    font-size: 0.875rem;
+}
+
+.pagination-sm .page-link {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}

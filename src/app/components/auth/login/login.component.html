@@ -1,0 +1,47 @@
+<div class="authincation d-flex flex-column flex-lg-row flex-column-fluid">
+    <div class="login-aside text-center d-flex flex-column flex-row-auto">
+        <div class="d-flex flex-column-auto flex-column pt-lg-40 pt-15">
+            <div class="text-center mb-lg-4 mb-2 pt-5 logo">
+                <h2 class="text-white">College Admin</h2>
+            </div>
+            <h3 class="mb-2 text-white">Bienvenido</h3>
+            <p class="mb-4">Inicia sesión para acceder al sistema académico</p>
+        </div>
+    </div>
+
+    <div
+        class="container flex-row-fluid d-flex flex-column justify-content-center position-relative overflow-hidden p-4 mx-auto">
+        <div class="d-flex justify-content-center h-100 align-items-center">
+            <div class="authincation-content style-2 w-100" style="max-width: 460px;">
+                <div class="auth-form form-validation">
+                    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+                        <div class="text-center mb-4">
+                            <h3 class="text-center mb-2 text-black">Iniciar Sesión</h3>
+                            <span>Usa tu correo o DNI y contraseña</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label mb-2 fs-13 label-color font-w500">Correo o DNI</label>
+                            <input type="text" class="form-control" formControlName="identifier"
+                                placeholder="correo@dominio.com o 12345678">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label mb-2 fs-13 label-color font-w500">Contraseña</label>
+                            <input type="password" class="form-control" formControlName="password"
+                                placeholder="Tu contraseña">
+                        </div>
+
+                        <div class="alert alert-danger" *ngIf="errorMessage">
+                            {{ errorMessage }}
+                        </div>
+
+                        <button type="submit" class="btn btn-block btn-primary" [disabled]="loading">
+                            {{ loading ? 'Validando...' : 'Ingresar' }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

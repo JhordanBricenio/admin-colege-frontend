@@ -19,12 +19,9 @@
                                         </a></span>
                                 </div>
                                 <div>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal">
-                                        <a routerLink="/admin/teacher/new">
-                                            + Nuevo profesor
-                                        </a>
-                                    </button>
+                                    <a routerLink="/admin/teacher/new" class="btn btn-primary">
+                                        + Nuevo profesor
+                                    </a>
                                     <button type="button" class="btn btn-outline-success ms-2"
                                         (click)="openAssignModal()">
                                         + Asignar materia
@@ -116,7 +113,8 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <app-paginator *ngIf="pagination" [pagination]="pagination"></app-paginator>
+                            <app-paginator *ngIf="pagination" [pagination]="pagination"
+                                [pagedRoute]="'/admin/teacher/paged'"></app-paginator>
                         </div>
                     </div>
                 </div>
@@ -133,6 +131,14 @@
                 <strong>Info!</strong> No hay usuarios disponibles.
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close"><span><i
                             class="fa-solid fa-xmark"></i></span>
+                </button>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+                <a routerLink="/admin/teacher/new" class="btn btn-primary">
+                    + Nuevo profesor
+                </a>
+                <button type="button" class="btn btn-outline-success" (click)="openAssignModal()">
+                    + Asignar materia
                 </button>
             </div>
         </ng-container>
@@ -167,7 +173,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Nivel educativo</label>
+                            <label class="form-label">Nivel educativo (opcional)</label>
                             <select class="form-select" formControlName="educationLevelId"
                                 (change)="onEducationLevelChange()">
                                 <option value="">Selecciona nivel</option>
@@ -178,7 +184,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Grado</label>
+                            <label class="form-label">Grado (obligatorio)</label>
                             <select class="form-select" formControlName="degreeId">
                                 <option value="">Selecciona grado</option>
                                 <option *ngFor="let degree of filteredDegreesByLevel" [value]="degree.idDegree">
@@ -188,13 +194,21 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Curso / Materia</label>
+                            <label class="form-label">Curso / Materia {{ !isPrimaryOrInitialSelected ? '(obligatorio)' :
+                                '(no aplica)' }}</label>
                             <select class="form-select" formControlName="courseId">
-                                <option value="">Selecciona curso</option>
+                                <option value="">{{ isPrimaryOrInitialSelected ? 'No aplica para Inicial/Primaria' :
+                                    'Selecciona curso' }}</option>
                                 <option *ngFor="let course of courses" [value]="course.idCourse">
                                     {{ course.name }}
                                 </option>
                             </select>
+                            <small class="text-muted" *ngIf="isPrimaryOrInitialSelected">
+                                En Inicial/Primaria la asignación es solo por grado.
+                            </small>
+                            <small class="text-muted" *ngIf="!isPrimaryOrInitialSelected">
+                                En Secundaria la asignación debe incluir tanto grado como curso.
+                            </small>
                         </div>
 
                         <div class="col-md-6">
@@ -245,7 +259,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let assignment of selectedTeacherAssignments">
-                                    <td>{{ getEducationLevelNameById(assignment.educationLevelId) }}</td>
+                                    <td>{{ getEducationLevelNameByAssignment(assignment) }}</td>
                                     <td>{{ getDegreeNameById(assignment.degreeId) }}</td>
                                     <td>{{ getCourseNameById(assignment.courseId) }}</td>
                                     <td>

@@ -1,0 +1,21 @@
+.assignment-card {
+    border: 0;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
+}
+
+.teacher-selector {
+    min-width: 320px;
+}
+
+.teacher-selector .form-select {
+    min-width: 320px;
+}
+
+@media (max-width: 768px) {
+
+    .teacher-selector,
+    .teacher-selector .form-select {
+        min-width: 100%;
+    }
+}

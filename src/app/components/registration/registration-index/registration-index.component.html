@@ -183,7 +183,8 @@
                             </tbody>
                         </table>
                     </div>
-                    <app-paginator *ngIf="pagination" [pagination]="pagination"></app-paginator>
+                    <app-paginator *ngIf="pagination" [pagination]="pagination"
+                        [pagedRoute]="'/admin/registration/paged'"></app-paginator>
                 </div>
             </div>
         </div>

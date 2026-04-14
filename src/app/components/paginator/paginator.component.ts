@@ -12,6 +12,8 @@ import { RouterLink } from "@angular/router";
 export class PaginatorComponent implements OnChanges {
 
   @Input() pagination: any;
+  @Input() pagedRoute = '/admin/user/paged';
+  @Input() routeName?: string;
   pages: number[] = [];
   desde: number;
   hasta: number;
@@ -19,6 +21,7 @@ export class PaginatorComponent implements OnChanges {
   rangeEnd = 0;
   totalElements = 0;
   pageSize = 0;
+  routeBase = '/admin/user/paged';
 
   ngOnInit(): void {
     this.initPagination();
@@ -26,9 +29,36 @@ export class PaginatorComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     const paginationChange = changes["pagination"];
+    if (changes["pagedRoute"] || changes["routeName"]) {
+      this.routeBase = this.buildRouteBase();
+    }
     if (paginationChange && paginationChange.currentValue) {
       this.initPagination();
     }
+  }
+
+  private buildRouteBase(): string {
+    const rawRoute = (this.routeName && this.routeName.trim().length > 0)
+      ? this.routeName.trim()
+      : this.pagedRoute;
+
+    if (!rawRoute) {
+      return '/admin/user/paged';
+    }
+
+    if (rawRoute.startsWith('/')) {
+      return rawRoute.replace(/\/+$/, '');
+    }
+
+    if (rawRoute.startsWith('admin/')) {
+      return `/${rawRoute.replace(/\/+$/, '')}`;
+    }
+
+    return `/admin/${rawRoute.replace(/\/+$/, '')}`;
+  }
+
+  getPageLink(page: number): string[] {
+    return [this.routeBase, String(page)];
   }
 
   private initPagination() {

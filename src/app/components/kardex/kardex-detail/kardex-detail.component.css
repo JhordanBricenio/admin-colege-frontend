@@ -1,0 +1,74 @@
+/* Kardex Detail Styles */
+
+.accordion-button {
+    font-weight: 500;
+    padding: 1rem;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #f0f8ff;
+    color: #0066cc;
+}
+
+.accordion-body {
+    padding: 0;
+}
+
+.table-responsive table {
+    font-size: 0.875rem;
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    border-top: 1px solid #dee2e6;
+}
+
+.table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    white-space: nowrap;
+}
+
+.progress {
+    font-size: 0.7rem;
+}
+
+.text-success.fw-bold,
+.text-primary.fw-bold,
+.text-warning.fw-bold,
+.text-danger.fw-bold {
+    font-size: 1.1rem;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+/* Print Styles */
+@media print {
+
+    .btn-group,
+    .pagination,
+    .d-print-none {
+        display: none !important;
+    }
+
+    .accordion {
+        page-break-inside: avoid;
+    }
+
+    .table {
+        page-break-inside: avoid;
+    }
+
+    body {
+        background: white;
+        margin: 0;
+        padding: 0;
+    }
+}

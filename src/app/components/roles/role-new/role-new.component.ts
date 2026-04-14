@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RoleService } from '../../../services/role.service';
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 
@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-role-new',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, RouterLink],
+  imports: [ReactiveFormsModule, NgIf, NgFor, RouterLink],
   templateUrl: './role-new.component.html',
   styleUrl: './role-new.component.css'
 })
@@ -22,10 +22,22 @@ export class RoleNewComponent {
   isEditMode = false;
   roleId: string | null = null;
 
+  // Opciones de roles predefinidas del backend
+  roleOptions = ['ADMIN', 'TEACHER', 'STUDENT', 'PARENT', 'TUTOR'];
+
+  // Mapa de traducción para mostrar en español
+  roleLabels: { [key: string]: string } = {
+    'ADMIN': 'Administrador',
+    'TEACHER': 'Profesor',
+    'STUDENT': 'Estudiante',
+    'PARENT': 'Padre/Madre',
+    'TUTOR': 'Tutor'
+  };
+
   constructor() { }
 
   roleForm = this.fb.nonNullable.group({
-    name: ['', [Validators.required, Validators.minLength(3)]],
+    name: ['', Validators.required],
     status: [true, Validators.required],
     description: [''],
   });

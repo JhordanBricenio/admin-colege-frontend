@@ -1,0 +1,235 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h4 class="mb-1" *ngIf="kardex">Kardex de {{ kardex.student.fullName }}</h4>
+                <h4 class="mb-1" *ngIf="!kardex && loading">Cargando Kardex...</h4>
+                <p class="mb-0 text-muted" *ngIf="kardex">
+                    Código: {{ kardex.student.code }} | DNI: {{ getStudentDni() || '-' }}
+                </p>
+                <p class="mb-0 text-muted" *ngIf="kardex && getAcademicLabel()">
+                    {{ getAcademicLabel() }}
+                </p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary" type="button" (click)="printKardex()"
+                    *ngIf="kardex && !loading" title="Imprimir">
+                    <i class="fa fa-print me-1"></i> Imprimir
+                </button>
+                <button class="btn btn-outline-primary" type="button" (click)="goBack()">
+                    <i class="fa fa-arrow-left me-1"></i> Volver
+                </button>
+            </div>
+        </div>
+
+        <ng-container *ngIf="kardex; else noData">
+            <!-- Global Summary -->
+            <div class="row mb-4" *ngIf="kardex.globalSummary">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Resumen Histórico General</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <h6 class="text-muted mb-2">Promedio Histórico</h6>
+                                        <h3 class="text-primary fw-bold">
+                                            {{ kardex.globalSummary.gpaHistorical || 'N/A' }}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <h6 class="text-muted mb-2">Cursos Aprobados</h6>
+                                        <h3 class="text-success fw-bold">
+                                            {{ kardex.globalSummary.totalApprovedCourses }}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <h6 class="text-muted mb-2">Cursos No Aprobados</h6>
+                                        <h3 class="text-danger fw-bold">
+                                            {{ kardex.globalSummary.totalFailedCourses }}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <h6 class="text-muted mb-2">Años Registrados</h6>
+                                        <h3 class="text-info fw-bold">
+                                            {{ kardex.globalSummary.yearsRegistered }}
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Year Records -->
+            <div class="accordion" id="kardexAccordion">
+                <div *ngFor="let record of kardex.records; let i = index" class="accordion-item">
+                    <!-- Year Header -->
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" [class.collapsed]="i > 0" type="button"
+                            [attr.data-bs-target]="'#collapse' + i" [attr.aria-controls]="'collapse' + i"
+                            [attr.aria-expanded]="i === 0">
+                            <strong>Año {{ record.year }}</strong>
+                            <span class="ms-3 badge bg-light text-dark">
+                                {{ record.courses.length }} Cursos
+                            </span>
+                            <span class="ms-2 badge" [ngClass]="record.summary.gpa >= 14 ? 'bg-success' : 'bg-warning'">
+                                Promedio: {{ record.summary.gpa ?? 'N/A' }}
+                            </span>
+                            <span class="ms-2 text-muted small"
+                                *ngIf="record.educationLevelName || record.degreeName || getAcademicLabel()">
+                                {{ record.educationLevelName || getAcademicLabel() }}
+                                <ng-container *ngIf="record.degreeName"> - {{ record.degreeName }}</ng-container>
+                            </span>
+                        </button>
+                    </h2>
+
+                    <!-- Year Content -->
+                    <div [id]="'collapse' + i" class="accordion-collapse collapse" [class.show]="i === 0"
+                        data-bs-parent="#kardexAccordion">
+                        <div class="accordion-body p-0">
+                            <!-- Year Summary -->
+                            <div class="bg-light border-bottom p-3">
+                                <div class="row text-center">
+                                    <div class="col-md-3">
+                                        <small class="d-block text-muted">Promedio Anual</small>
+                                        <strong class="text-primary">{{ record.summary.gpa ?? 'N/A' }}</strong>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="d-block text-muted">Aprobados</small>
+                                        <strong class="text-success">{{ record.summary.approvedCourses }}</strong>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="d-block text-muted">No Aprobados</small>
+                                        <strong class="text-danger">{{ record.summary.failedCourses }}</strong>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="d-block text-muted">En Progreso</small>
+                                        <strong class="text-warning">{{ record.summary.inProgressCourses }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Courses -->
+                            <div class="table-responsive">
+                                <table class="table table-sm mb-0">
+                                    <thead>
+                                        <tr class="table-light">
+                                            <th>Curso</th>
+                                            <th class="text-center">B1</th>
+                                            <th class="text-center">B2</th>
+                                            <th class="text-center">B3</th>
+                                            <th class="text-center">B4</th>
+                                            <th class="text-center">Promedio</th>
+                                            <th class="text-center">Estado</th>
+                                            <th class="d-print-none">Progreso</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let course of record.courses">
+                                            <td>
+                                                <div>
+                                                    <strong>{{ course.courseName }}</strong>
+                                                    <div *ngIf="course.teacherName" class="small text-muted">
+                                                        {{ course.teacherName }}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <span [ngClass]="getGradeColor(course.termGrades.BIMESTER_1)">
+                                                    {{ course.termGrades.BIMESTER_1 ?? '-' }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span [ngClass]="getGradeColor(course.termGrades.BIMESTER_2)">
+                                                    {{ course.termGrades.BIMESTER_2 ?? '-' }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span [ngClass]="getGradeColor(course.termGrades.BIMESTER_3)">
+                                                    {{ course.termGrades.BIMESTER_3 ?? '-' }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span [ngClass]="getGradeColor(course.termGrades.BIMESTER_4)">
+                                                    {{ course.termGrades.BIMESTER_4 ?? '-' }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center fw-bold">
+                                                <span [ngClass]="getGradeColor(course.annualAverage)">
+                                                    {{ course.annualAverage ?? 'N/A' }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="badge" [ngClass]="getStatusBadgeClass(course.status)">
+                                                    {{ STATUS_LABELS[course.status] }}
+                                                </span>
+                                            </td>
+                                            <td class="d-print-none">
+                                                <div class="progress" style="height: 20px;">
+                                                    <div class="progress-bar" role="progressbar"
+                                                        [style.width]="calculateCourseCompletion(course) + '%'"
+                                                        [attr.aria-valuenow]="calculateCourseCompletion(course)"
+                                                        aria-valuemin="0" aria-valuemax="100">
+                                                        {{ calculateCourseCompletion(course) }}%
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="record.courses.length === 0">
+                                            <td colspan="8" class="text-center text-muted py-3">
+                                                Sin datos de cursos
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- Loading -->
+        <ng-template #noData>
+            <div class="card" *ngIf="!loading">
+                <div class="card-body text-center py-5">
+                    <p class="text-muted">No se encontraron datos de Kardex</p>
+                </div>
+            </div>
+            <div class="alert alert-info" *ngIf="loading">
+                <i class="fa fa-spinner fa-spin me-2"></i> Cargando Kardex del estudiante...
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+<!-- Print Styles -->
+<style media="print">
+    body {
+        background: white;
+    }
+
+    .d-print-none {
+        display: none !important;
+    }
+
+    .btn {
+        display: none;
+    }
+
+    .card {
+        border: 1px solid #dee2e6 !important;
+        page-break-inside: avoid;
+    }
+</style>

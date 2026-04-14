@@ -1,162 +1,71 @@
-<div class="content-body">
+<div class="content-body home-page">
     <div class="container-fluid">
-        <!-- Estudiantes -->
-        <div class="row mb-3">
-            <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="icon-box icon-box-lg std-data bg-primary me-3">
-                                <svg width="32" height="32" viewBox="0 0 30 38" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M12.9288 37.75H3.75C1.67875 37.75 0 36.0713 0 34V23.5863C0 21.7738 1.29625 20.2213 3.07875 19.8975C5.72125 19.4163 10.2775 18.5875 12.855 18.12C14.2737 17.8612 15.7263 17.8612 17.145 18.12C19.7225 18.5875 24.2788 19.4163 26.9213 19.8975C28.7038 20.2213 30 21.7738 30 23.5863C30 26.3125 30 31.0825 30 34C30 36.0713 28.3212 37.75 26.25 37.75H12.9288ZM24.785 22.05L24.79 22.0563C25.0088 22.3838 25.06 22.795 24.9287 23.1662L24.0462 25.6662C23.9312 25.9925 23.685 26.2575 23.3675 26.3963L21.7075 27.12L22.3675 28.4412C22.5525 28.81 22.5425 29.2462 22.3425 29.6075L19.2075 35.25H26.25C26.94 35.25 27.5 34.69 27.5 34C27.5 31.0825 27.5 26.3125 27.5 23.5863C27.5 22.9825 27.0675 22.465 26.4738 22.3562L24.785 22.05ZM21.3663 21.4275L16.6975 20.5788C15.575 20.375 14.425 20.375 13.3025 20.5788L8.63375 21.4275L7.63625 22.9238L8.13 24.3213L10.5 25.3537C10.8138 25.4912 11.0575 25.7512 11.175 26.0737C11.2925 26.3962 11.2712 26.7525 11.1175 27.0588L10.1625 28.9688L13.6525 35.25H16.3475L19.8375 28.9688L18.8825 27.0588C18.7288 26.7525 18.7075 26.3962 18.825 26.0737C18.9425 25.7512 19.1862 25.4912 19.5 25.3537L21.87 24.3213L22.3638 22.9238L21.3663 21.4275ZM5.215 22.05L3.52625 22.3562C2.9325 22.465 2.5 22.9825 2.5 23.5863V34C2.5 34.69 3.06 35.25 3.75 35.25H10.7925L7.6575 29.6075C7.4575 29.2462 7.4475 28.81 7.6325 28.4412L8.2925 27.12L6.6325 26.3963C6.315 26.2575 6.06875 25.9925 5.95375 25.6662L5.07125 23.1662C4.94 22.795 4.99125 22.3838 5.21 22.0563L5.215 22.05ZM23.75 29V31.5C23.75 32.19 24.31 32.75 25 32.75C25.69 32.75 26.25 32.19 26.25 31.5V29C26.25 28.31 25.69 27.75 25 27.75C24.31 27.75 23.75 28.31 23.75 29ZM15 0.25C10.5163 0.25 6.875 3.89125 6.875 8.375C6.875 12.8587 10.5163 16.5 15 16.5C19.4837 16.5 23.125 12.8587 23.125 8.375C23.125 3.89125 19.4837 0.25 15 0.25ZM15 2.75C18.105 2.75 20.625 5.27 20.625 8.375C20.625 11.48 18.105 14 15 14C11.895 14 9.375 11.48 9.375 8.375C9.375 5.27 11.895 2.75 15 2.75Z"
-                                        fill="white" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-muted mb-1">Estudiantes</p>
-                                <h3 class="font-w700 mb-0">{{ totalStudents }}</h3>
-                            </div>
-                        </div>
-                    </div>
+        <section class="hero-panel mb-4">
+            <div class="hero-copy">
+                <span class="eyebrow">Panel de administración</span>
+                <h1>Resumen general del colegio</h1>
+            </div>
+
+            <div class="hero-meta">
+                <div class="hero-meta-item">
+                    <span>Última actualización</span>
+                    <strong>Datos en vivo</strong>
+                </div>
+                <div class="hero-meta-item">
+                    <span>Estado</span>
+                    <strong>Operativo</strong>
+                </div>
+                <div class="hero-meta-item">
+                    <span>Personas registradas</span>
+                    <strong>{{ totalStudents + totalTeachers + totalParents }}</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block mb-4">
+            <div class="section-heading">
+                <div>
+                    <span class="section-kicker">Indicadores</span>
+                    <h2>Métricas principales</h2>
                 </div>
             </div>
 
-            <!-- Docentes -->
-            <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="icon-box icon-box-lg teach-data bg-secondary me-3">
-                                <svg width="32" height="32" viewBox="0 0 30 38" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M0 34C0 36.0713 1.67875 37.75 3.75 37.75H26.25C28.3212 37.75 30 36.0713 30 34C30 31.0825 30 26.3125 30 23.5863C30 21.7738 28.7038 20.2213 26.9213 19.8975C24.2788 19.4163 19.7225 18.5875 17.145 18.12C15.7263 17.8612 14.2737 17.8612 12.855 18.12C10.2775 18.5875 5.72125 19.4163 3.07875 19.8975C1.29625 20.2213 0 21.7738 0 23.5863V34ZM17.885 20.795L19.7612 27.9288C20.0075 28.865 19.6775 29.8588 18.92 30.4638C18.28 30.9738 17.2713 31.7788 16.5713 32.3388C15.6525 33.0713 14.3475 33.0713 13.4287 32.3388C12.7287 31.7788 11.72 30.9738 11.08 30.4638C10.3225 29.8588 9.9925 28.865 10.2388 27.9288L12.115 20.795L3.52625 22.3562C2.9325 22.465 2.5 22.9825 2.5 23.5863V34C2.5 34.69 3.06 35.25 3.75 35.25C8.98 35.25 21.02 35.25 26.25 35.25C26.94 35.25 27.5 34.69 27.5 34C27.5 31.0825 27.5 26.3125 27.5 23.5863C27.5 22.9825 27.0675 22.465 26.4738 22.3562L17.885 20.795ZM15.2038 20.4288C15.0675 20.425 14.9325 20.425 14.7962 20.4288L12.6663 28.5312L14.9887 30.3837C14.995 30.39 15.005 30.39 15.0113 30.3837L17.3337 28.5312L15.2038 20.4288ZM15 0.25C10.5163 0.25 6.875 3.89125 6.875 8.375C6.875 12.8587 10.5163 16.5 15 16.5C19.4837 16.5 23.125 12.8587 23.125 8.375C23.125 3.89125 19.4837 0.25 15 0.25ZM15 2.75C18.105 2.75 20.625 5.27 20.625 8.375C20.625 11.48 18.105 14 15 14C11.895 14 9.375 11.48 9.375 8.375C9.375 5.27 11.895 2.75 15 2.75Z"
-                                        fill="white" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-muted mb-1">Docentes</p>
-                                <h3 class="font-w700 mb-0">{{ totalTeachers }}</h3>
-                            </div>
+            <div class="stats-grid">
+                <a class="stat-card" *ngFor="let card of statCards" [attr.href]="card.route">
+                    <div class="stat-card-top">
+                        <div class="stat-icon" [ngClass]="card.accent">
+                            <i class="material-icons">{{ card.icon }}</i>
                         </div>
+                        <span class="stat-badge">Ver detalle</span>
                     </div>
+
+                    <div class="stat-content">
+                        <p class="stat-label">{{ card.label }}</p>
+                        <h3>{{ card.value }}</h3>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="section-block">
+            <div class="section-heading">
+                <div>
+                    <span class="section-kicker">Atajos</span>
+                    <h2>Accesos rápidos</h2>
                 </div>
             </div>
 
-
-
-            <!-- Matrículas -->
-            <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="icon-box icon-box-lg event-data bg-info me-3">
-                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M4 4C4 2.89543 4.89543 2 6 2H18C18.5304 2 19.0391 2.21071 19.4142 2.58579L27.4142 10.5858C27.7893 10.9609 28 11.4696 28 12V28C28 29.1046 27.1046 30 26 30H6C4.89543 30 4 29.1046 4 28V4ZM18 4H6V28H26V12.8284L18.1716 5H18V4ZM10 14C9.44772 14 9 14.4477 9 15C9 15.5523 9.44772 16 10 16H22C22.5523 16 23 15.5523 23 15C23 14.4477 22.5523 14 22 14H10ZM9 19C9 18.4477 9.44772 18 10 18H22C22.5523 18 23 18.4477 23 19C23 19.5523 22.5523 20 22 20H10C9.44772 20 9 19.5523 9 19ZM10 22C9.44772 22 9 22.4477 9 23C9 23.5523 9.44772 24 10 24H18C18.5523 24 19 23.5523 19 23C19 22.4477 18.5523 22 18 22H10Z"
-                                        fill="white" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-muted mb-1">Matrículas</p>
-                                <h3 class="font-w700 mb-0">{{ totalRegistrations }}</h3>
-                            </div>
-                        </div>
+            <div class="actions-grid">
+                <a class="action-card" *ngFor="let action of quickActions" [attr.href]="action.route">
+                    <div class="action-icon">
+                        <i class="material-icons">{{ action.icon }}</i>
                     </div>
-                </div>
-            </div>
-
-            <!-- Cursos -->
-            <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="icon-box icon-box-lg course-data bg-warning me-3">
-                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M4 4C4 2.89543 4.89543 2 6 2H18C18.5304 2 19.0391 2.21071 19.4142 2.58579L27.4142 10.5858C27.7893 10.9609 28 11.4696 28 12V28C28 29.1046 27.1046 30 26 30H6C4.89543 30 4 29.1046 4 28V4ZM18 4H6V28H26V12.8284L18.1716 5H18V4ZM10 14C9.44772 14 9 14.4477 9 15C9 15.5523 9.44772 16 10 16H22C22.5523 16 23 15.5523 23 15C23 14.4477 22.5523 14 22 14H10ZM9 19C9 18.4477 9.44772 18 10 18H22C22.5523 18 23 18.4477 23 19C23 19.5523 22.5523 20 22 20H10C9.44772 20 9 19.5523 9 19ZM10 22C9.44772 22 9 22.4477 9 23C9 23.5523 9.44772 24 10 24H18C18.5523 24 19 23.5523 19 23C19 22.4477 18.5523 22 18 22H10Z"
-                                        fill="white" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-muted mb-1">Cursos</p>
-                                <h3 class="font-w700 mb-0">{{ totalCourses }}</h3>
-                            </div>
-                        </div>
+                    <div class="action-content">
+                        <h3>{{ action.title }}</h3>
                     </div>
-                </div>
+                    <i class="material-icons action-arrow">chevron_right</i>
+                </a>
             </div>
-        </div>
-
-        <!-- Segundo row -->
-        <div class="row">
-            <!-- Grados -->
-            <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="icon-box icon-box-lg degree-data bg-danger me-3">
-                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M16 2L2 8V14C2 23.627 8.268 32 16 32C23.732 32 30 23.627 30 14V8L16 2ZM4 9.118L16 4.236L28 9.118V14C28 22.7 22.627 30 16 30C9.373 30 4 22.7 4 14V9.118ZM16 8C12.134 8 9 11.134 9 15C9 18.866 12.134 22 16 22C19.866 22 23 18.866 23 15C23 11.134 19.866 8 16 8ZM11 15C11 12.239 13.239 10 16 10C18.761 10 21 12.239 21 15C21 17.761 18.761 20 16 20C13.239 20 11 17.761 11 15Z"
-                                        fill="white" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-muted mb-1">Grados</p>
-                                <h3 class="font-w700 mb-0">{{ totalDegrees }}</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="icon-box icon-box-lg teach-data bg-primary me-3">
-                                <svg width="32" height="32" viewBox="0 0 30 38" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M0 34C0 36.0713 1.67875 37.75 3.75 37.75H26.25C28.3212 37.75 30 36.0713 30 34C30 31.0825 30 26.3125 30 23.5863C30 21.7738 28.7038 20.2213 26.9213 19.8975C24.2788 19.4163 19.7225 18.5875 17.145 18.12C15.7263 17.8612 14.2737 17.8612 12.855 18.12C10.2775 18.5875 5.72125 19.4163 3.07875 19.8975C1.29625 20.2213 0 21.7738 0 23.5863V34ZM17.885 20.795L19.7612 27.9288C20.0075 28.865 19.6775 29.8588 18.92 30.4638C18.28 30.9738 17.2713 31.7788 16.5713 32.3388C15.6525 33.0713 14.3475 33.0713 13.4287 32.3388C12.7287 31.7788 11.72 30.9738 11.08 30.4638C10.3225 29.8588 9.9925 28.865 10.2388 27.9288L12.1151e-05L17,20L3,22L4,24L6,25L6,27L4,28L4,30L6,31L6,33L4,34L4,36L6,37H24L26,36V34L24,33V31
-L26,30V28L24,27V25L26,24V22L24,21V20L17.885 20.795ZM15.2038 20.4288C15.0675 20.425 14.9325 20.425 14.7962 20.4288L12.6663 28.5312L14.9887 30.3837C14.995 30.39 15.005 30.39 15.0113 30.3837L17.3337 28.5312L15.2038 20.4288ZM15 0.25C10.5163 0.25 6.875 3.89125 6.875 8.375C6.875 12.8587 10.5163 16.5 15 16.5C19.4837 16.5 23.125 12.8587 23.125 8.375C23.125 3.89125 19.4837 0.25 15 0.25ZM15 2.75C18.105 2.75 20.625 5.27 20.625 8.375C20.625 11.48 18.105 14 15 14C11.895 14 9.375 11.48 9.375 8.375C9.375 5.27 11.895 2.75 15 2.75Z"
-                                        fill="white" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-muted mb-1">Tutores</p>
-                                <h3 class="font-w700 mb-0">{{ totalParents }}</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Usuarios -->
-            <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="icon-box icon-box-lg users-data bg-success me-3">
-                                <svg width="32" height="32" viewBox="0 0 30 30" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M15 2C8.373 2 3 7.373 3 14C3 20.627 8.373 26 15 26C21.627 26 27 20.627 27 14C27 7.373 21.627 2 15 2ZM15 4C20.523 4 25 8.477 25 14C25 19.523 20.523 24 15 24C9.477 24 5 19.523 5 14C5 8.477 9.477 4 15 4ZM15 6C12.239 6 10 8.239 10 11C10 13.761 12.239 16 15 16C17.761 16 20 13.761 20 11C20 8.239 17.761 6 15 6ZM12 11C12 9.343 13.343 8 15 8C16.657 8 18 9.343 18 11C18 12.657 16.657 14 15 14C13.343 14 12 12.657 12 11ZM8 19C8 17.343 8 17 9 17H21C22 17 22 17.343 22 19C22 20.104 22 22 15 22C8 22 8 20.104 8 19Z"
-                                        fill="white" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-muted mb-1">Usuarios</p>
-                                <h3 class="font-w700 mb-0">{{ totalUsers }}</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </section>
     </div>
 </div>

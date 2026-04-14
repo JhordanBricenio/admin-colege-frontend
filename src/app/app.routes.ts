@@ -29,10 +29,31 @@ import { ParentsNewComponent } from './components/users/parents/parents-new/pare
 import { RegistrationDetailComponent } from './components/registration/registration-detail/registration-detail.component';
 import { PaymentIndexComponent } from './components/payment/payment-index/payment-index.component';
 import { PaymentNewComponent } from './components/payment/payment-new/payment-new.component';
+import { StudentGradeIndexComponent } from './components/student-grade/student-grade-index/student-grade-index.component';
+import { StudentGradeNewComponent } from './components/student-grade/student-grade-new/student-grade-new.component';
+import { KardexListComponent } from './components/kardex/kardex-list/kardex-list.component';
+import { KardexDetailComponent } from './components/kardex/kardex-detail/kardex-detail.component';
+import { TeacherAttendanceIndexComponent } from './components/assistance/teacher-attendance-index/teacher-attendance-index.component';
+import { TeacherAttendanceNewComponent } from './components/assistance/teacher-attendance-new/teacher-attendance-new.component';
+import { StudentAttendanceNewComponent } from './components/assistance/student-attendance-new/student-attendance-new.component';
+import { StudentAttendanceReportComponent } from './components/assistance/student-attendance-report/student-attendance-report.component';
+import { authGuard } from './guards/auth.guard';
+import { roleGuard } from './guards/role.guard';
+import { guestGuard } from './guards/guest.guard';
+import { LoginComponent } from './components/auth/login/login.component';
+import { ForbiddenComponent } from './components/errors/forbidden/forbidden.component';
+import { NotFoundComponent } from './components/errors/not-found/not-found.component';
 
 export const routes: Routes = [
     {
+        path: 'login',
+        component: LoginComponent,
+        canActivate: [guestGuard]
+    },
+    {
         path: 'admin', component: DashboardComponent,
+        canActivate: [authGuard],
+        canActivateChild: [roleGuard],
         children: [
             { path: 'role', component: RoleIndexComponent },
             { path: 'role/new', component: RoleNewComponent },
@@ -49,6 +70,7 @@ export const routes: Routes = [
             { path: 'teacher/detail', component: UserDetailComponent },
             { path: 'teacher/edit/:idTeacher', component: TeacherNewComponent },
             { path: 'teacher/paged/:page', component: TeacherIndexComponent },
+
 
             { path: 'student', component: StudentsIndexComponent },
             { path: 'student/new', component: StudentsNewComponent },
@@ -98,16 +120,36 @@ export const routes: Routes = [
             { path: 'payment/student/:idStudent', component: PaymentNewComponent },
 
 
+            { path: 'student-grades', component: StudentGradeIndexComponent },
+            { path: 'student-grades/new', component: StudentGradeNewComponent },
+
+            { path: 'teacher-attendance', component: TeacherAttendanceIndexComponent },
+            { path: 'teacher-attendance/new', component: TeacherAttendanceNewComponent },
+            { path: 'teacher-attendance/edit/:idAttendance', component: TeacherAttendanceNewComponent },
+            { path: 'teacher-attendance/paged/:page', component: TeacherAttendanceIndexComponent },
+            { path: 'student-attendance/new', component: StudentAttendanceNewComponent },
+            { path: 'student-attendance/report', component: StudentAttendanceReportComponent },
+
+            { path: 'kardex', component: KardexListComponent },
+            { path: 'kardex/detail', component: KardexDetailComponent },
+
             { path: '', component: HomeComponent },
+            { path: '**', component: NotFoundComponent },
 
         ],
     },
     {
-        path: '', redirectTo: 'admin', pathMatch: 'full'
+        path: 'forbidden', component: ForbiddenComponent
+    },
+    {
+        path: 'not-found', component: NotFoundComponent
+    },
+    {
+        path: '', redirectTo: 'login', pathMatch: 'full'
     },
 
-
-    { path: 'logout', component: LogoutComponent }
+    { path: 'logout', component: LogoutComponent, canActivate: [authGuard] },
+    { path: '**', component: NotFoundComponent }
 
 
 ];

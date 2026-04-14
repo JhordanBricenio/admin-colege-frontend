@@ -19,6 +19,22 @@
                                         El nombre es obligatorio y debe tener al menos 3 caracteres
                                     </small>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="educationLevelId" class="form-label text-primary">Nivel educativo<span
+                                            class="required">*</span></label>
+                                    <select id="educationLevelId" class="form-select"
+                                        formControlName="educationLevelId">
+                                        <option value="">Selecciona un nivel</option>
+                                        <option *ngFor="let level of educationLevels" [value]="level.idEducationLevel">
+                                            {{ level.name }} - {{ level.shift }}
+                                        </option>
+                                    </select>
+                                    <small
+                                        *ngIf="courseForm.controls.educationLevelId.touched && courseForm.controls.educationLevelId.invalid"
+                                        class="text-red-500">
+                                        El nivel educativo es obligatorio
+                                    </small>
+                                </div>
                                 <div class="mb-5">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" role="switch" id="status"
@@ -46,4 +62,4 @@
             </div>
         </div>
     </div>
-</div>>
+</div>
