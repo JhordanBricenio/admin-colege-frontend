@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { StudentService } from '../../services/student.service';
 import { TeacherService } from '../../services/teacher.service';
@@ -11,7 +12,7 @@ import { ParentService } from '../../services/parent.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -32,6 +33,10 @@ export class HomeComponent implements OnInit {
   totalParents: number = 0;
   totalDegrees: number = 0;
   totalRegistrations: number = 0;
+
+  get totalPeople(): number {
+    return this.totalStudents + this.totalTeachers + this.totalParents;
+  }
 
   get statCards() {
     return [

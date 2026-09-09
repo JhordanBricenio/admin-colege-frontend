@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { AssistanceStatus, TeacherAttendanceBulkCreateRequest, TeacherAttendanceBulkRecord, TeacherAttendanceCreateRequest } from '../../../models/assistance';
 import { Teacher } from '../../../models/teacher';
 import { AssistanceService } from '../../../services/assistance.service';
+import { AuthSessionService } from '../../../services/auth-session.service';
 import { TeacherService } from '../../../services/teacher.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class TeacherAttendanceNewComponent {
     private readonly fb = inject(FormBuilder);
     private readonly assistanceService = inject(AssistanceService);
     private readonly teacherService = inject(TeacherService);
+    private readonly authSession = inject(AuthSessionService);
     private readonly router = inject(Router);
     private readonly route = inject(ActivatedRoute);
 
@@ -62,10 +64,33 @@ export class TeacherAttendanceNewComponent {
 
     bulkTeacherSearch: string[] = [];
 
+    get isTeacherRole(): boolean {
+        return this.authSession.currentRole === 'TEACHER';
+    }
+
+    get availableModeOptions() {
+        return this.isTeacherRole
+            ? this.modeOptions.filter((option) => option.value === 'single')
+            : this.modeOptions;
+    }
+
+    setMode(mode: 'single' | 'bulk'): void {
+        if (this.isTeacherRole && mode === 'bulk') {
+            this.mode = 'single';
+            return;
+        }
+
+        this.mode = mode;
+    }
+
     ngOnInit(): void {
         const today = this.getTodayDate();
         this.form.patchValue({ attendanceDate: today });
         this.bulkForm.patchValue({ date: today });
+
+        if (this.isTeacherRole) {
+            this.mode = 'single';
+        }
 
         this.loadTeachers();
         this.addBulkRow();
@@ -219,6 +244,12 @@ export class TeacherAttendanceNewComponent {
     }
 
     submitBulk(): void {
+        if (this.isTeacherRole) {
+            Swal.fire('Atencion', 'El registro masivo de asistencia no está habilitado para docentes.', 'warning');
+            this.mode = 'single';
+            return;
+        }
+
         if (this.bulkForm.invalid || this.recordsArray.length === 0) {
             this.bulkForm.markAllAsTouched();
             this.recordsArray.controls.forEach((ctrl) => ctrl.markAllAsTouched());
@@ -255,7 +286,7 @@ export class TeacherAttendanceNewComponent {
             session: raw.session || 'Mañana',
             status: (raw.status || 'PRESENT') as AssistanceStatus,
             justification: raw.justification || '',
-            source: raw.source || 'web-admin'
+            source: 'web-admin'
         };
     }
 
@@ -268,7 +299,7 @@ export class TeacherAttendanceNewComponent {
                 minutesLate: Number(row.minutesLate ?? 0),
                 status: (row.status || 'PRESENT') as AssistanceStatus,
                 justification: row.justification || '',
-                source: row.source || 'web-admin'
+                source: 'web-admin'
             };
         });
 

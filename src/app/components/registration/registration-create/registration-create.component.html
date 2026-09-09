@@ -230,7 +230,7 @@
                         <div class="mb-4">
                             <div class="form-check form-switch fs-5">
                                 <input class="form-check-input" type="checkbox" id="status" formControlName="status"
-                                    (change)="registrationForm.patchValue({status: $event.target.checked ? 'ACTIVE' : 'INACTIVE'})">
+                                    (change)="registrationForm.patchValue({status: $event.target.checked})">
                                 <label class="form-check-label fw-medium" for="status">
                                     <span style="color: #28a745;">●</span> Estado Activo
                                 </label>

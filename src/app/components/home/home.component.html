@@ -1,37 +1,109 @@
 <div class="content-body home-page">
     <div class="container-fluid">
-        <section class="hero-panel mb-4">
-            <div class="hero-copy">
-                <span class="eyebrow">Panel de administración</span>
-                <h1>Resumen general del colegio</h1>
+        <section class="visual-hero mb-4">
+            <div class="visual-hero-main">
+                <span class="eyebrow">Centro académico</span>
+                <h1>Un dashboard más visual para controlar el colegio en segundos</h1>
+                <p class="hero-description">
+                    La pantalla combina indicadores, accesos directos y estado operativo en una interfaz más limpia,
+                    moderna y fácil de escanear.
+                </p>
+
+                <div class="hero-actions">
+                    <a class="intro-button intro-button-primary" routerLink="/admin/student">Abrir estudiantes</a>
+                    <a class="intro-button intro-button-secondary" routerLink="/admin/registration">Ver matrículas</a>
+                </div>
+
+                <div class="hero-pills">
+                    <span class="hero-pill">Datos en vivo</span>
+                    <span class="hero-pill">Acceso rápido</span>
+                    <span class="hero-pill">Lectura ejecutiva</span>
+                </div>
+
+                <div class="hero-metrics">
+                    <article class="metric-tile metric-tile-main">
+                        <span>Total personas</span>
+                        <strong>{{ totalPeople }}</strong>
+                        <small>Estudiantes, docentes y tutores</small>
+                    </article>
+                    <article class="metric-tile">
+                        <span>Cursos</span>
+                        <strong>{{ totalCourses }}</strong>
+                        <small>Oferta académica vigente</small>
+                    </article>
+                    <article class="metric-tile">
+                        <span>Matrículas</span>
+                        <strong>{{ totalRegistrations }}</strong>
+                        <small>Inscripciones procesadas</small>
+                    </article>
+                    <article class="metric-tile">
+                        <span>Usuarios</span>
+                        <strong>{{ totalUsers }}</strong>
+                        <small>Cuentas con acceso al sistema</small>
+                    </article>
+                </div>
             </div>
 
-            <div class="hero-meta">
-                <div class="hero-meta-item">
-                    <span>Última actualización</span>
-                    <strong>Datos en vivo</strong>
+            <aside class="visual-hero-aside">
+                <div class="signal-card signal-card-primary">
+                    <div class="signal-card-header">
+                        <span class="status-label">Estado del sistema</span>
+                        <span class="status-chip">Operativo</span>
+                    </div>
+                    <strong>{{ totalPeople }}</strong>
+                    <p>La plataforma está lista para gestión académica y seguimiento administrativo.</p>
                 </div>
-                <div class="hero-meta-item">
-                    <span>Estado</span>
-                    <strong>Operativo</strong>
+
+                <div class="signal-card signal-card-grid">
+                    <div>
+                        <span class="status-label">Docentes</span>
+                        <strong>{{ totalTeachers }}</strong>
+                    </div>
+                    <div>
+                        <span class="status-label">Tutores</span>
+                        <strong>{{ totalParents }}</strong>
+                    </div>
                 </div>
-                <div class="hero-meta-item">
-                    <span>Personas registradas</span>
-                    <strong>{{ totalStudents + totalTeachers + totalParents }}</strong>
+
+                <div class="signal-card signal-card-list">
+                    <div class="signal-item">
+                        <span class="signal-dot signal-dot-blue"></span>
+                        <div>
+                            <strong>Sincronización activa</strong>
+                            <p>Datos actualizados en tiempo real.</p>
+                        </div>
+                    </div>
+                    <div class="signal-item">
+                        <span class="signal-dot signal-dot-green"></span>
+                        <div>
+                            <strong>Navegación directa</strong>
+                            <p>Entradas rápidas a módulos clave.</p>
+                        </div>
+                    </div>
+                    <div class="signal-item">
+                        <span class="signal-dot signal-dot-gold"></span>
+                        <div>
+                            <strong>Lectura ejecutiva</strong>
+                            <p>Resumen claro del estado general.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </aside>
         </section>
 
         <section class="section-block mb-4">
-            <div class="section-heading">
+            <div class="section-heading section-heading-split">
                 <div>
                     <span class="section-kicker">Indicadores</span>
                     <h2>Métricas principales</h2>
                 </div>
+                <p class="section-note">
+                    Panorama resumido con acceso directo a cada módulo.
+                </p>
             </div>
 
             <div class="stats-grid">
-                <a class="stat-card" *ngFor="let card of statCards" [attr.href]="card.route">
+                <a class="stat-card" *ngFor="let card of statCards" [routerLink]="card.route">
                     <div class="stat-card-top">
                         <div class="stat-icon" [ngClass]="card.accent">
                             <i class="material-icons">{{ card.icon }}</i>
@@ -42,26 +114,33 @@
                     <div class="stat-content">
                         <p class="stat-label">{{ card.label }}</p>
                         <h3>{{ card.value }}</h3>
+                        <p class="stat-note">{{ card.note }}</p>
                     </div>
+
+                    <span class="stat-link">Abrir módulo</span>
                 </a>
             </div>
         </section>
 
         <section class="section-block">
-            <div class="section-heading">
+            <div class="section-heading section-heading-split">
                 <div>
                     <span class="section-kicker">Atajos</span>
                     <h2>Accesos rápidos</h2>
                 </div>
+                <p class="section-note">
+                    Tareas frecuentes para operar sin perder contexto.
+                </p>
             </div>
 
             <div class="actions-grid">
-                <a class="action-card" *ngFor="let action of quickActions" [attr.href]="action.route">
+                <a class="action-card" *ngFor="let action of quickActions" [routerLink]="action.route">
                     <div class="action-icon">
                         <i class="material-icons">{{ action.icon }}</i>
                     </div>
                     <div class="action-content">
                         <h3>{{ action.title }}</h3>
+                        <p>{{ action.description }}</p>
                     </div>
                     <i class="material-icons action-arrow">chevron_right</i>
                 </a>

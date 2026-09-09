@@ -3,12 +3,19 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
             <div>
-                <h4 class="mb-1">Kardex General</h4>
-                <p class="mb-0 text-muted">Historial académico de estudiantes</p>
+                <h4 class="mb-1">{{ isTeacherRole ? 'Kardex de mis asignaciones' : 'Kardex General' }}</h4>
+                <p class="mb-0 text-muted">
+                    {{ isTeacherRole ? 'Se muestran solo los grados asignados a tu sesión.' : 'Historial académico de
+                    estudiantes' }}
+                </p>
             </div>
             <button class="btn btn-outline-primary" type="button" (click)="goBack()" *ngIf="false">
                 <i class="fa fa-arrow-left me-1"></i> Volver
             </button>
+        </div>
+
+        <div class="alert alert-warning" *ngIf="isTeacherRole && !loading && allowedDegreeIds.length === 0">
+            Tu sesión de docente no tiene grados asignados para consultar Kardex.
         </div>
 
         <!-- Search & Filter -->

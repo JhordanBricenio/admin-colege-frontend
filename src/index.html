@@ -75,7 +75,11 @@
 
     jQuery(document).ready(function () {
       setTimeout(function () {
-        dlabSettingsOptions.version = 'dark';
+        const savedTheme = typeof getCookie === 'function' ? getCookie('version') : '';
+        dlabSettingsOptions.version = savedTheme || 'light';
+        if (!savedTheme && typeof setCookie === 'function') {
+          setCookie('version', 'light');
+        }
         new dlabSettings(dlabSettingsOptions);
       }, 1500)
     });

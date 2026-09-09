@@ -6,17 +6,18 @@
                     <div class="card-body">
                         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
                             <div>
-                                <h4 class="mb-1">Materias asignadas</h4>
-                                <p class="text-muted mb-0">Vista temporal sin login: selecciona un docente para simular
-                                    la sesión.</p>
+                                <h4 class="mb-1">Cursos y grados asignados</h4>
+                                <p class="text-muted mb-0" *ngIf="isAdmin">Selecciona el docente para registrar sus
+                                    notas.</p>
+                                <p class="text-muted mb-0" *ngIf="!isAdmin">Registro de notas para tu sesión actual.</p>
                             </div>
 
                             <div class="teacher-selector">
                                 <label for="teacherId" class="form-label mb-1">Docente actual</label>
                                 <select id="teacherId" class="form-select" [value]="currentTeacherId"
-                                    (change)="onTeacherChange($any($event.target).value)">
-                                    <option value="">Selecciona un docente</option>
-                                    <option *ngFor="let teacher of allTeachers" [value]="teacher.idTeacher">
+                                    (change)="onTeacherChange($any($event.target).value)" [disabled]="!isAdmin">
+                                    <option value="" *ngIf="isAdmin">Selecciona un docente</option>
+                                    <option *ngFor="let teacher of visibleTeachers" [value]="teacher.idTeacher">
                                         {{ getTeacherDisplayName(teacher) }}
                                     </option>
                                 </select>
@@ -70,7 +71,13 @@
                         </div>
 
                         <div class="alert alert-warning mb-0" *ngIf="!loading && !currentTeacherId">
-                            No se detecto docente en sesion. Selecciona uno para continuar.
+                            <span *ngIf="isAdmin">No se detectó docente seleccionado. Selecciona uno para
+                                continuar.</span>
+                            <span *ngIf="!isAdmin">No se pudo vincular tu sesión con un docente registrado.</span>
+                        </div>
+
+                        <div class="alert alert-danger mb-0 mt-2" *ngIf="!loading && sessionTeacherNotFound">
+                            Tu usuario inició sesión como docente, pero no está asociado a un registro de docente.
                         </div>
                     </div>
                 </div>

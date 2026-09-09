@@ -7,6 +7,7 @@ import { EducationLevel } from '../../../models/education-level';
 import { Teacher } from '../../../models/teacher';
 import { TeacherSubjectAssignments } from '../../../models/teacherSubjectAssignments';
 import { CourseService } from '../../../services/course.service';
+import { AuthSessionService } from '../../../services/auth-session.service';
 import { DegreeService } from '../../../services/degree.service';
 import { EducationLevelService } from '../../../services/education-level.service';
 import { TeacherService } from '../../../services/teacher.service';
@@ -27,6 +28,7 @@ export class StudentGradeIndexComponent {
   private readonly educationLevelService = inject(EducationLevelService);
   private readonly degreeService = inject(DegreeService);
   private readonly courseService = inject(CourseService);
+  private readonly authSession = inject(AuthSessionService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
@@ -38,6 +40,7 @@ export class StudentGradeIndexComponent {
 
   currentTeacherId = '';
   loading = true;
+  sessionTeacherNotFound = false;
 
   ngOnInit(): void {
     this.resolveTeacherContext();
@@ -55,7 +58,32 @@ export class StudentGradeIndexComponent {
     return this.allTeachers.find((item) => item.idTeacher === this.currentTeacherId) || null;
   }
 
+  get isAdmin(): boolean {
+    return this.authSession.currentRole === 'ADMIN';
+  }
+
+  get isTeacher(): boolean {
+    return this.authSession.currentRole === 'TEACHER';
+  }
+
+  get visibleTeachers(): Teacher[] {
+    if (this.isAdmin) {
+      return this.allTeachers;
+    }
+
+    if (!this.currentTeacherId) {
+      return [];
+    }
+
+    const teacher = this.allTeachers.find((item) => item.idTeacher === this.currentTeacherId);
+    return teacher ? [teacher] : [];
+  }
+
   onTeacherChange(teacherId: string): void {
+    if (!this.isAdmin) {
+      return;
+    }
+
     this.currentTeacherId = teacherId;
     this.persistTeacherId(teacherId);
   }
@@ -139,6 +167,7 @@ export class StudentGradeIndexComponent {
     this.teacherService.getUsers().subscribe({
       next: (response) => {
         this.allTeachers = response || [];
+        this.applySessionTeacherRestriction();
       },
       error: () => {
         this.allTeachers = [];
@@ -197,6 +226,10 @@ export class StudentGradeIndexComponent {
   }
 
   private ensureTeacherFallback(): void {
+    if (this.isTeacher) {
+      return;
+    }
+
     if (this.currentTeacherId) {
       return;
     }
@@ -225,6 +258,38 @@ export class StudentGradeIndexComponent {
     }
 
     sessionStorage.setItem('currentTeacherId', teacherId);
+  }
+
+  private applySessionTeacherRestriction(): void {
+    this.sessionTeacherNotFound = false;
+
+    if (!this.isTeacher) {
+      return;
+    }
+
+    const sessionUser = this.authSession.currentUser;
+    const sessionUserId = String(sessionUser?.id || '').trim();
+    const sessionEmail = String(sessionUser?.email || '').trim().toLowerCase();
+
+    const sessionTeacher = this.allTeachers.find((teacher) => {
+      const teacherUserId = String(teacher.user?.idUser || '').trim();
+      const teacherEmail = String(teacher.user?.email || '').trim().toLowerCase();
+
+      if (sessionUserId && teacherUserId === sessionUserId) {
+        return true;
+      }
+
+      return !!sessionEmail && teacherEmail === sessionEmail;
+    });
+
+    if (!sessionTeacher?.idTeacher) {
+      this.currentTeacherId = '';
+      this.sessionTeacherNotFound = true;
+      return;
+    }
+
+    this.currentTeacherId = sessionTeacher.idTeacher;
+    this.persistTeacherId(sessionTeacher.idTeacher);
   }
 
 }

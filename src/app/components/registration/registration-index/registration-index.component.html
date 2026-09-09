@@ -6,15 +6,29 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h3 class="fw-bold mb-2 text-dark">
-                            <i class="fas fa-list me-2" style="color: #007bff;"></i>Matrículas Registradas
+                            <i class="fas fa-list me-2" style="color: #007bff;"></i>
+                            {{ isTeacherRole ? 'Mis alumnos matriculados' : 'Matrículas Registradas' }}
                         </h3>
-                        <p class="text-muted mb-0">{{ filteredRegistrations.length }} matrícula(s) encontrada(s)</p>
+                        <p class="text-muted mb-0">
+                            {{ filteredRegistrations.length }} matrícula(s) encontrada(s)
+                            <span *ngIf="isTeacherRole"> para tus grados asignados</span>
+                        </p>
                     </div>
-                    <a routerLink="/admin/registration/new" class="btn btn-primary btn-lg" style="border-radius: 8px;">
+                    <a *ngIf="!isTeacherRole" routerLink="/admin/registration/new" class="btn btn-primary btn-lg"
+                        style="border-radius: 8px;">
                         <i class="fas fa-plus me-2"></i>Nueva Matrícula
                     </a>
                 </div>
             </div>
+        </div>
+
+        <div class="alert alert-warning" *ngIf="isTeacherRole && !isLoading && sessionTeacherMissing">
+            No se pudo vincular tu sesión con un docente registrado.
+        </div>
+
+        <div class="alert alert-info"
+            *ngIf="isTeacherRole && !isLoading && !sessionTeacherMissing && allowedDegreeIds.length === 0">
+            Tu sesión de docente no tiene grados asignados todavía.
         </div>
 
         <!-- Búsqueda y Filtros -->
@@ -27,8 +41,8 @@
                                 <i class="fas fa-search" style="color: #007bff;"></i>
                             </span>
                             <input type="text" class="form-control"
-                                placeholder="Buscar por estudiante, apoderado, grado o DNI..." [(ngModel)]="searchTerm"
-                                (keyup)="onSearch()" style="border-left: 0;">
+                                placeholder="Buscar por alumno, tutor, grado, sección, DNI o contacto..."
+                                [(ngModel)]="searchTerm" (keyup)="onSearch()" style="border-left: 0;">
                         </div>
                     </div>
                 </div>
@@ -41,6 +55,32 @@
                             <option value="ALL">Todos los Estados</option>
                             <option value="ACTIVE">Activos</option>
                             <option value="INACTIVE">Inactivos</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 mt-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-3">
+                        <select class="form-select form-select-lg" [ngModel]="selectedDegreeCourse"
+                            (ngModelChange)="onDegreeCourseChange($event)">
+                            <option value="">Todos los grados</option>
+                            <option *ngFor="let degreeCourse of availableDegreeCourses" [ngValue]="degreeCourse">
+                                {{ degreeCourse }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 mt-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-3">
+                        <select class="form-select form-select-lg" [ngModel]="selectedDegreeSection"
+                            (ngModelChange)="onDegreeSectionChange($event)">
+                            <option value="">Todas las secciones</option>
+                            <option *ngFor="let section of availableDegreeSections" [ngValue]="section">
+                                {{ section }}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -71,7 +111,7 @@
                             <thead class="bg-light">
                                 <tr>
                                     <th class="fw-bold text-dark">Estudiante</th>
-                                    <th class="fw-bold text-dark">Apoderado</th>
+                                    <th class="fw-bold text-dark">Tutor / Contacto</th>
                                     <th class="fw-bold text-dark text-center">Grado</th>
                                     <th class="fw-bold text-dark text-center">Nivel</th>
                                     <th class="fw-bold text-dark text-center">Fecha Registro</th>
@@ -115,12 +155,13 @@
                                                 <h6 class="mb-1 fw-bold text-dark" style="font-size: 0.95rem;">{{
                                                     registration.parentFullName }}</h6>
                                                 <small class="text-muted d-block">
-                                                    <i class="fas fa-link me-1"></i>{{ registration.parentPhone
+                                                    <i class="fas fa-phone me-1"></i>{{ registration.parentPhone || 'Sin
+                                                    teléfono'
                                                     }}
                                                 </small>
                                                 <small class="text-muted d-block">
                                                     <i class="fas fa-id-card me-1"></i>{{
-                                                    registration.parentRelationship
+                                                    registration.parentRelationship || 'Sin parentesco'
                                                     }}
                                                 </small>
                                             </div>
@@ -169,7 +210,7 @@
                                                 style="border-radius: 6px 0 0 6px;" title="Ver detalle">
                                                 <i class="fas fa-eye"></i>
                                             </button>
-                                            <button type="button" class="btn btn-sm"
+                                            <button *ngIf="!isTeacherRole" type="button" class="btn btn-sm"
                                                 [ngClass]="registration.status ? 'btn-outline-danger' : 'btn-outline-success'"
                                                 style="border-radius: 0 6px 6px 0;"
                                                 (click)="toggleRegistrationStatus(registration)"
@@ -183,7 +224,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <app-paginator *ngIf="pagination" [pagination]="pagination"
+                    <app-paginator *ngIf="pagination && !isTeacherRole" [pagination]="pagination"
                         [pagedRoute]="'/admin/registration/paged'"></app-paginator>
                 </div>
             </div>

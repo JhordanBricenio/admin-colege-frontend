@@ -97,9 +97,17 @@ export class SidebarComponent implements OnInit, OnDestroy {
     {
       label: 'Calificaciones',
       icon: 'grade',
-      allowedRoles: ['ADMIN', 'TEACHER'],
+      allowedRoles: ['ADMIN'],
       children: [
         { label: 'Calificaciones', route: '/admin/student-grades' }
+      ]
+    },
+    {
+      label: 'Mis asignaciones',
+      icon: 'fact_check',
+      allowedRoles: ['TEACHER'],
+      children: [
+        { label: 'Cursos y grados', route: '/admin/student-grades' }
       ]
     },
     {
@@ -136,6 +144,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
       children: [
         { label: 'Matrículas', route: '/admin/registration' },
         { label: 'Registrar Matrícula', route: '/admin/registration/new' }
+      ]
+    },
+    {
+      label: 'Mis alumnos',
+      icon: 'groups',
+      allowedRoles: ['TEACHER'],
+      children: [
+        { label: 'Matrículas por grado', route: '/admin/registration' }
       ]
     },
     {

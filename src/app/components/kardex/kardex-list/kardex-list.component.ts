@@ -4,6 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { KardexService } from '../../../services/kardex.service';
 import { KardexGlobalRecord, KardexGlobalResponse, STATUS_LABELS } from '../../../models/kardex';
+import { AuthSessionService } from '../../../services/auth-session.service';
+import { TeacherService } from '../../../services/teacher.service';
+import { TeacherSubjectAssignmentsService } from '../../../services/teacherSubjectAssignments.service';
+import { TeacherSubjectAssignments } from '../../../models/teacherSubjectAssignments';
+import { Teacher } from '../../../models/teacher';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -15,9 +20,14 @@ import Swal from 'sweetalert2';
 })
 export class KardexListComponent implements OnInit {
     private readonly kardexService = inject(KardexService);
+    private readonly authSession = inject(AuthSessionService);
+    private readonly teacherService = inject(TeacherService);
+    private readonly assignmentsService = inject(TeacherSubjectAssignmentsService);
     private readonly router = inject(Router);
 
     kardexRecords: KardexGlobalRecord[] = [];
+    allTeachers: Teacher[] = [];
+    assignments: TeacherSubjectAssignments[] = [];
     totalPages = 0;
     currentPage = 0;
     pageSize = 10;
@@ -25,10 +35,23 @@ export class KardexListComponent implements OnInit {
     searchQuery = '';
     selectedDegreeCourse = '';
     selectedDegreeSection = '';
+    currentTeacherId = '';
+    allowedDegreeIds: string[] = [];
 
     readonly STATUS_LABELS = STATUS_LABELS;
 
+    get isTeacherRole(): boolean {
+        return this.authSession.currentRole === 'TEACHER';
+    }
+
+    get isAdminRole(): boolean {
+        return this.authSession.currentRole === 'ADMIN';
+    }
+
     ngOnInit(): void {
+        this.resolveTeacherContext();
+        this.loadTeachers();
+        this.loadAssignments();
         this.loadKardex(0);
     }
 
@@ -47,6 +70,10 @@ export class KardexListComponent implements OnInit {
                 Swal.fire('Error', 'No se pudo cargar el Kardex', 'error');
             }
         });
+    }
+
+    get isTeacherViewRestricted(): boolean {
+        return this.isTeacherRole && this.allowedDegreeIds.length > 0;
     }
 
     viewDetail(record: KardexGlobalRecord): void {
@@ -104,6 +131,14 @@ export class KardexListComponent implements OnInit {
         );
 
         let result = onlyStudents;
+
+        if (this.isTeacherRole) {
+            if (this.allowedDegreeIds.length === 0) {
+                return [];
+            }
+
+            result = result.filter((record) => this.allowedDegreeIds.includes(String(record.degreeId || '').trim()));
+        }
 
         if (this.selectedDegreeCourse) {
             result = result.filter(
@@ -174,6 +209,83 @@ export class KardexListComponent implements OnInit {
         this.searchQuery = '';
         this.selectedDegreeCourse = '';
         this.selectedDegreeSection = '';
+    }
+
+    private resolveTeacherContext(): void {
+        const currentUser = this.authSession.currentUser;
+        const userId = String(currentUser?.id || '').trim();
+        const email = String(currentUser?.email || '').trim().toLowerCase();
+
+        if (!this.isTeacherRole || (!userId && !email)) {
+            return;
+        }
+
+        this.currentTeacherId = this.findTeacherIdByUserIdentity(userId, email);
+    }
+
+    private loadTeachers(): void {
+        this.teacherService.getUsers().subscribe({
+            next: (response) => {
+                this.allTeachers = response || [];
+
+                if (this.isTeacherRole && !this.currentTeacherId) {
+                    const currentUser = this.authSession.currentUser;
+                    const userId = String(currentUser?.id || '').trim();
+                    const email = String(currentUser?.email || '').trim().toLowerCase();
+                    this.currentTeacherId = this.findTeacherIdByUserIdentity(userId, email);
+                }
+
+                this.refreshAllowedDegreeIds();
+            },
+            error: () => {
+                this.allTeachers = [];
+                this.refreshAllowedDegreeIds();
+            }
+        });
+    }
+
+    private loadAssignments(): void {
+        this.assignmentsService.getTeacherSubjectAssignments().subscribe({
+            next: (response) => {
+                this.assignments = response || [];
+                this.refreshAllowedDegreeIds();
+            },
+            error: () => {
+                this.assignments = [];
+                this.refreshAllowedDegreeIds();
+            }
+        });
+    }
+
+    private refreshAllowedDegreeIds(): void {
+        if (!this.isTeacherRole || !this.currentTeacherId) {
+            this.allowedDegreeIds = [];
+            return;
+        }
+
+        this.allowedDegreeIds = Array.from(
+            new Set(
+                this.assignments
+                    .filter((assignment) => String(assignment.teacherId || '').trim() === this.currentTeacherId)
+                    .map((assignment) => String(assignment.degreeId || '').trim())
+                    .filter((degreeId) => !!degreeId)
+            )
+        );
+    }
+
+    private findTeacherIdByUserIdentity(userId: string, email: string): string {
+        const teacher = this.allTeachers.find((item) => {
+            const teacherUserId = String(item.user?.idUser || '').trim();
+            const teacherEmail = String(item.user?.email || '').trim().toLowerCase();
+
+            if (userId && teacherUserId === userId) {
+                return true;
+            }
+
+            return !!email && teacherEmail === email;
+        });
+
+        return teacher?.idTeacher || '';
     }
 
     goBack(): void {

@@ -1,6 +1,6 @@
 export class RegistrationDTO {
 
-    createdAt: Date;
+    createdAt?: Date;
     degreeCourse: string
     degreeId: string
     degreeSection: string
@@ -9,9 +9,13 @@ export class RegistrationDTO {
     idRegistration: string
     parentFullName: string
     parentId: string
+    parentDni?: string
+    parentPhone?: string
+    parentRelationship?: string
     status: boolean
     studentCode: string
     studentFullName: string
     studentId: string
-    updatedAt: Date;
+    studentDni?: string
+    updatedAt?: Date;
 }

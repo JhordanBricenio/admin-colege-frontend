@@ -67,7 +67,7 @@ export class StudentAttendanceNewComponent {
         { value: 'PRESENT', label: 'Asistio' },
         { value: 'ABSENT', label: 'Falto' },
         { value: 'LATE', label: 'Tardanza' },
-        { value: 'JUSTIFIED', label: 'Justificado' }
+        { value: 'EXCUSED', label: 'Justificado' }
     ];
 
     readonly todayDate = this.getTodayDate();
